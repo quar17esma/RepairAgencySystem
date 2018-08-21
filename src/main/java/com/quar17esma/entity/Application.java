@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public class Application {
     private long id;
+    private User user;
     private Status status;
     private int price;
     private String product;
@@ -21,6 +22,14 @@ public class Application {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Status getStatus() {
@@ -106,6 +115,7 @@ public class Application {
     public String toString() {
         return "Application{" +
                 "id=" + id +
+                ", user=" + user +
                 ", status=" + status +
                 ", price=" + price +
                 ", product='" + product + '\'' +
