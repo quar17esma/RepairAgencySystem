@@ -5,7 +5,7 @@ import com.quar17esma.enums.Role;
 import java.time.LocalDate;
 
 public class User {
-    private int id;
+    private long id;
     private String email;
     private String phone;
     private String password;
@@ -17,11 +17,11 @@ public class User {
     public User() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -93,7 +93,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return id;
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override
@@ -120,7 +120,7 @@ public class User {
             return user;
         }
 
-        public Builder setId(int id) {
+        public Builder setId(long id) {
             user.setId(id);
             return this;
         }
