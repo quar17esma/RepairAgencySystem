@@ -48,7 +48,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public Optional<User> findById(int id) {
+    public Optional<User> findById(long id) {
         Optional<User> result = Optional.empty();
 
         try (PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
@@ -141,7 +141,7 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         boolean result = false;
 
         try (PreparedStatement query = connection.prepareStatement(DELETE)) {
