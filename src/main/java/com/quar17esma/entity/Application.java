@@ -126,4 +126,66 @@ public class Application {
                 ", declineReason='" + declineReason + '\'' +
                 '}';
     }
+
+    public static class Builder {
+        private  Application application;
+
+        public Builder() {
+            this.application = new Application();
+        }
+
+        public Application build() {
+            return application;
+        }
+
+        public Builder setId(long id) {
+            application.setId(id);
+            return this;
+        }
+
+        public Builder setUser(User user) {
+            application.setUser(user);
+            return this;
+        }
+
+        public Builder setStatus(Status status) {
+            application.setStatus(status);
+            return this;
+        }
+
+        public Builder setPrice(int price) {
+            application.setPrice(price);
+            return this;
+        }
+
+        public Builder setProduct(String product) {
+            application.setProduct(product);
+            return this;
+        }
+
+        public Builder setRepairType(String repairType) {
+            application.setRepairType(repairType);
+            return this;
+        }
+
+        public Builder setDeclineReason(String declineReason) {
+            application.setDeclineReason(declineReason);
+            return this;
+        }
+
+        public Builder setCreateDate(LocalDate createDate) {
+            application.setCreateDate(createDate);
+            return this;
+        }
+
+        public Builder setProcessDate(LocalDate processDate) {
+            application.setProcessDate(processDate);
+            return this;
+        }
+
+        public Builder setCompleteDate(LocalDate completeDate) {
+            application.setCompleteDate(completeDate);
+            return this;
+        }
+    }
 }
