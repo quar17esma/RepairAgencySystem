@@ -5,7 +5,7 @@ import com.quar17esma.entity.Feedback;
 
 import java.util.List;
 
-public interface FeedbackDAO extends GenericDAO<Application> {
+public interface FeedbackDAO extends GenericDAO<Feedback> {
     List<Feedback> findByPage(int page, int feedbackOnPage);
 
     int countAll();
