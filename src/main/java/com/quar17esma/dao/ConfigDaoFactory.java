@@ -11,7 +11,7 @@ public class ConfigDaoFactory {
 
     private String factoryClassName;
 
-    public ConfigDaoFactory() {
+    private ConfigDaoFactory() {
         load();
     }
 

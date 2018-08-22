@@ -14,7 +14,7 @@ public class ConnectionPool {
     private static final String DATASOURCE_NAME = "jdbc/repair_agency";
     private static DataSource dataSource;
 
-    public ConnectionPool() {
+    private ConnectionPool() {
         try {
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
