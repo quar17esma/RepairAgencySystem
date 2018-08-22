@@ -8,5 +8,5 @@ import java.util.List;
 public interface FeedbackDAO extends GenericDAO<Feedback> {
     List<Feedback> findByPage(int page, int feedbackOnPage);
 
-    int countAll();
+    long countAll();
 }
