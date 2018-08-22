@@ -8,5 +8,5 @@ public interface GenericDAO<T> extends AutoCloseable{
     Optional<T> findById(long id);
     boolean update(T item);
     boolean delete(long id);
-    int insert(T item);
+    long insert(T item);
 }

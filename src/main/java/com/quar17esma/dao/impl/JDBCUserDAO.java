@@ -157,8 +157,8 @@ public class JDBCUserDAO implements UserDAO {
     }
 
     @Override
-    public int insert(User user) {
-        int result = -1;
+    public long insert(User user) {
+        long result = -1;
 
         try (PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             query.setString(1, user.getEmail());
@@ -171,7 +171,7 @@ public class JDBCUserDAO implements UserDAO {
             query.executeUpdate();
             ResultSet rsId = query.getGeneratedKeys();
             if (rsId.next()) {
-                result = rsId.getInt(1);
+                result = rsId.getLong(1);
                 user.setId(result);
             }
         } catch (Exception ex) {
