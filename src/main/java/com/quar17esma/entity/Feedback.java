@@ -77,4 +77,41 @@ public class Feedback {
                 ", mark=" + mark +
                 '}';
     }
+
+    public static class Builder {
+        private  Feedback feedback;
+
+        public Builder() {
+            this.feedback = new Feedback();
+        }
+
+        public Feedback build() {
+            return feedback;
+        }
+
+        public Builder setId(long id) {
+            feedback.setId(id);
+            return this;
+        }
+
+        public Builder setApplication(Application application) {
+            feedback.setApplication(application);
+            return this;
+        }
+
+        public Builder setDateTime(LocalDateTime dateTime) {
+            feedback.setDateTime(dateTime);
+            return this;
+        }
+
+        public Builder setComment(String comment) {
+            feedback.setComment(comment);
+            return this;
+        }
+
+        public Builder setMark(int mark) {
+            feedback.setMark(mark);
+            return this;
+        }
+    }
 }
