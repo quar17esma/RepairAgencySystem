@@ -21,11 +21,11 @@ public enum ActionEnum {
             this.action = new AddUser();
         }
     },
-//    EDIT_CLIENT {
-//        {
-//            this.action = new EditClient();
-//        }
-//    },
+    EDIT_USER {
+        {
+            this.action = new EditUser();
+        }
+    },
 //    EDIT_MEAL {
 //        {
 //            this.action = new EditMeal();
