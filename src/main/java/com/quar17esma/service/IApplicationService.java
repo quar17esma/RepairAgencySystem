@@ -6,9 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IApplicationService {
-    List<Application> getApplicationsByUserId(long id);
+    List<Application> getByUserId(long id);
 
-    List<Application> getApplicationsByUserIdAndDate(long userId, LocalDate date);
-
-    void addApplication(Application application);
+    void add(Application application);
 }
