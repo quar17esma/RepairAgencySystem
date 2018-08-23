@@ -37,15 +37,15 @@
         <res-auth>Container</res-auth>
     </resource-ref>
 
-    <!--<servlet>-->
-        <!--<servlet-name>controller</servlet-name>-->
-        <!--<servlet-class>com.quar17esma.controller.Controller</servlet-class>-->
-        <!--<load-on-startup>1</load-on-startup>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>controller</servlet-name>-->
-        <!--<url-pattern>/rest/*</url-pattern>-->
-    <!--</servlet-mapping>-->
+    <servlet>
+        <servlet-name>controller</servlet-name>
+        <servlet-class>com.quar17esma.controller.Controller</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>controller</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
 
     <!--<filter>-->
         <!--<filter-name>encodingFilter</filter-name>-->
