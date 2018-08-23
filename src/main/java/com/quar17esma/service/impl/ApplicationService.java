@@ -57,7 +57,14 @@ public class ApplicationService extends Service implements IApplicationService {
 
     @Override
     public void delete(long id) {
-
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applicationDAO.delete(id);
+        } catch (Exception e) {
+            LOGGER.error("Fail to delete application with id: " + id, e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
