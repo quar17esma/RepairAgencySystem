@@ -16,11 +16,11 @@ public enum ActionEnum {
             this.action = new Logout();
         }
     },
-//    ADD_CLIENT {
-//        {
-//            this.action = new AddUser();
-//        }
-//    },
+    ADD_USER {
+        {
+            this.action = new AddUser();
+        }
+    },
 //    EDIT_CLIENT {
 //        {
 //            this.action = new EditClient();
