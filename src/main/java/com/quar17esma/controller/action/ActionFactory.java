@@ -14,7 +14,7 @@ public class ActionFactory {
         }
 
         ActionEnum currentEnum = ActionEnum.valueOf(action.toUpperCase());
-        currentAction = currentEnum.getCurrentCommand();
+        currentAction = currentEnum.getCurrentAction();
 
         return currentAction;
     }

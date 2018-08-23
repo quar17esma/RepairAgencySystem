@@ -3,73 +3,73 @@ package com.quar17esma.controller.action;
 import com.quar17esma.controller.action.impl.*;
 
 /**
- * Possible Commands.
+ * Possible Actions.
  */
 public enum ActionEnum {
     LOGIN {
         {
-            this.command = new Login();
+            this.action = new Login();
         }
     },
     LOGOUT {
         {
-            this.command = new Logout();
+            this.action = new Logout();
         }
     };
 //    ADD_CLIENT {
 //        {
-//            this.command = new AddClient();
+//            this.action = new AddClient();
 //        }
 //    },
 //    EDIT_CLIENT {
 //        {
-//            this.command = new EditClient();
+//            this.action = new EditClient();
 //        }
 //    },
 //    EDIT_MEAL {
 //        {
-//            this.command = new EditMeal();
+//            this.action = new EditMeal();
 //        }
 //    },
 //    ADD_MEAL {
 //        {
-//            this.command = new AddMeal();
+//            this.action = new AddMeal();
 //        }
 //    },
 //    SHOW_MY_MEALS {
 //        {
-//            this.command = new ShowMyMeals();
+//            this.action = new ShowMyMeals();
 //        }
 //    },
 //    SHOW_FOODS {
 //        {
-//            this.command = new ShowFoods();
+//            this.action = new ShowFoods();
 //        }
 //    },
 //    EDIT_FOOD {
 //        {
-//            this.command = new EditFood();
+//            this.action = new EditFood();
 //        }
 //    },
 //    ADD_FOOD {
 //        {
-//            this.command = new AddFood();
+//            this.action = new AddFood();
 //        }
 //    },
 //    SEARCH_FOOD {
 //        {
-//            this.command = new SearchFood();
+//            this.action = new SearchFood();
 //        }
 //    },
 //    CHANGE_LOCALE {
 //        {
-//            this.command = new ChangeLocale();
+//            this.action = new ChangeLocale();
 //        }
 //    };
 
-    Action command;
+    Action action;
 
-    public Action getCurrentCommand() {
-        return command;
+    public Action getCurrentAction() {
+        return action;
     }
 }
