@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context path="/">
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Resource
+            name="jdbc/repair_agency"
+            author="Container"
+            type="javax.sql.DataSource"
+            factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+            maximumPoolSize="10"
+            connectionTimeout="30000"
+            maxWait="10000"
+            username="root"
+            password="root"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://localhost:3306/repair_agency"
+            autoReconnect="true"
+            characterEncoding="UTF-8"
+            useUnicode="true"
+            useJDBCCompliantTimezoneShift="true"
+            useLegacyDatetimeCode="false"
+            serverTimezone="UTC"
+    />
+</Context>
