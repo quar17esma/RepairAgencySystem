@@ -47,7 +47,7 @@
         <input type="reset" value="${buttonReset}">
     </form>
     <hr/>
-    <form name="registrationForm" method="POST" action="${pageContext.request.contextPath}/rest/edit_client">
+    <form name="registrationForm" method="POST" action="${pageContext.request.contextPath}/rest/edit_user">
         <fmt:message var="buttonRegistration" key="button.registration"/>
         <input type="submit" value="${buttonRegistration}">
     </form>
