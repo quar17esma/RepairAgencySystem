@@ -5,17 +5,17 @@ import com.quar17esma.entity.Feedback;
 import java.util.List;
 
 public interface IFeedbackService {
-    List<Feedback> getAllFeedbacks();
+    List<Feedback> getAll();
 
-    List<Feedback> getFeedbacksByPage(int page, int feedbacksOnPage);
+    List<Feedback> getByPage(int page, int feedbacksOnPage);
 
-    long getAllFeedbacksQuantity();
+    long getAllQuantity();
 
-    Feedback getFeedbackById(long id);
+    Feedback getById(long id);
 
-    void deleteFeedbackById(long id);
+    void deleteById(long id);
 
-    void addFeedback(Feedback feedback);
+    void add(Feedback feedback);
 
-    void updateFeedback(Feedback feedback);
+    void update(Feedback feedback);
 }
