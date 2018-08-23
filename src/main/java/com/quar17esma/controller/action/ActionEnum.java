@@ -15,10 +15,10 @@ public enum ActionEnum {
         {
             this.action = new Logout();
         }
-    };
+    },
 //    ADD_CLIENT {
 //        {
-//            this.action = new AddClient();
+//            this.action = new AddUser();
 //        }
 //    },
 //    EDIT_CLIENT {
@@ -61,11 +61,11 @@ public enum ActionEnum {
 //            this.action = new SearchFood();
 //        }
 //    },
-//    CHANGE_LOCALE {
-//        {
-//            this.action = new ChangeLocale();
-//        }
-//    };
+    CHANGE_LOCALE {
+        {
+            this.action = new ChangeLocale();
+        }
+    };
 
     Action action;
 
