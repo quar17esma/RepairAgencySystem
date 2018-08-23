@@ -15,6 +15,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
     private static final String FIND_ALL = "SELECT * FROM application ";
     private static final String FIND_BY_ID = "SELECT * FROM application WHERE application.id = ? ";
+    private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM application " +
+            "JOIN user ON application.user_id = user.id WHERE application.user_id = ? ";
     private static final String UPDATE = "UPDATE application " +
             "SET status = ?, price = ?, product = ?, repair_type = ?, " +
             "create_date = ?, process_date = ?, complete_date = ?, decline_reason = ? " +
@@ -65,6 +67,25 @@ public class JDBCApplicationDAO implements ApplicationDAO {
         }
 
         return result;
+    }
+
+    @Override
+    public List<Application> findAllByUserId(long userId) {
+        List<Application> applications = new ArrayList<>();
+
+        try (PreparedStatement query = connection.prepareStatement(FIND_ALL_BY_USER_ID)) {
+            query.setLong(1, userId);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Application application = createApplication(rs);
+                applications.add(application);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Fail to find applications by user id: " + userId, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
     }
 
     private Application createApplication(ResultSet rs) throws SQLException {
