@@ -5,6 +5,7 @@ import com.quar17esma.controller.checker.InputUserChecker;
 import com.quar17esma.controller.manager.ConfigurationManager;
 import com.quar17esma.controller.manager.LabelManager;
 import com.quar17esma.entity.User;
+import com.quar17esma.enums.Role;
 import com.quar17esma.exceptions.BusyEmailException;
 import com.quar17esma.service.IUserService;
 import com.quar17esma.service.impl.UserService;
@@ -48,7 +49,7 @@ public class AddUser implements Action {
             setDataAttributes(request, name, surname, email, phone, birthDate);
             request.setAttribute("errorRegistrationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
-            page = ConfigurationManager.getProperty("path.page.edit.client");
+            page = ConfigurationManager.getProperty("path.page.edit.user");
         }
 
         return page;
@@ -70,6 +71,7 @@ public class AddUser implements Action {
                 .setEmail(email)
                 .setPhone(phone)
                 .setPassword(password)
+                .setRole(Role.USER)
                 .setBirthDate(birthDate)
                 .build();
     }

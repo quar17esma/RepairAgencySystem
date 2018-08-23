@@ -18,8 +18,8 @@
 </div>
 
 <div>
-    <form name="registrationForm" method="POST" action="./add_client">
-        <input type="hidden" name="action" value="add_client"/>
+    <form name="registrationForm" method="POST" action="./add_user">
+        <%--<input type="hidden" name="action" value="add_user"/>--%>
 
         <label><fmt:message key="label.phone"/></label>
         <br/>

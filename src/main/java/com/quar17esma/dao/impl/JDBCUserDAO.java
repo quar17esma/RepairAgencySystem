@@ -21,7 +21,7 @@ public class JDBCUserDAO implements UserDAO {
             "SET email = ?, phone = ?, password = ?, role = ?, name = ?, surname = ?, birth_date = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM user WHERE id = ?";
     private static final String INSERT = "INSERT INTO user (email, phone, password, role, name, surname, birth_date) " +
-            "VALUES(?, ?, ?, ?, ?, ?, ?)";
+            "VALUES(?, ?, ?, ?, ?, ?, ?) ";
 
     private Connection connection;
 
