@@ -41,6 +41,26 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     @Override
+    public List<Application> getAll() {
+        return null;
+    }
+
+    @Override
+    public Application getById(long id) {
+        return null;
+    }
+
+    @Override
+    public void update(Application item) {
+
+    }
+
+    @Override
+    public void delete(long id) {
+
+    }
+
+    @Override
     public void add(Application application) {
         try (Connection connection = connectionPool.getConnection();
              ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {

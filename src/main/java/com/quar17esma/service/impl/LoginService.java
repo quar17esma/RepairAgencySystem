@@ -33,7 +33,7 @@ public class LoginService extends Service implements ILoginService {
 
     public User login(String email, String password) throws LoginException {
         if (checkLogin(email, password)) {
-            return clientsService.getUserByEmail(email);
+            return clientsService.getByEmail(email);
         } else {
             throw new LoginException("Fail to login", email);
         }

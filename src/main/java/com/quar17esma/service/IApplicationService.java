@@ -5,8 +5,6 @@ import com.quar17esma.entity.Application;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IApplicationService {
+public interface IApplicationService extends GenericService<Application> {
     List<Application> getByUserId(long id);
-
-    void add(Application application);
 }

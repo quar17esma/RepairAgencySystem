@@ -9,6 +9,7 @@ import com.quar17esma.service.IUserService;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Optional;
 
 public class UserService extends Service implements IUserService {
@@ -27,8 +28,44 @@ public class UserService extends Service implements IUserService {
         return Holder.INSTANCE;
     }
 
-    public void registerUser(User user) throws BusyEmailException {
+    @Override
+    public List<User> getAll() {
+        return null;
+    }
 
+    @Override
+    public User getById(long id) {
+        return null;
+    }
+
+    public User getByEmail(String email) {
+        Optional<User> user;
+
+        try (Connection connection = connectionPool.getConnection();
+             UserDAO userDAO = factory.createUserDAO(connection)) {
+            connection.setAutoCommit(false);
+
+            user = userDAO.findByEmail(email);
+
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            LOGGER.error("Fail to get user with email = " + email, e);
+            throw new RuntimeException(e);
+        }
+
+        return user.get();
+    }
+
+    @Override
+    public void update(User item) {
+    }
+
+    @Override
+    public void delete(long id) {
+    }
+
+    public void add(User user) throws BusyEmailException {
         try (Connection connection = connectionPool.getConnection();
              UserDAO userDAO = factory.createUserDAO(connection)) {
             connection.setAutoCommit(false);
@@ -49,24 +86,5 @@ public class UserService extends Service implements IUserService {
             LOGGER.error("Fail to register user: " + user, e);
             throw new RuntimeException(e);
         }
-    }
-
-    public User getUserByEmail(String email) {
-        Optional<User> user;
-
-        try (Connection connection = connectionPool.getConnection();
-             UserDAO userDAO = factory.createUserDAO(connection)) {
-            connection.setAutoCommit(false);
-
-            user = userDAO.findByEmail(email);
-
-            connection.commit();
-            connection.setAutoCommit(true);
-        } catch (Exception e) {
-            LOGGER.error("Fail to get user with email = " + email, e);
-            throw new RuntimeException(e);
-        }
-
-        return user.get();
     }
 }

@@ -40,6 +40,54 @@ public class FeedbackService extends Service implements IFeedbackService {
         return feedbackList;
     }
 
+    public Feedback getById(long id) {
+        Feedback feedback = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
+            connection.setAutoCommit(true);
+            feedback = feedbackDAO.findById(id).get();
+        } catch (Exception e) {
+            LOGGER.error("Fail to find feedback with id = " + id, e);
+            throw new RuntimeException(e);
+        }
+
+        return feedback;
+    }
+
+    public void update(Feedback feedback) {
+        try (Connection connection = connectionPool.getConnection();
+             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
+            connection.setAutoCommit(true);
+            feedbackDAO.update(feedback);
+        } catch (Exception e) {
+            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(long id) {
+        try (Connection connection = connectionPool.getConnection();
+             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
+            connection.setAutoCommit(true);
+            feedbackDAO.delete(id);
+        } catch (Exception e) {
+            LOGGER.error("Fail to delete feedback with id = " + id, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void add(Feedback feedback) {
+        try (Connection connection = connectionPool.getConnection();
+             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
+            connection.setAutoCommit(true);
+            feedbackDAO.insert(feedback);
+        } catch (Exception e) {
+            LOGGER.error("Fail to add feedback: " + feedback, e);
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Feedback> getByPage(int page, int feedbacksOnPage) {
         List<Feedback> feedbackList = null;
 
@@ -69,53 +117,5 @@ public class FeedbackService extends Service implements IFeedbackService {
         }
 
         return foodCounter;
-    }
-
-    public Feedback getById(long id) {
-        Feedback feedback = null;
-
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
-            feedback = feedbackDAO.findById(id).get();
-        } catch (Exception e) {
-            LOGGER.error("Fail to find feedback with id = " + id, e);
-            throw new RuntimeException(e);
-        }
-
-        return feedback;
-    }
-
-    public void deleteById(long id) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
-            feedbackDAO.delete(id);
-        } catch (Exception e) {
-            LOGGER.error("Fail to delete feedback with id = " + id, e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void add(Feedback feedback) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
-            feedbackDAO.insert(feedback);
-        } catch (Exception e) {
-            LOGGER.error("Fail to add feedback: " + feedback, e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void update(Feedback feedback) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
-            feedbackDAO.update(feedback);
-        } catch (Exception e) {
-            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
-            throw new RuntimeException(e);
-        }
     }
 }
