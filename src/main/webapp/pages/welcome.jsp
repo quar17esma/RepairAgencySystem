@@ -15,11 +15,10 @@
 
 <jsp:include page="/pages/header.jsp"/>
 
-<%--<div>--%>
-    <%--<c:out value="${successAddFoodMessage}"/>--%>
-    <%--<c:out value="${successAddMeal}"/>--%>
-    <%--<br>--%>
-<%--</div>--%>
+<div>
+    <c:out value="${successAddApplicationMessage}"/>
+    <br>
+</div>
 
 <div>
     <br>

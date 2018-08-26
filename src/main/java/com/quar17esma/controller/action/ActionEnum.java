@@ -31,11 +31,11 @@ public enum ActionEnum {
             this.action = new EditApplication();
         }
     },
-//    ADD_APPLICATION {
-//        {
-//            this.action = new AddApplication();
-//        }
-//    },
+    ADD_APPLICATION {
+        {
+            this.action = new AddApplication();
+        }
+    },
 //    SHOW_MY_MEALS {
 //        {
 //            this.action = new ShowMyMeals();
@@ -53,7 +53,7 @@ public enum ActionEnum {
 //    },
 //    ADD_FOOD {
 //        {
-//            this.action = new AddFood();
+//            this.action = new AddApplication();
 //        }
 //    },
 //    SEARCH_FOOD {

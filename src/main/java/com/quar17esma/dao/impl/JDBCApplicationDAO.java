@@ -6,9 +6,8 @@ import com.quar17esma.enums.Status;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Date;
+import java.util.*;
 
 public class JDBCApplicationDAO implements ApplicationDAO {
     private static final Logger LOGGER = Logger.getLogger(JDBCApplicationDAO.class);
@@ -152,8 +151,10 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setString(4, application.getProduct());
             query.setString(5, application.getRepairType());
             query.setDate(6, Date.valueOf(application.getCreateDate()));
-            query.setDate(7, Date.valueOf(application.getProcessDate()));
-            query.setDate(8, Date.valueOf(application.getCompleteDate()));
+            Date processDate = (application.getProcessDate() != null) ? Date.valueOf(application.getProcessDate()) : null;
+            query.setDate(7, processDate);
+            Date completeDate = (application.getCompleteDate() != null) ? Date.valueOf(application.getCompleteDate()) : null;
+            query.setDate(8, completeDate);
             query.setString(9, application.getDeclineReason());
             query.executeUpdate();
             ResultSet rsId = query.getGeneratedKeys();
