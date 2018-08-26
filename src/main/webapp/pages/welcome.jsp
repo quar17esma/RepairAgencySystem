@@ -18,6 +18,8 @@
 <div>
     <c:out value="${successAddApplicationMessage}"/>
     <c:out value="${successCompleteApplicationMessage}"/>
+    <c:out value="${successDeclineApplicationMessage}"/>
+    <c:out value="${successAcceptApplicationMessage}"/>
     <br>
 </div>
 

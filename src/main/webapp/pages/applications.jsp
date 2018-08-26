@@ -71,6 +71,8 @@
                         <br>
                         <form class="button" name="declineApplicationForm" method="POST" action="./decline_application">
                             <input type="hidden" name="applicationId" value="${application.id}">
+                            <label><fmt:message key="label.decline.reason"/></label>
+                            <input type="textarea" rows="4" cols="50"  name="declineReason" value="${application.declineReason}" required="required">
                             <fmt:message var="buttonDecline" key="button.decline"/>
                             <input type="submit" value="${buttonDecline}">
                         </form>

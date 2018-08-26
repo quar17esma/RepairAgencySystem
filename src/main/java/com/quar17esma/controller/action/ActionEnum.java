@@ -41,16 +41,17 @@ public enum ActionEnum {
             this.action = new AcceptApplication();
         }
     },
+    DECLINE_APPLICATION {
+        {
+            this.action = new DeclineApplication();
+        }
+    },
     COMPLETE_APPLICATION {
         {
             this.action = new CompleteApplication();
         }
     },
-//    SHOW_MY_MEALS {
-//        {
-//            this.action = new ShowMyMeals();
-//        }
-//    },
+
     SHOW_APPLICATIONS {
         {
             this.action = new ShowApplications();
@@ -61,21 +62,6 @@ public enum ActionEnum {
             this.action = new ShowAcceptedApplications();
         }
     },
-//    EDIT_FOOD {
-//        {
-//            this.action = new EditApplication();
-//        }
-//    },
-//    ADD_FOOD {
-//        {
-//            this.action = new AddApplication();
-//        }
-//    },
-//    SEARCH_FOOD {
-//        {
-//            this.action = new SearchFood();
-//        }
-//    },
     CHANGE_LOCALE {
         {
             this.action = new ChangeLocale();
