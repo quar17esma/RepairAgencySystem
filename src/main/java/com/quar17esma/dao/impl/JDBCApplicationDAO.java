@@ -27,8 +27,10 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ";
     private static final String FIND_BY_PAGE = "SELECT * FROM application ORDER BY application.create_date DESC LIMIT ?, ? ";
     private static final String FIND_ACCEPTED_BY_PAGE = "SELECT * FROM application WHERE application.status = 'ACCEPTED' ORDER BY application.create_date DESC LIMIT ?, ? ";
+    private static final String FIND_BY_USER_ID_BY_PAGE = "SELECT * FROM application WHERE application.user_id = ? ORDER BY application.create_date DESC LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM application ";
     private static final String COUNT_ACCEPTED_ID = "SELECT COUNT(id) FROM application WHERE application.status = 'ACCEPTED' ";
+    private static final String COUNT_BY_USER_ID = "SELECT COUNT(id) FROM application WHERE application.user_id = ? ";
 
     private Connection connection;
 
@@ -253,6 +255,46 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count accepted applications", e);
+            throw new RuntimeException(e);
+        }
+        return applicationCounter;
+    }
+
+    @Override
+    public List<Application> findByUserIdByPage(long userId, int page, int applicationsOnPage) {
+        List<Application> applications = new ArrayList<>();
+
+        int offset = (page - 1) * applicationsOnPage;
+
+        try (PreparedStatement query = connection.prepareStatement(FIND_BY_USER_ID_BY_PAGE)) {
+            query.setLong(1, userId);
+            query.setInt(2, offset);
+            query.setInt(3, applicationsOnPage);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Application application = createApplication(rs);
+                applications.add(application);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Fail to find applications by user id by Page, page = " + page +
+                    ", applicationsOnPage = " + applicationsOnPage, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
+    }
+
+    @Override
+    public long countAllByUserId(long userId) {
+        long applicationCounter = 0;
+        try (PreparedStatement query = connection.prepareStatement(COUNT_BY_USER_ID)) {
+            query.setLong(1, userId);
+            ResultSet rs = query.executeQuery();
+            if (rs.next()) {
+                applicationCounter = rs.getLong("COUNT(id)");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Fail to count by user id applications", e);
             throw new RuntimeException(e);
         }
         return applicationCounter;

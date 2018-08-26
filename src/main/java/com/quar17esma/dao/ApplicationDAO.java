@@ -14,4 +14,8 @@ public interface ApplicationDAO extends GenericDAO<Application> {
     List<Application> findAcceptedByPage(int page, int applicationsOnPage);
 
     long countAccepted();
+
+    List<Application> findByUserIdByPage(long userId, int page, int applicationsOnPage);
+
+    long countAllByUserId(long userId);
 }

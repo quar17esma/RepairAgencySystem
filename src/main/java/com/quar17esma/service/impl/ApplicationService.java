@@ -169,4 +169,36 @@ public class ApplicationService extends Service implements IApplicationService {
 
         return applicationCounter;
     }
+
+    public List<Application> getByUserIdByPage(long userId, int page, int applicationsOnPage) {
+        List<Application> applications = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
+        } catch (Exception e) {
+            LOGGER.error("Fail to get applications by user id: " + userId +
+                    ", by page, page = " + page +
+                    ", applicationsOnPage = " + applicationsOnPage, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
+    }
+
+    public long getAllByUserIdQuantity(long userId) {
+        long applicationCounter;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applicationCounter = applicationDAO.countAllByUserId(userId);
+        } catch (Exception e) {
+            LOGGER.error("Fail to get applications quantity by user id", e);
+            throw new RuntimeException(e);
+        }
+
+        return applicationCounter;
+    }
 }
