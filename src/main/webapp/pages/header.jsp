@@ -35,10 +35,13 @@
         <fmt:message var="buttonAddApplication" key="button.add.application"/>
         <input type="submit" value="${buttonAddApplication}">
     </form>
-    <%--<form class="headerButton" name="addNewFoodForm" method="POST" action="./edit_food">--%>
-        <%--<fmt:message var="buttonAddFood" key="button.add.food"/>--%>
-        <%--<input type="submit" value="${buttonAddFood}">--%>
-    <%--</form>--%>
+    <%--For MANAGER--%>
+    <c:if test="${sessionScope.user.role == 'MANAGER'}">
+        <form class="headerButton" name="showApplicationsForm" method="POST" action="./show_applications">
+            <fmt:message var="buttonApplications" key="button.applications"/>
+            <input type="submit" value="${buttonApplications}">
+        </form>
+    </c:if>
     <br/>
     <hr/>
 </div>
