@@ -15,11 +15,11 @@ import java.util.Optional;
 public class LoginService extends Service implements ILoginService {
     private static final Logger LOGGER = Logger.getLogger(LoginService.class);
 
-    private IUserService clientsService;
+    private IUserService userService;
 
-    private LoginService(DaoFactory factory, IUserService clientsService, ConnectionPool connectionPool) {
+    private LoginService(DaoFactory factory, IUserService userService, ConnectionPool connectionPool) {
         super(factory, connectionPool);
-        this.clientsService = clientsService;
+        this.userService = userService;
     }
 
     private static class Holder {
@@ -33,7 +33,7 @@ public class LoginService extends Service implements ILoginService {
 
     public User login(String email, String password) throws LoginException {
         if (checkLogin(email, password)) {
-            return clientsService.getByEmail(email);
+            return userService.getByEmail(email);
         } else {
             throw new LoginException("Fail to login", email);
         }
