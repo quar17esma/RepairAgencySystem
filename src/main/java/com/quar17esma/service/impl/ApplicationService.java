@@ -3,9 +3,7 @@ package com.quar17esma.service.impl;
 import com.quar17esma.dao.ApplicationDAO;
 import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
-import com.quar17esma.dao.FeedbackDAO;
 import com.quar17esma.entity.Application;
-import com.quar17esma.entity.Feedback;
 import com.quar17esma.service.IApplicationService;
 import org.apache.log4j.Logger;
 
@@ -44,17 +42,46 @@ public class ApplicationService extends Service implements IApplicationService {
 
     @Override
     public List<Application> getAll() {
-        return null;
+        List<Application> applications = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applications = applicationDAO.findAll();
+        } catch (Exception e) {
+            LOGGER.error("Fail to get all applications", e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
     }
 
     @Override
     public Application getById(long id) {
-        return null;
+        Application application = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            application = applicationDAO.findById(id).get();
+        } catch (Exception e) {
+            LOGGER.error("Fail to find application with id = " + id, e);
+            throw new RuntimeException(e);
+        }
+
+        return application;
     }
 
     @Override
-    public void update(Application item) {
-
+    public void update(Application application) {
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applicationDAO.update(application);
+        } catch (Exception e) {
+            LOGGER.error("Fail to update application with id = " + application.getId(), e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
