@@ -26,14 +26,14 @@ public enum ActionEnum {
             this.action = new EditUser();
         }
     },
-//    EDIT_MEAL {
+    EDIT_APPLICATION {
+        {
+            this.action = new EditApplication();
+        }
+    },
+//    ADD_APPLICATION {
 //        {
-//            this.action = new EditMeal();
-//        }
-//    },
-//    ADD_MEAL {
-//        {
-//            this.action = new AddMeal();
+//            this.action = new AddApplication();
 //        }
 //    },
 //    SHOW_MY_MEALS {
@@ -48,7 +48,7 @@ public enum ActionEnum {
 //    },
 //    EDIT_FOOD {
 //        {
-//            this.action = new EditFood();
+//            this.action = new EditApplication();
 //        }
 //    },
 //    ADD_FOOD {
