@@ -46,6 +46,11 @@ public enum ActionEnum {
             this.action = new ShowApplications();
         }
     },
+    SHOW_ACCEPTED_APPLICATIONS {
+        {
+            this.action = new ShowAcceptedApplications();
+        }
+    },
 //    EDIT_FOOD {
 //        {
 //            this.action = new EditApplication();

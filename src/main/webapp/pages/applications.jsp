@@ -61,7 +61,7 @@
                 </c:if>
                 </td>
                 <td>
-                    <c:if test="${application.status == 'NEW'}">
+                    <c:if test="${sessionScope.user.role == 'MANAGER' && application.status == 'NEW'}">
                         <form class="button" name="acceptApplicationForm" method="POST" action="./accept_application">
                             <input type="hidden" name="applicationId" value="${application.id}">
                             <label><fmt:message key="label.price"/></label>
@@ -74,6 +74,13 @@
                             <input type="hidden" name="applicationId" value="${application.id}">
                             <fmt:message var="buttonDecline" key="button.decline"/>
                             <input type="submit" value="${buttonDecline}">
+                        </form>
+                    </c:if>
+                    <c:if test="${sessionScope.user.role == 'REPAIRER' && application.status == 'ACCEPTED'}">
+                        <form class="button" name="completeApplicationForm" method="POST" action="./complete_application">
+                            <input type="hidden" name="applicationId" value="${application.id}">
+                            <fmt:message var="buttonComplete" key="button.complete"/>
+                            <input type="submit" value="${buttonComplete}">
                         </form>
                     </c:if>
                 </td>

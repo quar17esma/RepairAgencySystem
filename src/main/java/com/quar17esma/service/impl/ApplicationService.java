@@ -111,4 +111,35 @@ public class ApplicationService extends Service implements IApplicationService {
 
         return applicationCounter;
     }
+
+    public List<Application> getAcceptedByPage(int page, int applicationsOnPage) {
+        List<Application> applications = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
+        } catch (Exception e) {
+            LOGGER.error("Fail to get accepted applications by page, page = " + page +
+                    ", applicationsOnPage = " + applicationsOnPage, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
+    }
+
+    public long getAcceptedQuantity() {
+        long applicationCounter;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applicationCounter = applicationDAO.countAccepted();
+        } catch (Exception e) {
+            LOGGER.error("Fail to get accepted applications quantity", e);
+            throw new RuntimeException(e);
+        }
+
+        return applicationCounter;
+    }
 }

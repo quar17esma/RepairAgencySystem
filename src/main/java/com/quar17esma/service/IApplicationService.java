@@ -10,4 +10,8 @@ public interface IApplicationService extends GenericService<Application> {
     List<Application> getByPage(int page, int applicationsOnPage);
 
     long getAllQuantity();
+
+    List<Application> getAcceptedByPage(int page, int applicationsOnPage);
+
+    long getAcceptedQuantity();
 }

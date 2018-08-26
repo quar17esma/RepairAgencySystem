@@ -42,6 +42,13 @@
             <input type="submit" value="${buttonApplications}">
         </form>
     </c:if>
+    <%--For REPAIRER--%>
+    <c:if test="${sessionScope.user.role == 'REPAIRER'}">
+        <form class="headerButton" name="showAcceptedApplicationsForm" method="POST" action="./show_accepted_applications">
+            <fmt:message var="buttonApplications" key="button.applications"/>
+            <input type="submit" value="${buttonApplications}">
+        </form>
+    </c:if>
     <br/>
     <hr/>
 </div>

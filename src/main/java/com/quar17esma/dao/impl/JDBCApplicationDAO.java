@@ -26,7 +26,9 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             "(user_id, status, price, product, repair_type, create_date, process_date, complete_date, decline_reason) " +
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ";
     private static final String FIND_BY_PAGE = "SELECT * FROM application ORDER BY application.create_date DESC LIMIT ?, ? ";
+    private static final String FIND_ACCEPTED_BY_PAGE = "SELECT * FROM application WHERE application.status = 'ACCEPTED' ORDER BY application.create_date DESC LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM application ";
+    private static final String COUNT_ACCEPTED_ID = "SELECT COUNT(id) FROM application WHERE application.status = 'ACCEPTED' ";
 
     private Connection connection;
 
@@ -210,6 +212,44 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count applications", e);
+            throw new RuntimeException(e);
+        }
+        return applicationCounter;
+    }
+
+    @Override
+    public List<Application> findAcceptedByPage(int page, int applicationsOnPage) {
+        List<Application> applications = new ArrayList<>();
+
+        int offset = (page - 1) * applicationsOnPage;
+
+        try (PreparedStatement query = connection.prepareStatement(FIND_ACCEPTED_BY_PAGE)) {
+            query.setInt(1, offset);
+            query.setInt(2, applicationsOnPage);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Application application = createApplication(rs);
+                applications.add(application);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Fail to find accepted applications by Page, page = " + page +
+                    ", applicationsOnPage = " + applicationsOnPage, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
+    }
+
+    @Override
+    public long countAccepted() {
+        long applicationCounter = 0;
+        try (PreparedStatement query = connection.prepareStatement(COUNT_ACCEPTED_ID)) {
+            ResultSet rs = query.executeQuery();
+            if (rs.next()) {
+                applicationCounter = rs.getLong("COUNT(id)");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Fail to count accepted applications", e);
             throw new RuntimeException(e);
         }
         return applicationCounter;
