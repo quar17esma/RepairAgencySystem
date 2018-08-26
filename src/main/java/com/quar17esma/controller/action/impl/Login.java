@@ -46,7 +46,8 @@ public class Login implements Action {
     private String getLocaleOrSetDefault(HttpServletRequest request) {
         String locale = (String) request.getSession().getAttribute("locale");
         if (locale == null) {
-            request.getSession().setAttribute("locale", LabelManager.DEFAULT_LOCALE);
+            locale = LabelManager.DEFAULT_LOCALE;
+            request.getSession().setAttribute("locale", locale);
         }
         return locale;
     }
