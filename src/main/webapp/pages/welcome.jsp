@@ -17,6 +17,7 @@
 
 <div>
     <c:out value="${successAddApplicationMessage}"/>
+    <c:out value="${successCompleteApplicationMessage}"/>
     <br>
 </div>
 

@@ -123,6 +123,7 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setDate(6, Date.valueOf(application.getProcessDate()));
             query.setDate(7, Date.valueOf(application.getCompleteDate()));
             query.setString(8, application.getDeclineReason());
+            query.setLong(9, application.getId());
             query.executeUpdate();
             result = true;
         } catch (Exception e) {

@@ -19,10 +19,9 @@
 </head>
 <body>
     <jsp:include page="/pages/header.jsp"/>
-    <%--<div>--%>
-        <%--<c:out value="${successAddFoodMessage}"/>--%>
-        <%--<c:out value="${successDeleteFoodMessage}"/>--%>
-    <%--</div>--%>
+    <div>
+        <c:out value="${errorCompleteApplicationMessage}"/>
+    </div>
     <%--<div>--%>
         <%--<form name="searchForm" method="POST" action="./search_food">--%>
             <%--<label><fmt:message key="label.search.food"/></label>--%>
