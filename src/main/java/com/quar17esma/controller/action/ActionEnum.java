@@ -41,11 +41,11 @@ public enum ActionEnum {
 //            this.action = new ShowMyMeals();
 //        }
 //    },
-//    SHOW_FOODS {
-//        {
-//            this.action = new ShowFoods();
-//        }
-//    },
+    SHOW_APPLICATIONS {
+        {
+            this.action = new ShowApplications();
+        }
+    },
 //    EDIT_FOOD {
 //        {
 //            this.action = new EditApplication();

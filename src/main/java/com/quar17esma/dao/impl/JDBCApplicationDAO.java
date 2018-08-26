@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 public class JDBCApplicationDAO implements ApplicationDAO {
@@ -90,6 +91,10 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     }
 
     private Application createApplication(ResultSet rs) throws SQLException {
+        LocalDate processDate = (rs.getDate("application.process_date") != null) ?
+                rs.getDate("application.process_date").toLocalDate() : null;
+        LocalDate completeDate = (rs.getDate("application.complete_date") != null) ?
+                rs.getDate("application.complete_date").toLocalDate() : null;
         return new Application.Builder()
                 .setId(rs.getLong("application.id"))
                 .setStatus(Status.valueOf(rs.getString("application.status").toUpperCase()))
@@ -97,8 +102,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
                 .setPrice(rs.getInt("application.price"))
                 .setRepairType(rs.getString("application.repair_type"))
                 .setCreateDate(rs.getDate("application.create_date").toLocalDate())
-                .setProcessDate(rs.getDate("application.process_date").toLocalDate())
-                .setCompleteDate(rs.getDate("application.complete_date").toLocalDate())
+                .setProcessDate(processDate)
+                .setCompleteDate(completeDate)
                 .setDeclineReason(rs.getString("application.decline_reason"))
                 .build();
     }
