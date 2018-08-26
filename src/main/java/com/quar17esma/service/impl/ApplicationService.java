@@ -3,7 +3,9 @@ package com.quar17esma.service.impl;
 import com.quar17esma.dao.ApplicationDAO;
 import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
+import com.quar17esma.dao.FeedbackDAO;
 import com.quar17esma.entity.Application;
+import com.quar17esma.entity.Feedback;
 import com.quar17esma.service.IApplicationService;
 import org.apache.log4j.Logger;
 
@@ -77,5 +79,36 @@ public class ApplicationService extends Service implements IApplicationService {
             LOGGER.error("Fail to add application: " + application, e);
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Application> getByPage(int page, int applicationsOnPage) {
+        List<Application> applications = null;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applications = applicationDAO.findByPage(page, applicationsOnPage);
+        } catch (Exception e) {
+            LOGGER.error("Fail to get all applications by page, page = " + page +
+                    ", applicationsOnPage = " + applicationsOnPage, e);
+            throw new RuntimeException(e);
+        }
+
+        return applications;
+    }
+
+    public long getAllQuantity() {
+        long applicationCounter;
+
+        try (Connection connection = connectionPool.getConnection();
+             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
+            connection.setAutoCommit(true);
+            applicationCounter = applicationDAO.countAll();
+        } catch (Exception e) {
+            LOGGER.error("Fail to get all applications quantity", e);
+            throw new RuntimeException(e);
+        }
+
+        return applicationCounter;
     }
 }
