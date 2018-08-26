@@ -36,6 +36,11 @@ public enum ActionEnum {
             this.action = new AddApplication();
         }
     },
+    ACCEPT_APPLICATION {
+        {
+            this.action = new AcceptApplication();
+        }
+    },
     COMPLETE_APPLICATION {
         {
             this.action = new CompleteApplication();

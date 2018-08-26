@@ -120,8 +120,10 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setString(3, application.getProduct());
             query.setString(4, application.getRepairType());
             query.setDate(5, Date.valueOf(application.getCreateDate()));
-            query.setDate(6, Date.valueOf(application.getProcessDate()));
-            query.setDate(7, Date.valueOf(application.getCompleteDate()));
+            Date processDate = (application.getProcessDate() != null) ? Date.valueOf(application.getProcessDate()) : null;
+            query.setDate(6, processDate);
+            Date completeDate = (application.getCompleteDate() != null) ? Date.valueOf(application.getCompleteDate()) : null;
+            query.setDate(7, completeDate);
             query.setString(8, application.getDeclineReason());
             query.setLong(9, application.getId());
             query.executeUpdate();
