@@ -67,6 +67,11 @@ public enum ActionEnum {
             this.action = new ShowMyApplications();
         }
     },
+    SHOW_FEEDBACKS {
+        {
+            this.action = new ShowFeedbacks();
+        }
+    },
     CHANGE_LOCALE {
         {
             this.action = new ChangeLocale();
