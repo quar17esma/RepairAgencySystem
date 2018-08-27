@@ -84,6 +84,18 @@
                             <input type="submit" value="${buttonComplete}">
                         </form>
                     </c:if>
+                    <c:if test="${sessionScope.user.role == 'USER' && application.status == 'COMPLETED'}">
+                        <form class="button" name="addFeedbackForm" method="POST" action="./add_feedback">
+                            <input type="hidden" name="applicationId" value="${application.id}">
+                            <label><fmt:message key="label.feedback.mark"/></label>
+                            <input type="number" value="0" name="mark" min="1" max="5" step="1" required="required">
+                            <br>
+                            <label><fmt:message key="label.feedback.comment"/></label>
+                            <input type="textarea" rows="4" cols="50"  name="feedback" value="${feedback.comment}" required="required">
+                            <fmt:message var="buttonComplete" key="button.complete"/>
+                            <input type="submit" value="${buttonComplete}">
+                        </form>
+                    </c:if>
                 </td>
             </tr>
             </c:forEach>
