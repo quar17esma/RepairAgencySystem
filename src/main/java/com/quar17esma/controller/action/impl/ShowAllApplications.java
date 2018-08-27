@@ -9,16 +9,16 @@ import com.quar17esma.service.impl.ApplicationService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public class ShowApplications implements Action {
+public class ShowAllApplications implements Action {
     private static final int DEFAULT_PAGE = 1;
     private static final int APPLICATIONS_ON_PAGE = 5;
     private IApplicationService applicationService;
 
-    public ShowApplications() {
+    public ShowAllApplications() {
         this.applicationService = ApplicationService.getInstance();
     }
 
-    public ShowApplications(IApplicationService applicationService) {
+    public ShowAllApplications(IApplicationService applicationService) {
         this.applicationService = applicationService;
     }
 

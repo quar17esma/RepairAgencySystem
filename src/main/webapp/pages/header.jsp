@@ -40,7 +40,7 @@
         </form>
         <%--For MANAGER--%>
         <c:if test="${sessionScope.user.role == 'MANAGER'}">
-            <form class="headerButton" name="showApplicationsForm" method="POST" action="./show_applications">
+            <form class="headerButton" name="showApplicationsForm" method="POST" action="./show_all_applications">
                 <fmt:message var="buttonApplications" key="button.applications"/>
                 <input type="submit" value="${buttonApplications}">
             </form>

@@ -52,9 +52,9 @@ public enum ActionEnum {
         }
     },
 
-    SHOW_APPLICATIONS {
+    SHOW_ALL_APPLICATIONS {
         {
-            this.action = new ShowApplications();
+            this.action = new ShowAllApplications();
         }
     },
     SHOW_ACCEPTED_APPLICATIONS {
