@@ -27,6 +27,10 @@
             <fmt:message var="buttonLogout" key="button.logout"/>
             <input type="submit" value="${buttonLogout}"/>
         </form>
+        <form class="headerButton" name="feedbacksForm" method="POST" action="./show_feedbacks">
+            <fmt:message var="buttonFeedbacks" key="button.feedbacks"/>
+            <input type="submit" value="${buttonFeedbacks}">
+        </form>
         <%--For MANAGER--%>
         <c:if test="${sessionScope.user.role == 'USER'}">
             <form class="headerButton" name="myApplicationsForm" method="POST" action="./show_my_applications">
