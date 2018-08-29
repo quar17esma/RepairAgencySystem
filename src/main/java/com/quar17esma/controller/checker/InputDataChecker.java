@@ -5,18 +5,21 @@ import java.util.regex.Pattern;
 
 public abstract class InputDataChecker {
 
-     protected boolean isMatches(Pattern pattern, String string) {
+    protected boolean isMatches(Pattern pattern, String string) {
         Matcher matcher = pattern.matcher(string);
         return matcher.matches();
     }
 
     protected boolean isIntInRange(int number, int min, int max) {
-        boolean result = false;
+        return (number >= min && number <= max);
+    }
 
-        if (number >= min && number <= max) {
-            result = true;
+    protected boolean checkString(String stringToCheck, Pattern pattern, int maxLength) {
+        if (stringToCheck == null || stringToCheck.isEmpty()) {
+            return false;
         }
 
-        return result;
+        return isMatches(pattern, stringToCheck) &&
+                stringToCheck.length() <= maxLength;
     }
 }
