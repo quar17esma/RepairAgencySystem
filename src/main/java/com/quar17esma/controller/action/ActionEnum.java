@@ -67,6 +67,11 @@ public enum ActionEnum {
             this.action = new ShowMyApplications();
         }
     },
+    ADD_FEEDBACK {
+        {
+            this.action = new AddFeedback();
+        }
+    },
     SHOW_FEEDBACKS {
         {
             this.action = new ShowFeedbacks();

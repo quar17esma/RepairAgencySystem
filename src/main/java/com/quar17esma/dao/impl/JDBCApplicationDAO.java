@@ -2,6 +2,7 @@ package com.quar17esma.dao.impl;
 
 import com.quar17esma.dao.ApplicationDAO;
 import com.quar17esma.entity.Application;
+import com.quar17esma.entity.Feedback;
 import com.quar17esma.enums.Status;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,9 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     private static final String FIND_ALL = "SELECT * FROM application ";
     private static final String FIND_BY_ID = "SELECT * FROM application WHERE application.id = ? ";
     private static final String FIND_ALL_BY_USER_ID = "SELECT * FROM application " +
-            "JOIN user ON application.user_id = user.id WHERE application.user_id = ? ";
+            "JOIN user ON application.user_id = user.id " +
+            "JOIN feedback ON application.id = feedback.application_id " +
+            "WHERE application.user_id = ? ";
     private static final String UPDATE = "UPDATE application " +
             "SET status = ?, price = ?, product = ?, repair_type = ?, " +
             "create_date = ?, process_date = ?, complete_date = ?, decline_reason = ? " +
@@ -25,12 +28,23 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     private static final String INSERT = "INSERT INTO application " +
             "(user_id, status, price, product, repair_type, create_date, process_date, complete_date, decline_reason) " +
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) ";
-    private static final String FIND_BY_PAGE = "SELECT * FROM application ORDER BY application.create_date DESC LIMIT ?, ? ";
-    private static final String FIND_ACCEPTED_BY_PAGE = "SELECT * FROM application WHERE application.status = 'ACCEPTED' ORDER BY application.create_date DESC LIMIT ?, ? ";
-    private static final String FIND_BY_USER_ID_BY_PAGE = "SELECT * FROM application WHERE application.user_id = ? ORDER BY application.create_date DESC LIMIT ?, ? ";
+    private static final String FIND_BY_PAGE = "SELECT * FROM application " +
+            "ORDER BY application.create_date DESC " +
+            "LIMIT ?, ? ";
+    private static final String FIND_ACCEPTED_BY_PAGE = "SELECT * FROM application " +
+            "WHERE application.status = 'ACCEPTED' " +
+            "ORDER BY application.create_date DESC " +
+            "LIMIT ?, ? ";
+    private static final String FIND_BY_USER_ID_BY_PAGE = "SELECT * FROM application " +
+            "LEFT JOIN feedback ON application.id = feedback.application_id " +
+            "WHERE application.user_id = ? " +
+            "ORDER BY application.create_date DESC " +
+            "LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM application ";
-    private static final String COUNT_ACCEPTED_ID = "SELECT COUNT(id) FROM application WHERE application.status = 'ACCEPTED' ";
-    private static final String COUNT_BY_USER_ID = "SELECT COUNT(id) FROM application WHERE application.user_id = ? ";
+    private static final String COUNT_ACCEPTED_ID = "SELECT COUNT(id) FROM application " +
+            "WHERE application.status = 'ACCEPTED' ";
+    private static final String COUNT_BY_USER_ID = "SELECT COUNT(id) FROM application " +
+            "WHERE application.user_id = ? ";
 
     private Connection connection;
 
@@ -83,7 +97,7 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setLong(1, userId);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Application application = createApplication(rs);
+                Application application = createApplicationWithFeedback(rs);
                 applications.add(application);
             }
         } catch (Exception e) {
@@ -110,6 +124,22 @@ public class JDBCApplicationDAO implements ApplicationDAO {
                 .setCompleteDate(completeDate)
                 .setDeclineReason(rs.getString("application.decline_reason"))
                 .build();
+    }
+
+    private Application createApplicationWithFeedback(ResultSet rs) throws SQLException {
+        Application application = createApplication(rs);
+
+        if (rs.getString("feedback.comment") != null) {
+            application.setFeedback(new Feedback.Builder()
+                    .setId(rs.getLong("feedback.id"))
+                    .setMark(rs.getInt("feedback.mark"))
+                    .setComment(rs.getString("feedback.comment"))
+                    .setDateTime(rs.getTimestamp("feedback.date_time").toLocalDateTime())
+                    .build()
+            );
+        }
+
+        return application;
     }
 
     @Override
@@ -272,7 +302,7 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setInt(3, applicationsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Application application = createApplication(rs);
+                Application application = createApplicationWithFeedback(rs);
                 applications.add(application);
             }
         } catch (Exception e) {

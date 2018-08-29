@@ -20,7 +20,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             "JOIN application ON feedback.application_id = application.id WHERE feedback.id = ?";
     private static final String UPDATE = "UPDATE feedback SET date_time = ?, comment = ?, mark = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM feedback WHERE id = ?";
-    private static final String INSERT = "INSERT INTO feedback (date_time, comment, mark) VALUES(?, ?, ?) ";
+    private static final String INSERT = "INSERT INTO feedback (date_time, comment, mark, application_id) VALUES(?, ?, ?, ?) ";
     private static final String FIND_BY_PAGE = "SELECT * FROM feedback ORDER BY feedback.date_time DESC LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM feedback ";
 
@@ -130,6 +130,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             query.setTimestamp(1, Timestamp.valueOf(feedback.getDateTime()));
             query.setString(2, feedback.getComment());
             query.setInt(3, feedback.getMark());
+            query.setLong(4, feedback.getApplication().getId());
             query.executeUpdate();
             ResultSet rsId = query.getGeneratedKeys();
             if (rsId.next()) {

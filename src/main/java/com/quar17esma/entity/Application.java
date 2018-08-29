@@ -197,7 +197,7 @@ public class Application {
             application.setCompleteDate(completeDate);
             return this;
         }
-        
+
         public Builder setFeedback(Feedback feedback) {
             application.setFeedback(feedback);
             return this;

@@ -31,7 +31,7 @@
             <fmt:message var="buttonFeedbacks" key="button.feedbacks"/>
             <input type="submit" value="${buttonFeedbacks}">
         </form>
-        <%--For MANAGER--%>
+        <%--For USER--%>
         <c:if test="${sessionScope.user.role == 'USER'}">
             <form class="headerButton" name="myApplicationsForm" method="POST" action="./show_my_applications">
                 <fmt:message var="buttonMyApplications" key="button.my.applications"/>
