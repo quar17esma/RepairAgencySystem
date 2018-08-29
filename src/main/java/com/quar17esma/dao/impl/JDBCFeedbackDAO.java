@@ -37,7 +37,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
         try (PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Feedback feedback = createFeedbackWithApplication(rs);
+                Feedback feedback = createFeedback(rs);
                 feedbackList.add(feedback);
             }
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             query.setLong(1, id);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Feedback fb = createFeedbackWithApplication(rs);
+                Feedback fb = createFeedback(rs);
                 feedback = Optional.of(fb);
             }
         } catch (Exception e) {
@@ -67,24 +67,32 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
         return feedback;
     }
 
-    private Feedback createFeedbackWithApplication(ResultSet rs) throws SQLException {
-         return new Feedback.Builder()
+    private Feedback createFeedback(ResultSet rs) throws SQLException {
+        return new Feedback.Builder()
                 .setId(rs.getLong("feedback.id"))
                 .setDateTime(rs.getTimestamp("feedback.date_time").toLocalDateTime())
                 .setComment(rs.getString("feedback.comment"))
                 .setMark(rs.getInt("feedback.mark"))
-                .setApplication(new Application.Builder()
-                        .setId(rs.getLong("application.id"))
-                        .setStatus(Status.valueOf(rs.getString("application.status").toUpperCase()))
-                        .setPrice(rs.getInt("application.price"))
-                        .setProduct(rs.getString("application.product"))
-                        .setRepairType(rs.getString("application.repair_type"))
-                        .setDeclineReason(rs.getString("application.decline_reason"))
-                        .setCreateDate(rs.getDate("application.create_date").toLocalDate())
-                        .setProcessDate(rs.getDate("application.process_date").toLocalDate())
-                        .setCompleteDate(rs.getDate("application.complete_date").toLocalDate())
-                        .build())
                 .build();
+    }
+
+    private Feedback createFeedbackWithApplication(ResultSet rs) throws SQLException {
+        Feedback feedback = createFeedback(rs);
+
+        feedback.setApplication(new Application.Builder()
+                .setId(rs.getLong("application.id"))
+                .setStatus(Status.valueOf(rs.getString("application.status").toUpperCase()))
+                .setPrice(rs.getInt("application.price"))
+                .setProduct(rs.getString("application.product"))
+                .setRepairType(rs.getString("application.repair_type"))
+                .setDeclineReason(rs.getString("application.decline_reason"))
+                .setCreateDate(rs.getDate("application.create_date").toLocalDate())
+                .setProcessDate(rs.getDate("application.process_date").toLocalDate())
+                .setCompleteDate(rs.getDate("application.complete_date").toLocalDate())
+                .build()
+        );
+
+        return feedback;
     }
 
     @Override
@@ -147,25 +155,25 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
 
     @Override
     public List<Feedback> findByPage(int page, int feedbackOnPage) {
-            List<Feedback> feedbackList = new ArrayList<>();
+        List<Feedback> feedbackList = new ArrayList<>();
 
-            int offset = (page - 1) * feedbackOnPage;
+        int offset = (page - 1) * feedbackOnPage;
 
-            try (PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
-                query.setInt(1, offset);
-                query.setInt(2, feedbackOnPage);
-                ResultSet rs = query.executeQuery();
-                while (rs.next()) {
-                    Feedback feedback = createFeedbackWithApplication(rs);
-                    feedbackList.add(feedback);
-                }
-            } catch (Exception e) {
-                LOGGER.error("Fail to find feedbackList by Page, page = " + page +
-                        ", foodsOnPage = " + feedbackOnPage, e);
-                throw new RuntimeException(e);
+        try (PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
+            query.setInt(1, offset);
+            query.setInt(2, feedbackOnPage);
+            ResultSet rs = query.executeQuery();
+            while (rs.next()) {
+                Feedback feedback = createFeedback(rs);
+                feedbackList.add(feedback);
             }
+        } catch (Exception e) {
+            LOGGER.error("Fail to find feedbackList by Page, page = " + page +
+                    ", foodsOnPage = " + feedbackOnPage, e);
+            throw new RuntimeException(e);
+        }
 
-            return feedbackList;
+        return feedbackList;
     }
 
     @Override

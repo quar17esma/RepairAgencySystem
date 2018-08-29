@@ -28,10 +28,16 @@
         <div>
             <label><fmt:message key="label.author"/></label>
             <%--<c:out value="${}"/><br>--%>
+            <label><fmt:message key="label.mark"/></label>
             <c:out value="${feedback.mark}"/><br>
-            <c:out value="${feedback.comment}"/><br>
+            <div>
+                <c:out value="${feedback.comment}"/><br>
+            </div>
+            <label><fmt:message key="label.date"/></label>
+            <%--<fmt:formatDate value="${feedback.dateTime}" type="both" dateStyle="full"/> <br/>--%>
             <c:out value="${feedback.dateTime}"/><br>
         </div>
+        <br>
     </c:forEach>
     <br/>
 </div>
