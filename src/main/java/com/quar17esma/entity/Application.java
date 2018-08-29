@@ -15,6 +15,7 @@ public class Application {
     private LocalDate processDate;
     private LocalDate completeDate;
     private String declineReason;
+    private  Feedback feedback;
 
     public long getId() {
         return id;
@@ -96,6 +97,14 @@ public class Application {
         this.declineReason = declineReason;
     }
 
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -124,6 +133,7 @@ public class Application {
                 ", processDate=" + processDate +
                 ", completeDate=" + completeDate +
                 ", declineReason='" + declineReason + '\'' +
+                ", feedback=" + feedback +
                 '}';
     }
 
@@ -185,6 +195,11 @@ public class Application {
 
         public Builder setCompleteDate(LocalDate completeDate) {
             application.setCompleteDate(completeDate);
+            return this;
+        }
+        
+        public Builder setFeedback(Feedback feedback) {
+            application.setFeedback(feedback);
             return this;
         }
     }
