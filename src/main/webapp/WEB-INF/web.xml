@@ -69,18 +69,18 @@
         <url-pattern>/pages/*</url-pattern>
     </filter-mapping>
 
-    <!--<filter>-->
-        <!--<filter-name>AuthSecurityFilter</filter-name>-->
-        <!--<filter-class>com.quar17esma.filter.AuthSecurityFilter</filter-class>-->
-        <!--<init-param>-->
-            <!--<param-name>ignoredUrls</param-name>-->
-            <!--<param-value>/rest/change_locale,/rest/login,/rest/edit_client,/rest/add_client</param-value>-->
-        <!--</init-param>-->
-    <!--</filter>-->
-    <!---->
-    <!--<filter-mapping>-->
-        <!--<filter-name>AuthSecurityFilter</filter-name>-->
-        <!--<url-pattern>/rest/*</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter>
+        <filter-name>AuthSecurityFilter</filter-name>
+        <filter-class>com.quar17esma.filter.AuthSecurityFilter</filter-class>
+        <init-param>
+            <param-name>ignoredUrls</param-name>
+            <param-value>/rest/change_locale,/rest/login,/rest/edit_user,/rest/add_user</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthSecurityFilter</filter-name>
+        <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
 
 </web-app>
