@@ -77,10 +77,22 @@
             <param-value>/rest/change_locale,/rest/login,/rest/edit_user,/rest/add_user</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>AuthSecurityFilter</filter-name>
         <url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>UserSecurityFilter</filter-name>
+        <filter-class>com.quar17esma.filter.UserSecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>UserSecurityFilter</filter-name>
+        <url-pattern>/rest/accept_application</url-pattern>
+        <url-pattern>/rest/decline_application</url-pattern>
+        <url-pattern>/rest/complete_application</url-pattern>
+        <url-pattern>/rest/show_all_applications</url-pattern>
+        <url-pattern>/rest/show_accepted_applications</url-pattern>
     </filter-mapping>
 
 </web-app>
