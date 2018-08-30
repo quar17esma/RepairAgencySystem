@@ -7,9 +7,9 @@ import java.sql.Connection;
 public abstract class DaoFactory {
     private static final Logger LOGGER = Logger.getLogger(DaoFactory.class);
 
-    public abstract UserDAO createUserDAO(Connection connection);
-    public abstract ApplicationDAO createApplicationDAO(Connection connection);
-    public abstract FeedbackDAO createFeedbackDAO(Connection connection);
+    public abstract UserDAO createUserDAO();
+    public abstract ApplicationDAO createApplicationDAO();
+    public abstract FeedbackDAO createFeedbackDAO();
 
     public static DaoFactory getInstance(){
         String className = ConfigDaoFactory.getInstance().getFactoryClassName();
