@@ -59,6 +59,7 @@ public class AddUser implements Action {
         String locale = (String) request.getSession().getAttribute("locale");
         if (locale == null) {
             locale = LabelManager.DEFAULT_LOCALE;
+            request.getSession().setAttribute("locale", locale);
         }
         return locale;
     }
