@@ -1,15 +1,17 @@
 package com.quar17esma.dao.impl;
 
 import com.quar17esma.dao.ApplicationDAO;
+import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.entity.Application;
 import com.quar17esma.entity.Feedback;
 import com.quar17esma.enums.Status;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class JDBCApplicationDAO implements ApplicationDAO {
     private static final Logger LOGGER = Logger.getLogger(JDBCApplicationDAO.class);
@@ -46,17 +48,26 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     private static final String COUNT_BY_USER_ID = "SELECT COUNT(id) FROM application " +
             "WHERE application.user_id = ? ";
 
-    private Connection connection;
+    private ConnectionPool connectionPool;
 
-    public JDBCApplicationDAO(Connection connection) {
-        this.connection = connection;
+    private JDBCApplicationDAO(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
+    private static class Holder {
+        private static JDBCApplicationDAO INSTANCE = new JDBCApplicationDAO(ConnectionPool.getInstance());
+    }
+
+    public static JDBCApplicationDAO getInstance() {
+        return JDBCApplicationDAO.Holder.INSTANCE;
     }
 
     @Override
     public List<Application> findAll() {
         List<Application> applications = new ArrayList<>();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Application application = createApplication(rs);
@@ -74,7 +85,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     public Optional<Application> findById(long id) {
         Optional<Application> result = Optional.empty();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
             query.setLong(1, id);
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
@@ -93,7 +105,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     public List<Application> findAllByUserId(long userId) {
         List<Application> applications = new ArrayList<>();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_ALL_BY_USER_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_ALL_BY_USER_ID)) {
             query.setLong(1, userId);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
@@ -146,7 +159,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     public boolean update(Application application) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(UPDATE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(UPDATE)) {
             query.setString(1, application.getStatus().name());
             query.setInt(2, application.getPrice());
             query.setString(3, application.getProduct());
@@ -172,7 +186,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     public boolean delete(long id) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(DELETE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(DELETE)) {
             query.setLong(1, id);
             query.executeUpdate();
             result = true;
@@ -188,7 +203,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     public long insert(Application application) {
         long result = -1;
 
-        try (PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             query.setLong(1, application.getUser().getId());
             query.setString(2, application.getStatus().name());
             query.setInt(3, application.getPrice());
@@ -220,7 +236,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
         int offset = (page - 1) * applicationsOnPage;
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
             query.setInt(1, offset);
             query.setInt(2, applicationsOnPage);
             ResultSet rs = query.executeQuery();
@@ -240,7 +257,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     @Override
     public long countAll() {
         long applicationCounter = 0;
-        try (PreparedStatement query = connection.prepareStatement(COUNT_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(COUNT_ID)) {
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
                 applicationCounter = rs.getLong("COUNT(id)");
@@ -258,7 +276,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
         int offset = (page - 1) * applicationsOnPage;
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_ACCEPTED_BY_PAGE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_ACCEPTED_BY_PAGE)) {
             query.setInt(1, offset);
             query.setInt(2, applicationsOnPage);
             ResultSet rs = query.executeQuery();
@@ -278,7 +297,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     @Override
     public long countAccepted() {
         long applicationCounter = 0;
-        try (PreparedStatement query = connection.prepareStatement(COUNT_ACCEPTED_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(COUNT_ACCEPTED_ID)) {
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
                 applicationCounter = rs.getLong("COUNT(id)");
@@ -296,7 +316,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
         int offset = (page - 1) * applicationsOnPage;
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_USER_ID_BY_PAGE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_USER_ID_BY_PAGE)) {
             query.setLong(1, userId);
             query.setInt(2, offset);
             query.setInt(3, applicationsOnPage);
@@ -317,7 +338,8 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     @Override
     public long countAllByUserId(long userId) {
         long applicationCounter = 0;
-        try (PreparedStatement query = connection.prepareStatement(COUNT_BY_USER_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(COUNT_BY_USER_ID)) {
             query.setLong(1, userId);
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
@@ -328,10 +350,5 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             throw new RuntimeException(e);
         }
         return applicationCounter;
-    }
-
-    @Override
-    public void close() throws Exception {
-        connection.close();
     }
 }

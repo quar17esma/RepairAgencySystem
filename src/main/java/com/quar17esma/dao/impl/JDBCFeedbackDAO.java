@@ -1,5 +1,6 @@
 package com.quar17esma.dao.impl;
 
+import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.FeedbackDAO;
 import com.quar17esma.entity.Application;
 import com.quar17esma.entity.Feedback;
@@ -24,17 +25,26 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     private static final String FIND_BY_PAGE = "SELECT * FROM feedback ORDER BY feedback.date_time DESC LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM feedback ";
 
-    private Connection connection;
+    private ConnectionPool connectionPool;
 
-    public JDBCFeedbackDAO(Connection connection) {
-        this.connection = connection;
+    private JDBCFeedbackDAO(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
+    private static class Holder {
+        private static JDBCFeedbackDAO INSTANCE = new JDBCFeedbackDAO(ConnectionPool.getInstance());
+    }
+
+    public static JDBCFeedbackDAO getInstance() {
+        return JDBCFeedbackDAO.Holder.INSTANCE;
     }
 
     @Override
     public List<Feedback> findAll() {
         List<Feedback> feedbackList = new ArrayList<>();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Feedback feedback = createFeedback(rs);
@@ -52,7 +62,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     public Optional<Feedback> findById(long id) {
         Optional<Feedback> feedback = Optional.empty();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
             query.setLong(1, id);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
@@ -99,7 +110,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     public boolean update(Feedback feedback) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(UPDATE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(UPDATE)) {
             query.setTimestamp(1, Timestamp.valueOf(feedback.getDateTime()));
             query.setString(2, feedback.getComment());
             query.setInt(3, feedback.getMark());
@@ -118,7 +130,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     public boolean delete(long id) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(DELETE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(DELETE)) {
             query.setLong(1, id);
             query.executeUpdate();
             result = true;
@@ -134,7 +147,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     public long insert(Feedback feedback) {
         long result = -1;
 
-        try (PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             query.setTimestamp(1, Timestamp.valueOf(feedback.getDateTime()));
             query.setString(2, feedback.getComment());
             query.setInt(3, feedback.getMark());
@@ -159,7 +173,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
 
         int offset = (page - 1) * feedbackOnPage;
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
             query.setInt(1, offset);
             query.setInt(2, feedbackOnPage);
             ResultSet rs = query.executeQuery();
@@ -179,7 +194,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     @Override
     public long countAll() {
         long feedbackCounter = 0;
-        try (PreparedStatement query = connection.prepareStatement(COUNT_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(COUNT_ID)) {
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
                 feedbackCounter = rs.getLong("COUNT(id)");
@@ -189,10 +205,5 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             throw new RuntimeException(e);
         }
         return feedbackCounter;
-    }
-
-    @Override
-    public void close() throws Exception {
-        connection.close();
     }
 }

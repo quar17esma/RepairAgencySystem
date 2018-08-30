@@ -5,10 +5,8 @@ import com.quar17esma.dao.DaoFactory;
 
 public abstract class Service {
     protected DaoFactory factory;
-    protected ConnectionPool connectionPool;
 
-    public Service(DaoFactory factory, ConnectionPool connectionPool) {
+    public Service(DaoFactory factory) {
         this.factory = factory;
-        this.connectionPool = connectionPool;
     }
 }

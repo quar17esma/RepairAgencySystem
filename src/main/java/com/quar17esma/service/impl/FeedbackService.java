@@ -1,24 +1,22 @@
 package com.quar17esma.service.impl;
 
-import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.dao.FeedbackDAO;
 import com.quar17esma.entity.Feedback;
 import com.quar17esma.service.IFeedbackService;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class FeedbackService extends Service implements IFeedbackService {
     private static final Logger LOGGER = Logger.getLogger(FeedbackService.class);
 
-    private FeedbackService(DaoFactory factory, ConnectionPool connectionPool) {
-        super(factory, connectionPool);
+    private FeedbackService(DaoFactory factory) {
+        super(factory);
     }
 
     private static class Holder {
-        private static FeedbackService INSTANCE = new FeedbackService(DaoFactory.getInstance(), ConnectionPool.getInstance());
+        private static FeedbackService INSTANCE = new FeedbackService(DaoFactory.getInstance());
     }
 
     public static FeedbackService getInstance() {
@@ -28,9 +26,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     public List<Feedback> getAll() {
         List<Feedback> feedbackList = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedbackList = feedbackDAO.findAll();
         } catch (Exception e) {
             LOGGER.error("Fail to get all feedbacks", e);
@@ -43,9 +40,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     public Feedback getById(long id) {
         Feedback feedback = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedback = feedbackDAO.findById(id).get();
         } catch (Exception e) {
             LOGGER.error("Fail to find feedback with id = " + id, e);
@@ -56,9 +52,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     }
 
     public void update(Feedback feedback) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedbackDAO.update(feedback);
         } catch (Exception e) {
             LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
@@ -67,9 +62,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     }
 
     public void delete(long id) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedbackDAO.delete(id);
         } catch (Exception e) {
             LOGGER.error("Fail to delete feedback with id = " + id, e);
@@ -78,9 +72,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     }
 
     public void add(Feedback feedback) {
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedbackDAO.insert(feedback);
         } catch (Exception e) {
             LOGGER.error("Fail to add feedback: " + feedback, e);
@@ -91,9 +84,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     public List<Feedback> getByPage(int page, int feedbacksOnPage) {
         List<Feedback> feedbackList = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             feedbackList = feedbackDAO.findByPage(page, feedbacksOnPage);
         } catch (Exception e) {
             LOGGER.error("Fail to get all feedbacks by page, page = " + page +
@@ -107,9 +99,8 @@ public class FeedbackService extends Service implements IFeedbackService {
     public long getAllQuantity() {
         long foodCounter;
 
-        try (Connection connection = connectionPool.getConnection();
-             FeedbackDAO feedbackDAO = factory.createFeedbackDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
             foodCounter = feedbackDAO.countAll();
         } catch (Exception e) {
             LOGGER.error("Fail to get all feedbacks quantity", e);

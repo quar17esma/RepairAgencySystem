@@ -1,5 +1,6 @@
 package com.quar17esma.dao.impl;
 
+import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
 import com.quar17esma.enums.Role;
@@ -23,25 +24,34 @@ public class JDBCUserDAO implements UserDAO {
     private static final String INSERT = "INSERT INTO user (email, phone, password, role, name, surname, birth_date) " +
             "VALUES(?, ?, ?, ?, ?, ?, ?) ";
 
-    private Connection connection;
+    private ConnectionPool connectionPool;
 
-    public JDBCUserDAO(Connection connection) {
-        this.connection = connection;
+    private JDBCUserDAO(ConnectionPool connectionPool) {
+        this.connectionPool = connectionPool;
+    }
+
+    private static class Holder {
+        private static JDBCUserDAO INSTANCE = new JDBCUserDAO(ConnectionPool.getInstance());
+    }
+
+    public static JDBCUserDAO getInstance() {
+        return Holder.INSTANCE;
     }
 
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 User user = createUser(rs);
                 users.add(user);
             }
-        } catch (Exception ex) {
-            LOGGER.error("Fail to find users", ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to find users", e);
+            throw new RuntimeException(e);
         }
 
         return users;
@@ -51,16 +61,17 @@ public class JDBCUserDAO implements UserDAO {
     public Optional<User> findById(long id) {
         Optional<User> result = Optional.empty();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
             query.setLong(1, id);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 User user = createUser(rs);
                 result = Optional.of(user);
             }
-        } catch (Exception ex) {
-            LOGGER.error("Fail to find user with id = " + id, ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to find user with id = " + id, e);
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -70,16 +81,17 @@ public class JDBCUserDAO implements UserDAO {
     public Optional<User> findByEmail(String email) {
         Optional<User> result = Optional.empty();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_EMAIL)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_EMAIL)) {
             query.setString(1, email);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 User user = createUser(rs);
                 result = Optional.of(user);
             }
-        } catch (Exception ex) {
-            LOGGER.error("Fail to find user with email = " + email, ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to find user with email = " + email, e);
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -89,16 +101,17 @@ public class JDBCUserDAO implements UserDAO {
     public Optional<User> findByPhone(String phone) {
         Optional<User> result = Optional.empty();
 
-        try (PreparedStatement query = connection.prepareStatement(FIND_BY_PHONE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(FIND_BY_PHONE)) {
             query.setString(1, phone);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 User user = createUser(rs);
                 result = Optional.of(user);
             }
-        } catch (Exception ex) {
-            LOGGER.error("Fail to find user with phone = " + phone, ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to find user with phone = " + phone, e);
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -121,7 +134,8 @@ public class JDBCUserDAO implements UserDAO {
     public boolean update(User user) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(UPDATE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(UPDATE)) {
             query.setString(1, user.getEmail());
             query.setString(2, user.getPhone());
             query.setString(3, user.getPassword());
@@ -132,9 +146,9 @@ public class JDBCUserDAO implements UserDAO {
             query.setLong(8, user.getId());
             query.executeUpdate();
             result = true;
-        } catch (Exception ex) {
-            LOGGER.error("Fail to update user with id = " + user.getId(), ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to update user with id = " + user.getId(), e);
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -144,13 +158,14 @@ public class JDBCUserDAO implements UserDAO {
     public boolean delete(long id) {
         boolean result = false;
 
-        try (PreparedStatement query = connection.prepareStatement(DELETE)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(DELETE)) {
             query.setLong(1, id);
             query.executeUpdate();
             result = true;
-        } catch (Exception ex) {
-            LOGGER.error("Fail to delete user with id = " + id, ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to delete user with id = " + id, e);
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -160,7 +175,8 @@ public class JDBCUserDAO implements UserDAO {
     public long insert(User user) {
         long result = -1;
 
-        try (PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             query.setString(1, user.getEmail());
             query.setString(2, user.getPhone());
             query.setString(3, user.getPassword());
@@ -174,16 +190,11 @@ public class JDBCUserDAO implements UserDAO {
                 result = rsId.getLong(1);
                 user.setId(result);
             }
-        } catch (Exception ex) {
-            LOGGER.error("Fail to insert user: " + user.toString(), ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to insert user: " + user.toString(), e);
+            throw new RuntimeException(e);
         }
 
         return result;
-    }
-
-    @Override
-    public void close() throws Exception {
-        connection.close();
     }
 }

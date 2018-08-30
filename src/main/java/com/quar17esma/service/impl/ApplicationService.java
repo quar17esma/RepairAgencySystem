@@ -1,24 +1,22 @@
 package com.quar17esma.service.impl;
 
 import com.quar17esma.dao.ApplicationDAO;
-import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.entity.Application;
 import com.quar17esma.service.IApplicationService;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class ApplicationService extends Service implements IApplicationService {
     private static final Logger LOGGER = Logger.getLogger(ApplicationService.class);
 
-    private ApplicationService(DaoFactory factory, ConnectionPool connectionPool) {
-        super(factory, connectionPool);
+    private ApplicationService(DaoFactory factory) {
+        super(factory);
     }
 
     private static class Holder {
-        private static ApplicationService INSTANCE = new ApplicationService(DaoFactory.getInstance(), ConnectionPool.getInstance());
+        private static ApplicationService INSTANCE = new ApplicationService(DaoFactory.getInstance());
     }
 
     public static ApplicationService getInstance() {
@@ -28,9 +26,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getByUserId(long userId) {
         List<Application> applications = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applications = applicationDAO.findAllByUserId(userId);
         } catch (Exception e) {
             LOGGER.error("Fail to get applications with userId = " + userId, e);
@@ -44,9 +41,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getAll() {
         List<Application> applications = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applications = applicationDAO.findAll();
         } catch (Exception e) {
             LOGGER.error("Fail to get all applications", e);
@@ -60,9 +56,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public Application getById(long id) {
         Application application = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             application = applicationDAO.findById(id).get();
         } catch (Exception e) {
             LOGGER.error("Fail to find application with id = " + id, e);
@@ -74,9 +69,8 @@ public class ApplicationService extends Service implements IApplicationService {
 
     @Override
     public void update(Application application) {
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applicationDAO.update(application);
         } catch (Exception e) {
             LOGGER.error("Fail to update application with id = " + application.getId(), e);
@@ -86,9 +80,8 @@ public class ApplicationService extends Service implements IApplicationService {
 
     @Override
     public void delete(long id) {
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applicationDAO.delete(id);
         } catch (Exception e) {
             LOGGER.error("Fail to delete application with id: " + id, e);
@@ -98,9 +91,8 @@ public class ApplicationService extends Service implements IApplicationService {
 
     @Override
     public void add(Application application) {
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applicationDAO.insert(application);
         } catch (Exception e) {
             LOGGER.error("Fail to add application: " + application, e);
@@ -111,9 +103,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getByPage(int page, int applicationsOnPage) {
         List<Application> applications = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applications = applicationDAO.findByPage(page, applicationsOnPage);
         } catch (Exception e) {
             LOGGER.error("Fail to get all applications by page, page = " + page +
@@ -127,9 +118,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public long getAllQuantity() {
         long applicationCounter;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applicationCounter = applicationDAO.countAll();
         } catch (Exception e) {
             LOGGER.error("Fail to get all applications quantity", e);
@@ -142,9 +132,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getAcceptedByPage(int page, int applicationsOnPage) {
         List<Application> applications = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
         } catch (Exception e) {
             LOGGER.error("Fail to get accepted applications by page, page = " + page +
@@ -158,9 +147,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public long getAcceptedQuantity() {
         long applicationCounter;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applicationCounter = applicationDAO.countAccepted();
         } catch (Exception e) {
             LOGGER.error("Fail to get accepted applications quantity", e);
@@ -173,9 +161,8 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getByUserIdByPage(long userId, int page, int applicationsOnPage) {
         List<Application> applications = null;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
+        try {
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
             applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
         } catch (Exception e) {
             LOGGER.error("Fail to get applications by user id: " + userId +
@@ -188,17 +175,19 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public long getAllByUserIdQuantity(long userId) {
-        long applicationCounter;
+//        long applicationCounter;
+//
+//        try {
+//            ApplicationDAO applicationDAO = factory.createApplicationDAO();
+//            applicationCounter = applicationDAO.countAllByUserId(userId);
+//        } catch (Exception e) {
+//            LOGGER.error("Fail to get applications quantity by user id", e);
+//            throw new RuntimeException(e);
+//        }
+//
+//        return applicationCounter;
 
-        try (Connection connection = connectionPool.getConnection();
-             ApplicationDAO applicationDAO = factory.createApplicationDAO(connection)) {
-            connection.setAutoCommit(true);
-            applicationCounter = applicationDAO.countAllByUserId(userId);
-        } catch (Exception e) {
-            LOGGER.error("Fail to get applications quantity by user id", e);
-            throw new RuntimeException(e);
-        }
-
-        return applicationCounter;
+            ApplicationDAO applicationDAO = factory.createApplicationDAO();
+            return applicationDAO.countAllByUserId(userId);
     }
 }

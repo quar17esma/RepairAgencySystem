@@ -1,6 +1,5 @@
 package com.quar17esma.service.impl;
 
-import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
@@ -9,7 +8,6 @@ import com.quar17esma.service.ILoginService;
 import com.quar17esma.service.IUserService;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.util.Optional;
 
 public class LoginService extends Service implements ILoginService {
@@ -17,14 +15,13 @@ public class LoginService extends Service implements ILoginService {
 
     private IUserService userService;
 
-    private LoginService(DaoFactory factory, IUserService userService, ConnectionPool connectionPool) {
-        super(factory, connectionPool);
+    private LoginService(DaoFactory factory, IUserService userService) {
+        super(factory);
         this.userService = userService;
     }
 
     private static class Holder {
-        private static LoginService INSTANCE =
-                new LoginService(DaoFactory.getInstance(), UserService.getInstance(), ConnectionPool.getInstance());
+        private static LoginService INSTANCE = new LoginService(DaoFactory.getInstance(), UserService.getInstance());
     }
 
     public static LoginService getInstance() {
@@ -47,10 +44,8 @@ public class LoginService extends Service implements ILoginService {
                 !email.isEmpty() &&
                 !password.isEmpty()) {
 
-            try (Connection connection = connectionPool.getConnection();
-                 UserDAO userDAO = factory.createUserDAO(connection)) {
-                connection.setAutoCommit(true);
-
+            try {
+                UserDAO userDAO = factory.createUserDAO();
                 Optional<User> user = userDAO.findByEmail(email);
                 if (user.isPresent()) {
                     result = user.get().getPassword().equals(password);
