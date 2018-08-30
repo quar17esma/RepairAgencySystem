@@ -24,89 +24,37 @@ public class FeedbackService extends Service implements IFeedbackService {
     }
 
     public List<Feedback> getAll() {
-        List<Feedback> feedbackList = null;
-
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedbackList = feedbackDAO.findAll();
-        } catch (Exception e) {
-            LOGGER.error("Fail to get all feedbacks", e);
-            throw new RuntimeException(e);
-        }
-
-        return feedbackList;
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        return feedbackDAO.findAll();
     }
 
     public Feedback getById(long id) {
-        Feedback feedback = null;
-
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedback = feedbackDAO.findById(id).get();
-        } catch (Exception e) {
-            LOGGER.error("Fail to find feedback with id = " + id, e);
-            throw new RuntimeException(e);
-        }
-
-        return feedback;
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        return feedbackDAO.findById(id).get();
     }
 
     public void update(Feedback feedback) {
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedbackDAO.update(feedback);
-        } catch (Exception e) {
-            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
-            throw new RuntimeException(e);
-        }
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        feedbackDAO.update(feedback);
     }
 
     public void delete(long id) {
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedbackDAO.delete(id);
-        } catch (Exception e) {
-            LOGGER.error("Fail to delete feedback with id = " + id, e);
-            throw new RuntimeException(e);
-        }
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        feedbackDAO.delete(id);
     }
 
     public void add(Feedback feedback) {
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedbackDAO.insert(feedback);
-        } catch (Exception e) {
-            LOGGER.error("Fail to add feedback: " + feedback, e);
-            throw new RuntimeException(e);
-        }
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        feedbackDAO.insert(feedback);
     }
 
     public List<Feedback> getByPage(int page, int feedbacksOnPage) {
-        List<Feedback> feedbackList = null;
-
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            feedbackList = feedbackDAO.findByPage(page, feedbacksOnPage);
-        } catch (Exception e) {
-            LOGGER.error("Fail to get all feedbacks by page, page = " + page +
-                    ", feedbacksOnPage = " + feedbacksOnPage, e);
-            throw new RuntimeException(e);
-        }
-
-        return feedbackList;
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        return feedbackDAO.findByPage(page, feedbacksOnPage);
     }
 
     public long getAllQuantity() {
-        long foodCounter;
-
-        try {
-            FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
-            foodCounter = feedbackDAO.countAll();
-        } catch (Exception e) {
-            LOGGER.error("Fail to get all feedbacks quantity", e);
-            throw new RuntimeException(e);
-        }
-
-        return foodCounter;
+        FeedbackDAO feedbackDAO = factory.createFeedbackDAO();
+        return feedbackDAO.countAll();
     }
 }

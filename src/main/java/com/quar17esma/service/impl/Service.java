@@ -1,6 +1,5 @@
 package com.quar17esma.service.impl;
 
-import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.DaoFactory;
 
 public abstract class Service {

@@ -44,15 +44,10 @@ public class LoginService extends Service implements ILoginService {
                 !email.isEmpty() &&
                 !password.isEmpty()) {
 
-            try {
-                UserDAO userDAO = factory.createUserDAO();
-                Optional<User> user = userDAO.findByEmail(email);
-                if (user.isPresent()) {
-                    result = user.get().getPassword().equals(password);
-                }
-            } catch (Exception e) {
-                LOGGER.error("Fail to find user with email = " + email, e);
-                throw new RuntimeException(e);
+            UserDAO userDAO = factory.createUserDAO();
+            Optional<User> user = userDAO.findByEmail(email);
+            if (user.isPresent()) {
+                result = user.get().getPassword().equals(password);
             }
         }
 

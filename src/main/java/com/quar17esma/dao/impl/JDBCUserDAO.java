@@ -51,7 +51,6 @@ public class JDBCUserDAO implements UserDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find users", e);
-            throw new RuntimeException(e);
         }
 
         return users;
@@ -71,7 +70,6 @@ public class JDBCUserDAO implements UserDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find user with id = " + id, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -91,7 +89,6 @@ public class JDBCUserDAO implements UserDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find user with email = " + email, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -111,7 +108,6 @@ public class JDBCUserDAO implements UserDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find user with phone = " + phone, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -148,7 +144,6 @@ public class JDBCUserDAO implements UserDAO {
             result = true;
         } catch (Exception e) {
             LOGGER.error("Fail to update user with id = " + user.getId(), e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -165,7 +160,6 @@ public class JDBCUserDAO implements UserDAO {
             result = true;
         } catch (Exception e) {
             LOGGER.error("Fail to delete user with id = " + id, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -192,7 +186,6 @@ public class JDBCUserDAO implements UserDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to insert user: " + user.toString(), e);
-            throw new RuntimeException(e);
         }
 
         return result;

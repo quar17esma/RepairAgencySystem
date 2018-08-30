@@ -37,14 +37,8 @@ public class UserService extends Service implements IUserService {
 
     public User getByEmail(String email) {
         Optional<User> user;
-
-        try {
-            UserDAO userDAO = factory.createUserDAO();
-            user = userDAO.findByEmail(email);
-        } catch (Exception e) {
-            LOGGER.error("Fail to get user with email = " + email, e);
-            throw new RuntimeException(e);
-        }
+        UserDAO userDAO = factory.createUserDAO();
+        user = userDAO.findByEmail(email);
 
         return user.get();
     }
@@ -69,9 +63,6 @@ public class UserService extends Service implements IUserService {
             user.setId(userId);
         } catch (BusyEmailException e) {
             throw new BusyEmailException(e);
-        } catch (Exception e) {
-            LOGGER.error("Fail to register user: " + user, e);
-            throw new RuntimeException(e);
         }
     }
 }

@@ -75,7 +75,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find applications", e);
-            throw new RuntimeException(e);
         }
 
         return applications;
@@ -95,7 +94,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find application with id = " + id, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -115,7 +113,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find applications by user id: " + userId, e);
-            throw new RuntimeException(e);
         }
 
         return applications;
@@ -176,7 +173,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             result = true;
         } catch (Exception e) {
             LOGGER.error("Fail to update application with id = " + application.getId(), e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -193,7 +189,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             result = true;
         } catch (Exception e) {
             LOGGER.error("Fail to delete application with id = " + id, e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -224,7 +219,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to insert application: " + application.toString(), e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -248,7 +242,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
         } catch (Exception e) {
             LOGGER.error("Fail to find applications by Page, page = " + page +
                     ", applicationsOnPage = " + applicationsOnPage, e);
-            throw new RuntimeException(e);
         }
 
         return applications;
@@ -265,7 +258,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count applications", e);
-            throw new RuntimeException(e);
         }
         return applicationCounter;
     }
@@ -288,7 +280,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
         } catch (Exception e) {
             LOGGER.error("Fail to find accepted applications by Page, page = " + page +
                     ", applicationsOnPage = " + applicationsOnPage, e);
-            throw new RuntimeException(e);
         }
 
         return applications;
@@ -305,7 +296,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count accepted applications", e);
-            throw new RuntimeException(e);
         }
         return applicationCounter;
     }
@@ -329,7 +319,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
         } catch (Exception e) {
             LOGGER.error("Fail to find applications by user id by Page, page = " + page +
                     ", applicationsOnPage = " + applicationsOnPage, e);
-            throw new RuntimeException(e);
         }
 
         return applications;
@@ -347,7 +336,6 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count by user id applications", e);
-            throw new RuntimeException(e);
         }
         return applicationCounter;
     }

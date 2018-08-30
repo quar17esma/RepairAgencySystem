@@ -52,7 +52,6 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find feedbackList", e);
-            throw new RuntimeException(e);
         }
 
         return feedbackList;
@@ -72,7 +71,6 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find meal with id = " + id, e);
-            throw new RuntimeException(e);
         }
 
         return feedback;
@@ -118,9 +116,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             query.setLong(4, feedback.getId());
             query.executeUpdate();
             result = true;
-        } catch (Exception ex) {
-            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
         }
 
         return result;
@@ -135,9 +132,8 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             query.setLong(1, id);
             query.executeUpdate();
             result = true;
-        } catch (Exception ex) {
-            LOGGER.error("Fail to delete order with id = " + id, ex);
-            throw new RuntimeException(ex);
+        } catch (Exception e) {
+            LOGGER.error("Fail to delete order with id = " + id, e);
         }
 
         return result;
@@ -161,7 +157,6 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to insert feedback: " + feedback.toString(), e);
-            throw new RuntimeException(e);
         }
 
         return result;
@@ -185,7 +180,6 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
         } catch (Exception e) {
             LOGGER.error("Fail to find feedbackList by Page, page = " + page +
                     ", foodsOnPage = " + feedbackOnPage, e);
-            throw new RuntimeException(e);
         }
 
         return feedbackList;
@@ -202,7 +196,6 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to count feedbacks", e);
-            throw new RuntimeException(e);
         }
         return feedbackCounter;
     }
