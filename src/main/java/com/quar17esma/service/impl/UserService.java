@@ -13,8 +13,11 @@ import java.util.Optional;
 public class UserService extends Service implements IUserService {
     private static final Logger LOGGER = Logger.getLogger(UserService.class);
 
+    private UserDAO userDAO;
+
     private UserService(DaoFactory factory) {
         super(factory);
+        this.userDAO = factory.createUserDAO();
     }
 
     private static class Holder {
@@ -27,33 +30,30 @@ public class UserService extends Service implements IUserService {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return userDAO.findAll();
     }
 
     @Override
     public User getById(long id) {
-        return null;
+        return userDAO.findById(id).get();
     }
 
     public User getByEmail(String email) {
-        Optional<User> user;
-        UserDAO userDAO = factory.createUserDAO();
-        user = userDAO.findByEmail(email);
-
-        return user.get();
+        return userDAO.findByEmail(email).get();
     }
 
     @Override
-    public void update(User item) {
+    public void update(User user) {
+        userDAO.update(user);
     }
 
     @Override
     public void delete(long id) {
+        userDAO.delete(id);
     }
 
     public void add(User user) throws BusyEmailException {
         try {
-            UserDAO userDAO = factory.createUserDAO();
             Optional<User> userOptional = userDAO.findByEmail(user.getEmail());
             if (userOptional.isPresent()) {
                 throw new BusyEmailException("Fail to register user, email is busy",

@@ -11,8 +11,11 @@ import java.util.List;
 public class ApplicationService extends Service implements IApplicationService {
     private static final Logger LOGGER = Logger.getLogger(ApplicationService.class);
 
+    private ApplicationDAO applicationDAO;
+
     private ApplicationService(DaoFactory factory) {
         super(factory);
+        this.applicationDAO = factory.createApplicationDAO();
     }
 
     private static class Holder {
@@ -24,97 +27,55 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public List<Application> getByUserId(long userId) {
-        List<Application> applications = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applications = applicationDAO.findAllByUserId(userId);
-
-        return applications;
+        return applicationDAO.findAllByUserId(userId);
     }
 
     @Override
     public List<Application> getAll() {
-        List<Application> applications = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applications = applicationDAO.findAll();
-
-        return applications;
+        return applicationDAO.findAll();
     }
 
     @Override
     public Application getById(long id) {
-        Application application = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        application = applicationDAO.findById(id).get();
-
-        return application;
+        return applicationDAO.findById(id).get();
     }
 
     @Override
     public void update(Application application) {
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
         applicationDAO.update(application);
     }
 
     @Override
     public void delete(long id) {
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
         applicationDAO.delete(id);
     }
 
     @Override
     public void add(Application application) {
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
         applicationDAO.insert(application);
     }
 
     public List<Application> getByPage(int page, int applicationsOnPage) {
-        List<Application> applications = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applications = applicationDAO.findByPage(page, applicationsOnPage);
-
-        return applications;
+        return applicationDAO.findByPage(page, applicationsOnPage);
     }
 
     public long getAllQuantity() {
-        long applicationCounter;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applicationCounter = applicationDAO.countAll();
-
-        return applicationCounter;
+        return applicationDAO.countAll();
     }
 
     public List<Application> getAcceptedByPage(int page, int applicationsOnPage) {
-        List<Application> applications = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
-
-        return applications;
+        return applicationDAO.findAcceptedByPage(page, applicationsOnPage);
     }
 
     public long getAcceptedQuantity() {
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        long applicationCounter = applicationDAO.countAccepted();
-
-        return applicationCounter;
+        return applicationDAO.countAccepted();
     }
 
     public List<Application> getByUserIdByPage(long userId, int page, int applicationsOnPage) {
-        List<Application> applications = null;
-
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
-        applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
-
-        return applications;
+        return applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
     }
 
     public long getAllByUserIdQuantity(long userId) {
-        ApplicationDAO applicationDAO = factory.createApplicationDAO();
         return applicationDAO.countAllByUserId(userId);
     }
 }

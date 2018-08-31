@@ -44,10 +44,9 @@ public class LoginService extends Service implements ILoginService {
                 !email.isEmpty() &&
                 !password.isEmpty()) {
 
-            UserDAO userDAO = factory.createUserDAO();
-            Optional<User> user = userDAO.findByEmail(email);
-            if (user.isPresent()) {
-                result = user.get().getPassword().equals(password);
+            User user = userService.getByEmail(email);
+            if (user != null) {
+                result = user.getPassword().equals(password);
             }
         }
 
