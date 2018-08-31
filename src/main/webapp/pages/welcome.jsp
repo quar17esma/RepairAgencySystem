@@ -17,20 +17,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">
+    <jsp:include page="/pages/header.jsp"/>
 
-<jsp:include page="/pages/header.jsp"/>
-
-<div>
-    <c:out value="${successAddApplicationMessage}"/>
-    <c:out value="${successCompleteApplicationMessage}"/>
-    <c:out value="${successDeclineApplicationMessage}"/>
-    <c:out value="${successAcceptApplicationMessage}"/>
-    <br>
-</div>
-
-<div>
-    <br>
-    <fmt:message key="message.welcome"/>
+    <div class="row">
+        <c:out value="${successAddApplicationMessage}"/>
+        <c:out value="${successCompleteApplicationMessage}"/>
+        <c:out value="${successDeclineApplicationMessage}"/>
+        <c:out value="${successAcceptApplicationMessage}"/>
+    </div>
+    <div class="row">
+        <br>
+        <fmt:message key="message.welcome"/>
+    </div>
 </div>
 
 </body>
