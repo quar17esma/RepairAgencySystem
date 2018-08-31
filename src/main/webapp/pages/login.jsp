@@ -20,54 +20,66 @@
 <div class="container">
     <br>
     <div class="row">
-        <div class="col-md-1">
-            <form name="engForm" method="POST" action="${pageContext.request.contextPath}/rest/change_locale">
-                <input type="hidden" name="locale" value="en_US">
-                <fmt:message var="buttonEng" key="button.english"/>
-                <input type="submit" value="${buttonEng}">
-            </form>
-        </div>
-        <div class="col-md-1">
-            <form name="rusForm" method="POST" action="${pageContext.request.contextPath}/rest/change_locale">
-                <input type="hidden" name="locale" value="ru_RU">
-                <fmt:message var="buttonRus" key="button.russian"/>
-                <input type="submit" value="${buttonRus}">
-            </form>
+        <div class="form-inline">
+            <div class="form-group">
+                <form name="engForm" method="POST" action="${pageContext.request.contextPath}/rest/change_locale">
+                    <input type="hidden" name="locale" value="en_US">
+                    <fmt:message var="buttonEng" key="button.english"/>
+                    <input class="btn btn-default" type="submit" value="${buttonEng}">
+                </form>
+            </div>
+            <div class="form-group">
+                <form name="rusForm" method="POST" action="${pageContext.request.contextPath}/rest/change_locale">
+                    <input type="hidden" name="locale" value="ru_RU">
+                    <fmt:message var="buttonRus" key="button.russian"/>
+                    <input class="btn btn-default" type="submit" value="${buttonRus}">
+                </form>
+            </div>
         </div>
     </div>
 
     <div class="row">
         <c:out value="${successRegistrationMessage}"/>
-        <c:out value="${errorLoginPassMessage}"/>
     </div>
     <div class="row">
         <h2><fmt:message key="title.login"/></h2>
         <div class="panel panel-default">
             <div class="panel-body">
-                <form name="loginForm" method="POST" action="${pageContext.request.contextPath}/rest/login">
-                    <div class="row">
-                        <div class="col-md-1">
-                            <label><fmt:message key="label.email"/></label>
+                <form class="form-horizontal" name="loginForm" method="POST"
+                      action="${pageContext.request.contextPath}/rest/login">
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="email">
+                            <fmt:message key="label.email"/>
+                        </label>
+                        <div class="col-md-2">
+                            <input class="form-control" type="email" name="email" value="" id="email"/>
                         </div>
-                        <div class="col-md-1">
-                            <input type="text" name="email" value=""/>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${errorNoSuchUser}"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1">
-                            <label><fmt:message key="label.password"/></label>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="pwd">
+                            <fmt:message key="label.password"/>
+                        </label>
+                        <div class="col-md-2">
+                            <input class="form-control" type="password" name="password" value="" id="pwd"/>
                         </div>
-                        <div class="col-md-1">
-                            <input type="password" name="password" value=""/>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${errorWrongPassword}"/>
+                            </div>
                         </div>
                     </div>
                     <br>
-                    <div class="row">
+                    <div class="form-group">
                         <div class="col-md-2 offset-md-1">
                             <fmt:message var="buttonLogin" key="button.login"/>
-                            <input type="submit" value="${buttonLogin}"/>
+                            <input class="btn btn-default" type="submit" value="${buttonLogin}"/>
                             <fmt:message var="buttonReset" key="button.reset"/>
-                            <input type="reset" value="${buttonReset}">
+                            <input class="btn btn-default" type="reset" value="${buttonReset}">
                         </div>
                     </div>
                 </form>
@@ -76,7 +88,7 @@
         <hr/>
         <form name="registrationForm" method="POST" action="${pageContext.request.contextPath}/rest/edit_user">
             <fmt:message var="buttonRegistration" key="button.registration"/>
-            <input type="submit" value="${buttonRegistration}">
+            <input class="btn btn-default" type="submit" value="${buttonRegistration}">
         </form>
     </div>
 </div>
