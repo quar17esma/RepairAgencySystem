@@ -12,19 +12,29 @@ public class LabelManager {
 
     private static ResourceBundle resourceBundle = RESOURCE_BUNDLE_EN_US;
 
-    private LabelManager(){}
+    private LabelManager() {
+    }
 
-    public static String getProperty(String key, String locale){
+    public static String getProperty(String key, String locale) {
         setLocale(locale);
         return resourceBundle.getString(key);
     }
 
     private static void setLocale(String locale) {
-        switch (locale) {
-            case "en_US" : resourceBundle = RESOURCE_BUNDLE_EN_US;
-            break;
-            case "ru_RU" : resourceBundle = RESOURCE_BUNDLE_RU_RU;
-            break;
+        if (locale == null || locale.isEmpty()) {
+            resourceBundle = RESOURCE_BUNDLE_EN_US;
+        } else {
+            switch (locale) {
+                case "en_US":
+                    resourceBundle = RESOURCE_BUNDLE_EN_US;
+                    break;
+                case "ru_RU":
+                    resourceBundle = RESOURCE_BUNDLE_RU_RU;
+                    break;
+                default:
+                    resourceBundle = RESOURCE_BUNDLE_EN_US;
+                    break;
+            }
         }
     }
 }
