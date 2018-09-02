@@ -9,11 +9,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        .headerButton {
-            float: left;
-        }
-    </style>
     <title>Header</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,49 +17,55 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="header">
-    <h1><fmt:message key="repair.agency"/></h1>
-    <hr/>
+<div class="page-header">
     <fmt:message key="message.hello"/> ${user.name}!
     <br/>
-    <div>
-        <form class="headerButton" name="logoutForm" method="POST" action="./logout">
-            <fmt:message var="buttonLogout" key="button.logout"/>
-            <input type="submit" value="${buttonLogout}"/>
-        </form>
-        <form class="headerButton" name="feedbacksForm" method="POST" action="./show_feedbacks">
-            <fmt:message var="buttonFeedbacks" key="button.feedbacks"/>
-            <input type="submit" value="${buttonFeedbacks}">
-        </form>
-        <%--For USER--%>
-        <c:if test="${sessionScope.user.role == 'USER'}">
-            <form class="headerButton" name="myApplicationsForm" method="POST" action="./show_my_applications">
-                <fmt:message var="buttonMyApplications" key="button.my.applications"/>
-                <input type="submit" value="${buttonMyApplications}">
-            </form>
-        </c:if>
-        <form class="headerButton" name="addNewApplicationForm" method="POST" action="./edit_application">
-            <fmt:message var="buttonAddApplication" key="button.add.application"/>
-            <input type="submit" value="${buttonAddApplication}">
-        </form>
-        <%--For MANAGER--%>
-        <c:if test="${sessionScope.user.role == 'MANAGER'}">
-            <form class="headerButton" name="showApplicationsForm" method="POST" action="./show_all_applications">
-                <fmt:message var="buttonApplications" key="button.applications"/>
-                <input type="submit" value="${buttonApplications}">
-            </form>
-        </c:if>
-        <%--For REPAIRER--%>
-        <c:if test="${sessionScope.user.role == 'REPAIRER'}">
-            <form class="headerButton" name="showAcceptedApplicationsForm" method="POST"
-                  action="./show_accepted_applications">
-                <fmt:message var="buttonApplications" key="button.applications"/>
-                <input type="submit" value="${buttonApplications}">
-            </form>
-        </c:if>
-        <br/>
-        <hr/>
-    </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="./"><fmt:message key="repair.agency"/></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="./show_feedbacks"><fmt:message key="button.feedbacks"/></a>
+                </li>
+                <%--For USER--%>
+                <c:if test="${sessionScope.user.role == 'USER'}">
+                    <li>
+                        <a href="./show_my_applications"><fmt:message key="button.my.applications"/></a>
+                    </li>
+                    <li>
+                        <a href="./edit_application"><fmt:message key="button.add.application"/></a>
+                    </li>
+                </c:if>
+                <%--For MANAGER--%>
+                <c:if test="${sessionScope.user.role == 'MANAGER'}">
+                    <li>
+                        <a href="./show_all_applications"><fmt:message key="button.applications"/></a>
+                    </li>
+                </c:if>
+                <%--For REPAIRER--%>
+                <c:if test="${sessionScope.user.role == 'REPAIRER'}">
+                    <li>
+                        <a href="./show_accepted_applications"><fmt:message key="button.applications"/></a>
+                    </li>
+                </c:if>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="row">
+                        <fmt:message key="message.hello"/> ${user.name}!
+                    </div>
+                </li>
+                <li>
+                    <a href="./logout">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        <fmt:message key="button.logout"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 </body>
 </html>

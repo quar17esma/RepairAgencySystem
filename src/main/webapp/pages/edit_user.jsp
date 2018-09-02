@@ -17,51 +17,105 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">
+    <div class="row">
+        <br>
+        <h2><fmt:message key="title.registration.form"/></h2>
+    </div>
+    <div class="row">
+        <c:if test="${errorRegistrationMessage != null}">
+            <div class="alert alert-error">
+                <c:out value="${errorRegistrationMessage}"/>
+            </div>
+        </c:if>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" name="registrationForm" method="POST" action="./add_user">
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="phone">
+                            <fmt:message key="label.phone"/>
+                        </label>
+                        <div class="col-md-2">
+                            <fmt:message var="placeholderPhone" key="placeholder.enter.phone"/>
+                            <input class="form-control" type="text" name="phone" value="${phone}" required="required"
+                                   placeholder="${placeholderPhone}"
+                                   id="phone"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="email">
+                            <fmt:message key="label.email"/>
+                        </label>
+                        <div class="col-md-2">
+                            <fmt:message var="placeholderEmail" key="placeholder.enter.email"/>
+                            <input class="form-control" type="email" name="email" value="${email}" required="required"
+                                   placeholder="${placeholderEmail}"
+                                   id="email"/>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${errorBusyEmailMessage}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="pwd">
+                            <fmt:message key="label.password"/>
+                        </label>
+                        <div class="col-md-2">
+                            <fmt:message var="placeholderPassword" key="placeholder.enter.password"/>
+                            <input class="form-control" type="password" name="password" value="" required="required"
+                                   placeholder="${placeholderPassword}"
+                                   id="pwd"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="name">
+                            <fmt:message key="label.name"/>
+                        </label>
+                        <div class="col-md-2">
+                            <fmt:message var="placeholderName" key="placeholder.enter.name"/>
+                            <input class="form-control" type="text" name="name" value="${name}" required="required"
+                                   placeholder="${placeholderName}"
+                                   id="name"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="surname">
+                            <fmt:message key="label.surname"/>
+                        </label>
+                        <div class="col-md-2">
+                            <fmt:message var="placeholderSurname" key="placeholder.enter.surname"/>
+                            <input class="form-control" type="text" name="surname" value="${surname}" required="required"
+                                   placeholder="${placeholderSurname}"
+                                   id="surname"/>
+                        </div>
+                    </div>
 
-<div>
-    <c:out value="${errorRegistrationMessage}"/>
-</div>
-
-<div>
-    <form name="registrationForm" method="POST" action="./add_user">
-        <%--<input type="hidden" name="action" value="add_user"/>--%>
-
-        <label><fmt:message key="label.phone"/></label>
-        <br/>
-        <input type="text" name="phone" value="${phone}" required="required"/>
-        <c:out value="${errorBusyEmailMessage}"/>
-        <br/>
-
-        <label><fmt:message key="label.email"/></label>
-        <br/>
-        <input type="text" name="email" value="${email}" required="required"/>
-        <c:out value="${errorBusyEmailMessage}"/>
-        <br/>
-
-        <label><fmt:message key="label.password"/></label>
-        <br/>
-        <input type="password" name="password" value="" required="required"/>
-        <br/>
-
-        <label><fmt:message key="label.name"/></label>
-        <br/>
-        <input type="text" name="name" value="${name}" required="required"/>
-        <br/>
-
-        <label><fmt:message key="label.surname"/></label>
-        <br/>
-        <input type="text" name="surname" value="${surname}" required="required"/>
-        <br/>
-
-        <label><fmt:message key="label.birth.date"/></label>
-        <br/>
-        <input type="date" name="birthDate" value="${birthDate}" required="required"/>
-        <br/>
-
-        <br/>
-        <fmt:message var="buttonRegister" key="button.register"/>
-        <input type="submit" value="${buttonRegister}"/>
-    </form>
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="birthDate">
+                            <fmt:message key="label.birth.date"/>
+                        </label>
+                        <div class="col-md-2">
+                            <input class="form-control" type="date" name="birthDate" value="${birthDate}"
+                                   required="required"
+                                   id="birthDate"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-2 offset-md-1">
+                            <fmt:message var="buttonRegister" key="button.register"/>
+                            <input class="btn btn-default" type="submit" value="${buttonRegister}"/>
+                            <fmt:message var="buttonReset" key="button.reset"/>
+                            <input class="btn btn-default" type="reset" value="${buttonReset}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

@@ -31,8 +31,7 @@ public class AddUser implements Action {
     public String execute(HttpServletRequest request) {
         String page = null;
 
-        String locale = getLocaleOrSetDefault(request);
-
+        String locale = (String) request.getSession().getAttribute("locale");
         String name = request.getParameter("name").trim();
         String surname = request.getParameter("surname").trim();
         String email = request.getParameter("email").trim();
@@ -53,14 +52,6 @@ public class AddUser implements Action {
         }
 
         return page;
-    }
-
-    private String getLocaleOrSetDefault(HttpServletRequest request) {
-        String locale = (String) request.getSession().getAttribute("locale");
-        if (locale == null) {
-            locale = LabelManager.DEFAULT_LOCALE;
-        }
-        return locale;
     }
 
     private User makeUser(String name, String surname, String email, String phone, String password,

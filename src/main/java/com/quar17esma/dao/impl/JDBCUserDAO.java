@@ -4,6 +4,8 @@ import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
 import com.quar17esma.enums.Role;
+import com.quar17esma.exceptions.NoSuchUserException;
+import com.quar17esma.exceptions.WrongPasswordException;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -189,5 +191,34 @@ public class JDBCUserDAO implements UserDAO {
         }
 
         return result;
+    }
+
+    public Optional<User> login(String email, String password) {
+        Optional<User> userOptional = Optional.empty();
+        try (Connection connection = connectionPool.getConnection();
+             PreparedStatement findByEmailQuery = connection.prepareStatement(FIND_BY_EMAIL)) {
+            findByEmailQuery.setString(1, email);
+            ResultSet rs = findByEmailQuery.executeQuery();
+            if (rs.next()) {
+                User user = createUser(rs);
+                if (password.equals(user.getPassword())) {
+                    userOptional = Optional.ofNullable(user);
+                } else {
+                    throw new WrongPasswordException("Wrong password for user with email: " + email, email);
+                }
+            } else {
+                throw new NoSuchUserException("Fail to find user with email: " + email, email);
+            }
+        } catch (NoSuchUserException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new NoSuchUserException(e.getMessage(), e.getEmail());
+        } catch (WrongPasswordException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw new WrongPasswordException(e.getMessage(), e.getEmail());
+        } catch (Exception e) {
+            LOGGER.error("Fail to find user with email = " + email, e);
+        }
+
+        return userOptional;
     }
 }

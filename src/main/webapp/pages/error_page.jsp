@@ -18,14 +18,15 @@
 </head>
 <body>
 
-<div>
-    <fmt:message key="message.error.page"/>
-</div>
-<div>
-    <a href="${pageContext.request.contextPath}">
-        <fmt:message key="href.to.login.page"/>
-    </a>
-    <br/>
+<div class="container">
+    <div class="row">
+        <fmt:message key="message.error.page"/>
+    </div>
+    <div class="row">
+        <a href="${pageContext.request.contextPath}">
+            <fmt:message key="href.to.login.page"/>
+        </a>
+    </div>
 </div>
 
 </body>

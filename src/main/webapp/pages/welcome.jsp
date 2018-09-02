@@ -17,20 +17,35 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-<jsp:include page="/pages/header.jsp"/>
-
-<div>
-    <c:out value="${successAddApplicationMessage}"/>
-    <c:out value="${successCompleteApplicationMessage}"/>
-    <c:out value="${successDeclineApplicationMessage}"/>
-    <c:out value="${successAcceptApplicationMessage}"/>
-    <br>
-</div>
-
-<div>
-    <br>
-    <fmt:message key="message.welcome"/>
+<div class="container">
+    <div class="row">
+        <jsp:include page="/pages/header.jsp"/>
+    </div>
+    <div class="row">
+        <c:if test="${successAddApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successAddApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successCompleteApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successCompleteApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successDeclineApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successDeclineApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successAcceptApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successAcceptApplicationMessage}"/>
+            </div>
+        </c:if>
+    </div>
+    <div class="row">
+        <fmt:message key="message.welcome"/>
+    </div>
 </div>
 
 </body>
