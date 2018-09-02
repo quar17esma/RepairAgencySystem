@@ -19,7 +19,9 @@
 </head>
 <body>
 <div class="container">
-    <jsp:include page="/pages/header.jsp"/>
+    <div class="row">
+        <jsp:include page="/pages/header.jsp"/>
+    </div>
 
     <div class="row">
         <c:if test="${successAddFeedbackMessage != null}">
@@ -31,38 +33,35 @@
 
     <div class="row">
         <h2><fmt:message key="title.feedbacks"/></h2>
+
         <div class="panel-group">
             <c:forEach items="${feedbacks}" var="feedback">
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <label><fmt:message key="label.author"/></label>
-                        <%--<c:out value="${}"/><br>--%>
-                    <label><fmt:message key="label.mark"/></label>
-                    <c:out value="${feedback.mark}"/><br>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <label><fmt:message key="label.author"/></label>
+                            <%--<c:out value="${}"/><br>--%>
+                        <label><fmt:message key="label.mark"/></label>
+                        <c:out value="${feedback.mark}"/><br>
+                    </div>
+                    <div class="panel-body">
+                        <c:out value="${feedback.comment}"/>
+                    </div>
+                    <div class="panel-footer">
+                        <label><fmt:message key="label.date"/></label>
+                        <ctg:dateTimeFmt dateTime="${feedback.dateTime}" pattern="HH:mm:ss dd-MM-yyyy"/>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <c:out value="${feedback.comment}"/>
-                </div>
-                <div class="panel-footer">
-                <label><fmt:message key="label.date"/></label>
-                    <ctg:dateTimeFmt dateTime="${feedback.dateTime}" pattern="HH:mm:ss dd-MM-yyyy" />
-                </div>
-            </div>
-            <br>
+            </c:forEach>
         </div>
+    </div>
+    <div class="row">
+        <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
+            <form class="btn btn-default" name="feedbacksPagesForm" method="POST" action="./show_feedbacks">
+                <input type="hidden" name="page" value="${loop.count}">
+                <input type="submit" value="${loop.count}">
+            </form>
         </c:forEach>
     </div>
-    <br/>
-</div>
-<div>
-    <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
-        <form class="button" name="feedbacksPagesForm" method="POST" action="./show_feedbacks">
-            <input type="hidden" name="page" value="${loop.count}">
-            <input type="submit" value="${loop.count}">
-        </form>
-    </c:forEach>
-</div>
 </div>
 </body>
 </html>
