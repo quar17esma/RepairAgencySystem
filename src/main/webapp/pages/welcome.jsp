@@ -18,16 +18,32 @@
 </head>
 <body>
 <div class="container">
-    <jsp:include page="/pages/header.jsp"/>
-
     <div class="row">
-        <c:out value="${successAddApplicationMessage}"/>
-        <c:out value="${successCompleteApplicationMessage}"/>
-        <c:out value="${successDeclineApplicationMessage}"/>
-        <c:out value="${successAcceptApplicationMessage}"/>
+        <jsp:include page="/pages/header.jsp"/>
     </div>
     <div class="row">
-        <br>
+        <c:if test="${successAddApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successAddApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successCompleteApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successCompleteApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successDeclineApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successDeclineApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${successAcceptApplicationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successAcceptApplicationMessage}"/>
+            </div>
+        </c:if>
+    </div>
+    <div class="row">
         <fmt:message key="message.welcome"/>
     </div>
 </div>

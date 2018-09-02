@@ -23,7 +23,11 @@
         <h2><fmt:message key="title.registration.form"/></h2>
     </div>
     <div class="row">
-        <c:out value="${errorRegistrationMessage}"/>
+        <c:if test="${errorRegistrationMessage != null}">
+            <div class="alert alert-error">
+                <c:out value="${errorRegistrationMessage}"/>
+            </div>
+        </c:if>
     </div>
     <div class="row">
         <div class="panel panel-default">

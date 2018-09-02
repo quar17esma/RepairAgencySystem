@@ -55,12 +55,14 @@
         </div>
     </div>
     <div class="row">
-        <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
-            <form class="btn btn-default" name="feedbacksPagesForm" method="POST" action="./show_feedbacks">
-                <input type="hidden" name="page" value="${loop.count}">
-                <input type="submit" value="${loop.count}">
-            </form>
-        </c:forEach>
+        <div class="btn-group">
+            <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
+                <form name="feedbacksPagesForm" method="POST" action="./show_feedbacks">
+                    <input type="hidden" name="page" value="${loop.count}">
+                    <input class="btn btn-default" type="submit" value="${loop.count}">
+                </form>
+            </c:forEach>
+        </div>
     </div>
 </div>
 </body>
