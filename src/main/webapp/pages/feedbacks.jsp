@@ -22,28 +22,42 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<jsp:include page="/pages/header.jsp"/>
-<div>
-<c:out value="${successAddFeedbackMessage}"/>
-</div>
-<div>
-    <h2><fmt:message key="title.feedbacks"/></h2>
+<div class="container">
+    <jsp:include page="/pages/header.jsp"/>
 
-    <c:forEach items="${feedbacks}" var="feedback">
-        <div>
-            <label><fmt:message key="label.author"/></label>
-            <%--<c:out value="${}"/><br>--%>
-            <label><fmt:message key="label.mark"/></label>
-            <c:out value="${feedback.mark}"/><br>
-            <div>
-                <c:out value="${feedback.comment}"/><br>
+    <div class="row">
+        <c:if test="${successAddFeedbackMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successAddFeedbackMessage}"/>
             </div>
-            <label><fmt:message key="label.date"/></label>
-            <%--<fmt:formatDate value="${feedback.dateTime}" type="both" dateStyle="full"/> <br/>--%>
-            <c:out value="${feedback.dateTime}"/><br>
+        </c:if>
+    </div>
+
+    <div class="row">
+        <h2><fmt:message key="title.feedbacks"/></h2>
+        <div class="panel-group">
+            <c:forEach items="${feedbacks}" var="feedback">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <label><fmt:message key="label.author"/></label>
+                        <%--<c:out value="${}"/><br>--%>
+                    <label><fmt:message key="label.mark"/></label>
+                    <c:out value="${feedback.mark}"/><br>
+                </div>
+                <div class="panel-body">
+                    <c:out value="${feedback.comment}"/>
+                </div>
+                <div class="panel-footer">
+                <label><fmt:message key="label.date"/></label>
+                    <%--<fmt:formatDate value="${feedback.dateTime}" type="both" dateStyle="full"/> <br/>--%>
+                <c:out value="${feedback.dateTime}"/>
+                </div>
+            </div>
+            <br>
         </div>
-        <br>
-    </c:forEach>
+        </c:forEach>
+    </div>
     <br/>
 </div>
 <div>
@@ -53,6 +67,7 @@
             <input type="submit" value="${loop.count}">
         </form>
     </c:forEach>
+</div>
 </div>
 </body>
 </html>

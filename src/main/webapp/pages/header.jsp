@@ -9,11 +9,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        .headerButton {
-            float: left;
-        }
-    </style>
     <title>Header</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +19,6 @@
 <body>
 <div class="page-header">
     <h1><fmt:message key="repair.agency"/></h1>
-    <%--<hr/>--%>
     <fmt:message key="message.hello"/> ${user.name}!
     <br/>
     <nav class="navbar navbar-default">
