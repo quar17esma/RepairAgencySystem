@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <fmt:setLocale value="en_US"/>
 <c:if test="${pageContext.session.getAttribute('locale') == 'ru_RU'}">
     <fmt:setLocale value="ru_RU"/>
@@ -9,11 +10,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        .button {
-            float: left;
-        }
-    </style>
     <title><fmt:message key="title.feedbacks"/></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,8 +46,7 @@
                 </div>
                 <div class="panel-footer">
                 <label><fmt:message key="label.date"/></label>
-                    <%--<fmt:formatDate value="${feedback.dateTime}" type="both" dateStyle="full"/> <br/>--%>
-                <c:out value="${feedback.dateTime}"/>
+                    <ctg:dateTimeFmt dateTime="${feedback.dateTime}" pattern="HH:mm:ss dd-MM-yyyy" />
                 </div>
             </div>
             <br>
