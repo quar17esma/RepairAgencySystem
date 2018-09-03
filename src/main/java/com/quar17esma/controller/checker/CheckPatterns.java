@@ -8,4 +8,5 @@ public interface CheckPatterns {
     Pattern EMAIL = Pattern.compile("[a-zA-Z1-9\\-._]+@[a-z1-9]+(.[a-z1-9]+)+");
     Pattern PHONE = Pattern.compile("[+]?([\\d]+)?([(][\\d]+[)])?([\\d]+)?[-]?([\\d]+)?[-]?[\\d]+");
     Pattern CHAR_DIGIT_PUNCT_EN_RU = Pattern.compile("[A-ZА-Яa-zа-я0-9 _.,!\"'/:()]+");
+    Pattern PASSWORD = Pattern.compile("[A-ZА-Яa-zа-я0-9]+");
 }

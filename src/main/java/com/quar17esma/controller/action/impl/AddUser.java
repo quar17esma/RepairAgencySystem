@@ -39,7 +39,7 @@ public class AddUser implements Action {
         String password = request.getParameter("password").trim();
         LocalDate birthDate = LocalDate.parse(request.getParameter("birthDate"));
 
-        boolean isDataCorrect = checker.isInputDataCorrect(name, surname, email, phone, birthDate);
+        boolean isDataCorrect = checker.isInputDataCorrect(name, surname, email, phone, password, birthDate);
 
         if (isDataCorrect) {
             User user = makeUser(name, surname, email, phone, password, birthDate);
