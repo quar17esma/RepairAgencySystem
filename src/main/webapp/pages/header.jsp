@@ -18,8 +18,11 @@
 </head>
 <body>
 <div class="page-header">
-    <fmt:message key="message.hello"/> ${user.name}!
-    <br/>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <fmt:message key="message.hello"/> ${user.name}!
+        </div>
+    </div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
