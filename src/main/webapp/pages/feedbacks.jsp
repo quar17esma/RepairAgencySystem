@@ -54,15 +54,15 @@
             </c:forEach>
         </div>
     </div>
+
     <div class="row">
-        <div class="btn-group">
+        <ul class="pagination">
             <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
-                <form name="feedbacksPagesForm" method="POST" action="./show_feedbacks">
-                    <input type="hidden" name="page" value="${loop.count}">
-                    <input class="btn btn-default" type="submit" value="${loop.count}">
-                </form>
+                <li>
+                    <a href="?page=${loop.count}">${loop.count}</a>
+                </li>
             </c:forEach>
-        </div>
+        </ul>
     </div>
 </div>
 </body>
