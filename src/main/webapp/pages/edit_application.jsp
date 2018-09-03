@@ -29,6 +29,7 @@
         </c:if>
     </div>
     <div class="row">
+        <h2><fmt:message key="title.add.application"/></h2>
         <form class="form-horizontal" name="addApplicationForm" method="POST" action="./add_application">
             <c:if test="${application != null}">
                 <input type="hidden" name="applicationId" value="${application.id}">
