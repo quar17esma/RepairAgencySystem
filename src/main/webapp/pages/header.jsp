@@ -53,11 +53,6 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <div class="row">
-                        <fmt:message key="message.hello"/> ${user.name}!
-                    </div>
-                </li>
-                <li>
                     <a href="./logout">
                         <span class="glyphicon glyphicon-log-out"></span>
                         <fmt:message key="button.logout"/>
