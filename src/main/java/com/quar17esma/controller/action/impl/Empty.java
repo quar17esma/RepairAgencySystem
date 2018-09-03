@@ -9,6 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 public class Empty implements Action {
     @Override
     public String execute(HttpServletRequest request) {
-        return ConfigurationManager.getProperty("path.page.login");
+        return ConfigurationManager.getProperty("path.page.welcome");
     }
 }

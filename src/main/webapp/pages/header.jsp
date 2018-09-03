@@ -18,8 +18,11 @@
 </head>
 <body>
 <div class="page-header">
-    <fmt:message key="message.hello"/> ${user.name}!
-    <br/>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <fmt:message key="message.hello"/> ${user.name}!
+        </div>
+    </div>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -52,11 +55,6 @@
                 </c:if>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <div class="row">
-                        <fmt:message key="message.hello"/> ${user.name}!
-                    </div>
-                </li>
                 <li>
                     <a href="./logout">
                         <span class="glyphicon glyphicon-log-out"></span>

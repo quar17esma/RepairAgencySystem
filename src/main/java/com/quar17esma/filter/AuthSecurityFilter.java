@@ -37,7 +37,7 @@ public class AuthSecurityFilter implements Filter {
             String url = request.getRequestURI().replaceAll(request.getContextPath(), "");
 
             if (!ignoredUrls.contains(url)) {
-                String page = ConfigurationManager.getProperty("path.page.index");
+                String page = ConfigurationManager.getProperty("path.page.login");
                 RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(page);
                 dispatcher.forward(request, response);
                 return;

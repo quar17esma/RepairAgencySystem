@@ -92,16 +92,19 @@
                                 <fmt:message key="button.decline"/>
                             </a>
                             <div id="declineApplication${application.id}" class="collapse">
-                                <form class="form-inline"
-                                      name="declineApplicationForm" method="POST" action="./decline_application">
-                                    <div class="form-group">
+                                <form class="form-horizontal" name="declineApplicationForm"
+                                      method="POST" action="./decline_application">
                                         <input type="hidden" name="applicationId" value="${application.id}">
+                                    <div class="form-group">
                                         <label for="declineReason${application.id}">
                                             <fmt:message key="label.decline.reason"/>
                                         </label>
-                                        <input id="declineReason${application.id}" class="form-control"
-                                               type="textarea" rows="4" cols="50" name="declineReason"
-                                               value="${application.declineReason}" required="required">
+                                        <textarea id="declineReason${application.id}" class="form-control" rows="4"
+                                                  name="declineReason"
+                                                  value="${application.declineReason}" required="required">
+                                        </textarea>
+                                    </div>
+                                    <div class="form-group">
                                         <fmt:message var="buttonDecline" key="button.decline"/>
                                         <input class="btn btn-default" type="submit" value="${buttonDecline}">
                                     </div>
@@ -109,39 +112,36 @@
                             </div>
                         </c:if>
                         <c:if test="${sessionScope.user.role == 'REPAIRER' && application.status == 'ACCEPTED'}">
-                            <a href="#completeApplication${application.id}" data-toggle="collapse">
-                                <fmt:message key="button.complete"/>
-                            </a>
-                            <div id="completeApplication${application.id}" class="collapse">
-                                <form class="form-inline"
-                                      name="completeApplicationForm" method="POST" action="./complete_application">
-                                    <input type="hidden" name="applicationId" value="${application.id}">
-                                    <fmt:message var="buttonComplete" key="button.complete"/>
-                                    <input class="btn btn-default" type="submit" value="${buttonComplete}">
-                                </form>
-                            </div>
+                            <form class="form-inline"
+                                  name="completeApplicationForm" method="POST" action="./complete_application">
+                                <input type="hidden" name="applicationId" value="${application.id}">
+                                <fmt:message var="buttonComplete" key="button.complete"/>
+                                <input class="btn btn-default" type="submit" value="${buttonComplete}">
+                            </form>
                         </c:if>
                         <c:if test="${sessionScope.user.role == 'USER' && application.status == 'COMPLETED' && application.feedback == null}">
                             <a href="#addFeedback${application.id}" data-toggle="collapse">
                                 <fmt:message key="button.leave.feedback"/>
                             </a>
                             <div id="addFeedback${application.id}" class="collapse">
-                                <form class="form-inline" name="addFeedbackForm" method="POST" action="./add_feedback">
-                                    <input type="hidden" name="applicationId" value="${application.id}">
+                                <form class="form-horizontal" name="addFeedbackForm" method="POST"
+                                      action="./add_feedback">
+                                    <input type="hidden" name="applicationId" value="${application.id}"/>
                                     <label for="mark${application.id}">
                                         <fmt:message key="label.feedback.mark"/>
                                     </label>
                                     <input id="mark${application.id}" class="form-control" type="number" value="1"
                                            name="mark" min="1" max="5" step="1"
-                                           required="required">
-                                    <label for="comment${application.id}">
-                                        <fmt:message key="label.feedback.comment"/>
+                                           required="required"/>
+                                    <label for="comment${application.id}"/>
+                                    <fmt:message key="label.feedback.comment"/>
                                     </label>
-                                    <input id="comment${application.id}" class="form-control"
-                                           type="textarea" rows="4" cols="50" name="comment" value="${feedback.comment}"
-                                           required="required">
+                                    <textarea id="comment${application.id}" class="form-control"
+                                              rows="4" name="comment" value="${feedback.comment}"
+                                              required="required">
+                                    </textarea>
                                     <fmt:message var="buttonLeaveFeedback" key="button.leave.feedback"/>
-                                    <input class="btn btn-default" type="submit" value="${buttonLeaveFeedback}">
+                                    <input class="btn btn-default" type="submit" value="${buttonLeaveFeedback}"/>
                                 </form>
                             </div>
                         </c:if>
@@ -151,15 +151,15 @@
         </table>
         <br/>
     </div>
+
     <div class="row">
-        <div class="btn-group">
+        <ul class="pagination">
             <c:forEach begin="1" end="${pagesQuantity}" varStatus="loop">
-                <form name="applicationPagesForm" method="POST" action="./show_applications">
-                    <input type="hidden" name="page" value="${loop.count}">
-                    <input class="btn btn-default" type="submit" value="${loop.count}">
-                </form>
+                <li>
+                    <a href="?page=${loop.count}">${loop.count}</a>
+                </li>
             </c:forEach>
-        </div>
+        </ul>
     </div>
 </div>
 </body>

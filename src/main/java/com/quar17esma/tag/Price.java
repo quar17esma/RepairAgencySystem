@@ -16,8 +16,13 @@ public class Price extends TagSupport {
         try {
             String priceString = String.valueOf(price);
             String integerPart = priceString.substring(0, priceString.length() - 2);
+            if (integerPart == null || integerPart.isEmpty()) {
+                integerPart = "0";
+            }
             String fractionalPart = priceString.substring(priceString.length() - 2);
-
+            if (fractionalPart == null || fractionalPart.isEmpty()) {
+                fractionalPart = "00";
+            }
             pageContext.getOut().write(integerPart + "," + fractionalPart);
         } catch (IOException e) {
             throw new JspException(e.getMessage());
