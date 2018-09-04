@@ -78,7 +78,6 @@ public class InputUserCheckerTest {
         boolean result;
         for (String email : EMAILS_FALSE) {
             result = userChecker.isEmailCorrect(email);
-            System.out.println(email + " " + result);
             assertFalse(result);
         }
     }
