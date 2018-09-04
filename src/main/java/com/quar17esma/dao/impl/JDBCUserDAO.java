@@ -56,6 +56,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to find users", e);
         }
 
+        LOGGER.info("Found all user");
         return users;
     }
 
@@ -75,6 +76,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to find user with id = " + id, e);
         }
 
+        LOGGER.info("Found user by id, id: " + id);
         return result;
     }
 
@@ -94,6 +96,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to find user with email = " + email, e);
         }
 
+        LOGGER.info("Found user by email, user: " + result + ", email: " + email);
         return result;
     }
 
@@ -113,6 +116,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to find user with phone = " + phone, e);
         }
 
+        LOGGER.info("Found user by phone, user: " + result + ", phone: " + phone);
         return result;
     }
 
@@ -149,6 +153,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to update user with id = " + user.getId(), e);
         }
 
+        LOGGER.info("Updated user, user: " + user);
         return result;
     }
 
@@ -165,6 +170,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to delete user with id = " + id, e);
         }
 
+        LOGGER.info("Deleted user by id, id: " + id);
         return result;
     }
 
@@ -217,19 +223,21 @@ public class JDBCUserDAO implements UserDAO {
             throw new RuntimeException(e);
         }
 
+        LOGGER.info("User inserted to DB, user: " + user);
         return result;
     }
 
-    public Optional<User> login(String email, String password) {
-        Optional<User> userOptional = Optional.empty();
+    public User login(String email, String password) {
+        User user = null;
+
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement findByEmailQuery = connection.prepareStatement(FIND_BY_EMAIL)) {
             findByEmailQuery.setString(1, email);
             ResultSet rs = findByEmailQuery.executeQuery();
             if (rs.next()) {
-                User user = createUser(rs);
-                if (password.equals(user.getPassword())) {
-                    userOptional = Optional.ofNullable(user);
+                User userByEmail = createUser(rs);
+                if (password.equals(userByEmail.getPassword())) {
+                    user = userByEmail;
                 } else {
                     throw new WrongPasswordException("Wrong password for user with email: " + email, email);
                 }
@@ -246,6 +254,7 @@ public class JDBCUserDAO implements UserDAO {
             LOGGER.error("Fail to find user with email = " + email, e);
         }
 
-        return userOptional;
+        LOGGER.info("Logged in user by email, email: " + email);
+        return user;
     }
 }
