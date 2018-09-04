@@ -27,36 +27,57 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public List<Application> getByUserId(long userId) {
-        return applicationDAO.findAllByUserId(userId);
+        List<Application> applications = applicationDAO.findAllByUserId(userId);
+
+        LOGGER.info("Got applications by user id, applications: " + applications +
+                "user id: " + userId);
+        return applications;
     }
 
     @Override
     public List<Application> getAll() {
-        return applicationDAO.findAll();
+        List<Application> applications = applicationDAO.findAll();
+
+        LOGGER.info("Got all applications");
+        return applications;
     }
 
     @Override
     public Application getById(long id) {
-        return applicationDAO.findById(id).get();
+        Application application = applicationDAO.findById(id).get();
+
+        LOGGER.info("Got application by id, id: " + id);
+        return application;
     }
 
     @Override
     public void update(Application application) {
         applicationDAO.update(application);
+
+        LOGGER.info("Updated application, application: " + application);
     }
 
     @Override
     public void delete(long id) {
         applicationDAO.delete(id);
+
+        LOGGER.info("Deleted application by id, id: " + id);
     }
 
     @Override
     public void add(Application application) {
         applicationDAO.insert(application);
+
+        LOGGER.info("Added application, application: " + application);
     }
 
     public List<Application> getByPage(int page, int applicationsOnPage) {
-        return applicationDAO.findByPage(page, applicationsOnPage);
+        List<Application> applications = applicationDAO.findByPage(page, applicationsOnPage);
+
+        LOGGER.info("Got applications by page, applications: " + applications +
+                ", page: " + page +
+                ", applicationsOnPage: " + applicationsOnPage);
+        return applications;
     }
 
     public long getAllQuantity() {
@@ -64,7 +85,12 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public List<Application> getAcceptedByPage(int page, int applicationsOnPage) {
-        return applicationDAO.findAcceptedByPage(page, applicationsOnPage);
+        List<Application> applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
+
+        LOGGER.info("Got accepted applications by page, applications: " + applications +
+                ", page: " + page +
+                ", applicationsOnPage: " + applicationsOnPage);
+        return applications;
     }
 
     public long getAcceptedQuantity() {
@@ -72,7 +98,13 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public List<Application> getByUserIdByPage(long userId, int page, int applicationsOnPage) {
-        return applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
+        List<Application> applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
+
+        LOGGER.info("Got applications by user id, by page, applications: " + applications +
+                ", user id: " + userId +
+                ", page: " + page +
+                ", applicationsOnPage: " + applicationsOnPage);
+        return applications;
     }
 
     public long getAllByUserIdQuantity(long userId) {

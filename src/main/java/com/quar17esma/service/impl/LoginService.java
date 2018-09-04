@@ -28,8 +28,6 @@ public class LoginService extends Service implements ILoginService {
     }
 
     public User login(String email, String password) throws NoSuchUserException {
-        User user = null;
-
         if (email == null &&
                 password == null &&
                 email.isEmpty() &&
@@ -37,11 +35,9 @@ public class LoginService extends Service implements ILoginService {
             throw new NoSuchUserException("Fail to login, email or password is null or empty", email);
         }
 
-        Optional<User> userOptional = userDAO.login(email, password);
-        if (userOptional.isPresent()) {
-            user = userOptional.get();
-        }
+        User user = userDAO.login(email, password);
 
+        LOGGER.info("Logged in user by email, user: " + user + ", email: " + email);
         return user;
     }
 }

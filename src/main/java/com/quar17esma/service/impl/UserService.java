@@ -8,7 +8,6 @@ import com.quar17esma.service.IUserService;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.Optional;
 
 public class UserService extends Service implements IUserService {
     private static final Logger LOGGER = Logger.getLogger(UserService.class);
@@ -30,30 +29,45 @@ public class UserService extends Service implements IUserService {
 
     @Override
     public List<User> getAll() {
-        return userDAO.findAll();
+        List<User> users = userDAO.findAll();
+
+        LOGGER.info("Got all users");
+        return users;
     }
 
     @Override
     public User getById(long id) {
-        return userDAO.findById(id).get();
+        User user = userDAO.findById(id).get();
+
+        LOGGER.info("Got user by ID, user: " + user + " ID: " + id);
+        return user;
     }
 
     public User getByEmail(String email) {
-        return userDAO.findByEmail(email).get();
+        User user = userDAO.findByEmail(email).get();
+
+        LOGGER.info("Got user by email, user: " + user + " email: " + email);
+        return user;
     }
 
     @Override
     public void update(User user) {
         userDAO.update(user);
+
+        LOGGER.info("Updated user, user: " + user);
     }
 
     @Override
     public void delete(long id) {
         userDAO.delete(id);
+
+        LOGGER.info("Deleted user by id, id: " + id);
     }
 
     public void add(User user) throws BusyEmailException {
         long userId = userDAO.insert(user);
         user.setId(userId);
+
+        LOGGER.info("Added user, user: " + user);
     }
 }
