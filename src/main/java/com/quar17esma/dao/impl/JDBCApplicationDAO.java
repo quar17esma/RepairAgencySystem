@@ -249,15 +249,26 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
     @Override
     public long countAll() {
+        long counter = 0;
+
+        try {
+            counter = count(COUNT_ID);
+            return counter;
+        } catch (SQLException e) {
+            LOGGER.error("Fail to count all applications", e);
+        }
+
+        return counter;
+    }
+
+    private long count(String sql) throws SQLException {
         long applicationCounter = 0;
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(COUNT_ID)) {
+             PreparedStatement query = connection.prepareStatement(sql)) {
             ResultSet rs = query.executeQuery();
             if (rs.next()) {
                 applicationCounter = rs.getLong("COUNT(id)");
             }
-        } catch (Exception e) {
-            LOGGER.error("Fail to count applications", e);
         }
         return applicationCounter;
     }
@@ -287,17 +298,15 @@ public class JDBCApplicationDAO implements ApplicationDAO {
 
     @Override
     public long countAccepted() {
-        long applicationCounter = 0;
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(COUNT_ACCEPTED_ID)) {
-            ResultSet rs = query.executeQuery();
-            if (rs.next()) {
-                applicationCounter = rs.getLong("COUNT(id)");
-            }
-        } catch (Exception e) {
+        long counter = 0;
+
+        try {
+            return count(COUNT_ACCEPTED_ID);
+        } catch (SQLException e) {
             LOGGER.error("Fail to count accepted applications", e);
         }
-        return applicationCounter;
+
+        return counter;
     }
 
     @Override
