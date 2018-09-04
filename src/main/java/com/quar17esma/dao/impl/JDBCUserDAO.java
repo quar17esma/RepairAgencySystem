@@ -4,6 +4,7 @@ import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
 import com.quar17esma.enums.Role;
+import com.quar17esma.exceptions.BusyEmailException;
 import com.quar17esma.exceptions.NoSuchUserException;
 import com.quar17esma.exceptions.WrongPasswordException;
 import org.apache.log4j.Logger;
@@ -85,7 +86,7 @@ public class JDBCUserDAO implements UserDAO {
              PreparedStatement query = connection.prepareStatement(FIND_BY_EMAIL)) {
             query.setString(1, email);
             ResultSet rs = query.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 User user = createUser(rs);
                 result = Optional.of(user);
             }
@@ -171,23 +172,49 @@ public class JDBCUserDAO implements UserDAO {
     public long insert(User user) {
         long result = -1;
 
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            query.setString(1, user.getEmail());
-            query.setString(2, user.getPhone());
-            query.setString(3, user.getPassword());
-            query.setString(4, user.getRole().name());
-            query.setString(5, user.getName());
-            query.setString(6, user.getSurname());
-            query.setDate(7, Date.valueOf(user.getBirthDate()));
-            query.executeUpdate();
-            ResultSet rsId = query.getGeneratedKeys();
-            if (rsId.next()) {
-                result = rsId.getLong(1);
-                user.setId(result);
+        try (Connection connection = connectionPool.getConnection()) {
+            connection.setAutoCommit(false);
+
+            try (PreparedStatement queryFindByEmail = connection.prepareStatement(FIND_BY_EMAIL);
+                 PreparedStatement queryInsert = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+
+                queryFindByEmail.setString(1, user.getEmail());
+                ResultSet rs = queryFindByEmail.executeQuery();
+                if (rs.next()) {
+                    throw new BusyEmailException("Fail to register user: " + user + ", email is busy",
+                            user.getName(), user.getEmail());
+                }
+
+                queryInsert.setString(1, user.getEmail());
+                queryInsert.setString(2, user.getPhone());
+                queryInsert.setString(3, user.getPassword());
+                queryInsert.setString(4, user.getRole().name());
+                queryInsert.setString(5, user.getName());
+                queryInsert.setString(6, user.getSurname());
+                queryInsert.setDate(7, Date.valueOf(user.getBirthDate()));
+                queryInsert.executeUpdate();
+                ResultSet rsId = queryInsert.getGeneratedKeys();
+                if (rsId.next()) {
+                    result = rsId.getLong(1);
+                    user.setId(result);
+                }
+
+                connection.commit();
+            } catch (BusyEmailException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                LOGGER.error(e.getMessage(), e);
+                throw e;
+            } catch (SQLException e) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                throw e;
             }
-        } catch (Exception e) {
-            LOGGER.error("Fail to insert user: " + user.toString(), e);
+            connection.commit();
+            connection.setAutoCommit(true);
+        } catch (SQLException e) {
+            LOGGER.error("Fail to insert user: " + user, e);
+            throw new RuntimeException(e);
         }
 
         return result;

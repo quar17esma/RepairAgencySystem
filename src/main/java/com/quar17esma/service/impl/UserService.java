@@ -53,17 +53,7 @@ public class UserService extends Service implements IUserService {
     }
 
     public void add(User user) throws BusyEmailException {
-        try {
-            Optional<User> userOptional = userDAO.findByEmail(user.getEmail());
-            if (userOptional.isPresent()) {
-                throw new BusyEmailException("Fail to register user: " + user + ", email is busy",
-                        user.getName(), user.getEmail());
-            }
-            long userId = userDAO.insert(user);
-            user.setId(userId);
-        } catch (BusyEmailException e) {
-            LOGGER.error(e.getMessage(), e);
-            throw new BusyEmailException(e);
-        }
+        long userId = userDAO.insert(user);
+        user.setId(userId);
     }
 }

@@ -81,6 +81,11 @@ public class AddUser implements Action {
             request.setAttribute("errorBusyEmailMessage",
                     LabelManager.getProperty("message.error.busy.email", locale));
             page = ConfigurationManager.getProperty("path.page.edit.user");
+        } catch (Exception e) {
+            setDataAttributes(request, user.getName(), user.getSurname(), user.getEmail(), user.getPhone(), user.getBirthDate());
+            request.setAttribute("errorRegisterUserMessage",
+                    LabelManager.getProperty("message.error.register.user", locale));
+            page = ConfigurationManager.getProperty("path.page.edit.user");
         }
 
         return page;

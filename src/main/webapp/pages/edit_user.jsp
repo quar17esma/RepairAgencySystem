@@ -28,6 +28,11 @@
                 <c:out value="${errorRegistrationMessage}"/>
             </div>
         </c:if>
+        <c:if test="${errorRegisterUserMessage != null}">
+            <div class="alert alert-error">
+                <c:out value="${errorRegisterUserMessage}"/>
+            </div>
+        </c:if>
     </div>
     <div class="row">
         <div class="panel panel-default">
