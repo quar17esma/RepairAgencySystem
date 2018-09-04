@@ -16,6 +16,7 @@ public abstract class DaoFactory {
         DaoFactory factory = null;
         try {
             factory = (DaoFactory) Class.forName(className).newInstance();
+            LOGGER.info("Got DaoFactory");
         } catch (Exception e) {
             LOGGER.error("Fail to get DaoFactory", e);
             throw new RuntimeException(e);

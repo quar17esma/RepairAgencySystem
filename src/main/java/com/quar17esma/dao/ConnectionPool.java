@@ -19,6 +19,8 @@ public class ConnectionPool {
             Context initContext = new InitialContext();
             Context envContext = (Context) initContext.lookup("java:/comp/env");
             dataSource = (DataSource) envContext.lookup(DATASOURCE_NAME);
+
+            LOGGER.info("DataSource initialized");
         } catch (NamingException e) {
             LOGGER.error("Fail to initialize datasource", e);
             throw new RuntimeException(e);
@@ -34,8 +36,11 @@ public class ConnectionPool {
     }
 
     public Connection getConnection() {
+        Connection connection;
         try {
-            return dataSource.getConnection();
+            connection = dataSource.getConnection();
+            LOGGER.info("Got connection");
+            return connection;
         } catch (SQLException e) {
             LOGGER.error("Fail to get connection", e);
             throw new RuntimeException(e);
