@@ -7,7 +7,7 @@ import java.util.List;
 public interface ApplicationDAO extends GenericDAO<Application> {
     List<Application> findAllByUserId(long userId);
 
-    List<Application> findByPage(int page, int applicationsOnPage);
+    List<Application> findAllByPage(int page, int applicationsOnPage);
 
     long countAll();
 

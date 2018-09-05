@@ -73,10 +73,11 @@ public class JDBCApplicationDAO implements ApplicationDAO {
                 Application application = createApplication(rs);
                 applications.add(application);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.error("Fail to find applications", e);
         }
 
+        LOGGER.info("Found all applications");
         return applications;
     }
 
@@ -92,10 +93,11 @@ public class JDBCApplicationDAO implements ApplicationDAO {
                 Application application = createApplication(rs);
                 result = Optional.of(application);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.error("Fail to find application with id = " + id, e);
         }
 
+        LOGGER.info("Found application by id, id: " + id);
         return result;
     }
 
@@ -111,10 +113,12 @@ public class JDBCApplicationDAO implements ApplicationDAO {
                 Application application = createApplicationWithFeedback(rs);
                 applications.add(application);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.error("Fail to find applications by user id: " + userId, e);
         }
 
+        LOGGER.info("Found applications by user id, applications: " + applications +
+                ", user id: " + userId);
         return applications;
     }
 
@@ -171,10 +175,11 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setLong(9, application.getId());
             query.executeUpdate();
             result = true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.error("Fail to update application with id = " + application.getId(), e);
         }
 
+        LOGGER.info("Updated application, application: " + application);
         return result;
     }
 
@@ -187,10 +192,11 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             query.setLong(1, id);
             query.executeUpdate();
             result = true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             LOGGER.error("Fail to delete application with id = " + id, e);
         }
 
+        LOGGER.info("Deleted application by id, id: " + id);
         return result;
     }
 
@@ -221,29 +227,24 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             LOGGER.error("Fail to insert application: " + application.toString(), e);
         }
 
+        LOGGER.info("Inserted application to DB, application: " + application);
         return result;
     }
 
     @Override
-    public List<Application> findByPage(int page, int applicationsOnPage) {
+    public List<Application> findAllByPage(int page, int applicationsOnPage) {
         List<Application> applications = new ArrayList<>();
 
-        int offset = (page - 1) * applicationsOnPage;
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
-            query.setInt(1, offset);
-            query.setInt(2, applicationsOnPage);
-            ResultSet rs = query.executeQuery();
-            while (rs.next()) {
-                Application application = createApplication(rs);
-                applications.add(application);
-            }
+        try {
+            applications = findByPage(page, applicationsOnPage, FIND_BY_PAGE);
         } catch (Exception e) {
             LOGGER.error("Fail to find applications by Page, page = " + page +
                     ", applicationsOnPage = " + applicationsOnPage, e);
         }
 
+        LOGGER.info("Found applications by page, applications: " + applications +
+        ", page: " + page +
+        ", applicationsOnPage: " + applicationsOnPage);
         return applications;
     }
 
@@ -274,23 +275,34 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     }
 
     @Override
-    public List<Application> findAcceptedByPage(int page, int applicationsOnPage) {
+    public List<Application> findAcceptedByPage(int page, int itemsOnPage) {
         List<Application> applications = new ArrayList<>();
 
-        int offset = (page - 1) * applicationsOnPage;
+        try {
+            applications = findByPage(page, itemsOnPage, FIND_ACCEPTED_BY_PAGE);
+        } catch (SQLException e) {
+            LOGGER.error("Fail to find accepted applications by Page, page = " + page +
+                    ", itemsOnPage = " + itemsOnPage, e);
+        }
+
+        LOGGER.info("Found accepted applications by page, applications: " + applications +
+                ", page: " + page +
+                ", itemsOnPage: " + itemsOnPage);
+        return applications;
+    }
+
+    private List<Application> findByPage(int page, int itemsOnPage, String sql) throws SQLException {
+        List<Application> applications = new ArrayList<>();
 
         try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(FIND_ACCEPTED_BY_PAGE)) {
-            query.setInt(1, offset);
-            query.setInt(2, applicationsOnPage);
+             PreparedStatement query = connection.prepareStatement(sql)) {
+            query.setInt(1,(page - 1) * itemsOnPage);
+            query.setInt(2, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Application application = createApplication(rs);
                 applications.add(application);
             }
-        } catch (Exception e) {
-            LOGGER.error("Fail to find accepted applications by Page, page = " + page +
-                    ", applicationsOnPage = " + applicationsOnPage, e);
         }
 
         return applications;
@@ -310,16 +322,14 @@ public class JDBCApplicationDAO implements ApplicationDAO {
     }
 
     @Override
-    public List<Application> findByUserIdByPage(long userId, int page, int applicationsOnPage) {
+    public List<Application> findByUserIdByPage(long userId, int page, int itemsOnPage) {
         List<Application> applications = new ArrayList<>();
-
-        int offset = (page - 1) * applicationsOnPage;
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(FIND_BY_USER_ID_BY_PAGE)) {
             query.setLong(1, userId);
-            query.setInt(2, offset);
-            query.setInt(3, applicationsOnPage);
+            query.setInt(2,(page - 1) * itemsOnPage);
+            query.setInt(3, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Application application = createApplicationWithFeedback(rs);
@@ -327,9 +337,13 @@ public class JDBCApplicationDAO implements ApplicationDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find applications by user id by Page, page = " + page +
-                    ", applicationsOnPage = " + applicationsOnPage, e);
+                    ", itemsOnPage = " + itemsOnPage, e);
         }
 
+        LOGGER.info("Found applications by user id by page, applications: " + applications +
+                ", user id: " + userId +
+                ", page: " + page +
+                ", itemsOnPage: " + itemsOnPage);
         return applications;
     }
 

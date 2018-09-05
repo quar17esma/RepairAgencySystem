@@ -72,7 +72,7 @@ public class ApplicationService extends Service implements IApplicationService {
     }
 
     public List<Application> getByPage(int page, int applicationsOnPage) {
-        List<Application> applications = applicationDAO.findByPage(page, applicationsOnPage);
+        List<Application> applications = applicationDAO.findAllByPage(page, applicationsOnPage);
 
         LOGGER.info("Got applications by page, applications: " + applications +
                 ", page: " + page +
