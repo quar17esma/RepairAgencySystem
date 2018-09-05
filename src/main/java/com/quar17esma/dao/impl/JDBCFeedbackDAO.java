@@ -168,15 +168,13 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     }
 
     @Override
-    public List<Feedback> findByPage(int page, int feedbackOnPage) {
+    public List<Feedback> findByPage(int page, int itemsOnPage) {
         List<Feedback> feedbacks = new ArrayList<>();
-
-        int offset = (page - 1) * feedbackOnPage;
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
-            query.setInt(1, offset);
-            query.setInt(2, feedbackOnPage);
+            query.setInt(1,(page - 1) * itemsOnPage);
+            query.setInt(2, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Feedback feedback = createFeedback(rs);
@@ -184,12 +182,12 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             }
         } catch (Exception e) {
             LOGGER.error("Fail to find feedbacks by page, page = " + page +
-                    ", foodsOnPage = " + feedbackOnPage, e);
+                    ", itemsOnPage = " + itemsOnPage, e);
         }
 
         LOGGER.info("Found feedbacks by page, feedbacks: " + feedbacks +
                 ", page: " + page +
-                ", feedbacksOnPage: " + feedbackOnPage);
+                ", itemsOnPage: " + itemsOnPage);
         return feedbacks;
     }
 
