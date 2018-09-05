@@ -54,6 +54,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             LOGGER.error("Fail to find feedbackList", e);
         }
 
+        LOGGER.info("Found all feedbacks");
         return feedbackList;
     }
 
@@ -65,7 +66,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
              PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
             query.setLong(1, id);
             ResultSet rs = query.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 Feedback fb = createFeedback(rs);
                 feedback = Optional.of(fb);
             }
@@ -73,6 +74,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             LOGGER.error("Fail to find meal with id = " + id, e);
         }
 
+        LOGGER.info("Found feedback by id, feedback: " + feedback + ", id: " + id);
         return feedback;
     }
 
@@ -120,6 +122,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
         }
 
+        LOGGER.info("Updated feedback, feedback: " + feedback);
         return result;
     }
 
@@ -136,6 +139,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             LOGGER.error("Fail to delete order with id = " + id, e);
         }
 
+        LOGGER.info("Deleted feedback by id, id: " + id);
         return result;
     }
 
@@ -159,12 +163,13 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             LOGGER.error("Fail to insert feedback: " + feedback.toString(), e);
         }
 
+        LOGGER.info("Inserted feedback to DB, feedback: " + feedback);
         return result;
     }
 
     @Override
     public List<Feedback> findByPage(int page, int feedbackOnPage) {
-        List<Feedback> feedbackList = new ArrayList<>();
+        List<Feedback> feedbacks = new ArrayList<>();
 
         int offset = (page - 1) * feedbackOnPage;
 
@@ -175,14 +180,17 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
                 Feedback feedback = createFeedback(rs);
-                feedbackList.add(feedback);
+                feedbacks.add(feedback);
             }
         } catch (Exception e) {
-            LOGGER.error("Fail to find feedbackList by Page, page = " + page +
+            LOGGER.error("Fail to find feedbacks by page, page = " + page +
                     ", foodsOnPage = " + feedbackOnPage, e);
         }
 
-        return feedbackList;
+        LOGGER.info("Found feedbacks by page, feedbacks: " + feedbacks +
+                ", page: " + page +
+                ", feedbacksOnPage: " + feedbackOnPage);
+        return feedbacks;
     }
 
     @Override
