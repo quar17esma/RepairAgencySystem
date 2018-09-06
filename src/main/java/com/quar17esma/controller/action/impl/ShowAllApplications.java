@@ -17,8 +17,8 @@ public class ShowAllApplications extends ShowApplications {
     }
 
     @Override
-    protected List<Application> getApplications(int page, HttpServletRequest request) {
-        return applicationService.getByPage(page, APPLICATIONS_ON_PAGE);
+    protected List<Application> getApplications(long page, HttpServletRequest request) {
+        return applicationService.getByPage(page, ITEMS_ON_PAGE);
     }
 
     @Override

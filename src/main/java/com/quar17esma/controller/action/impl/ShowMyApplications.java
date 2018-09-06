@@ -20,9 +20,9 @@ public class ShowMyApplications extends ShowApplications {
     }
 
     @Override
-    protected List<Application> getApplications(int page, HttpServletRequest request) {
+    protected List<Application> getApplications(long page, HttpServletRequest request) {
         user = (User) request.getSession().getAttribute("user");
-        return applicationService.getByUserIdByPage(user.getId(), page, APPLICATIONS_ON_PAGE);
+        return applicationService.getByUserIdByPage(user.getId(), page, ITEMS_ON_PAGE);
     }
 
     @Override

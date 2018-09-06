@@ -58,7 +58,7 @@ public class FeedbackService extends Service implements IFeedbackService {
         LOGGER.info("Added feedback, feedback: " + feedback);
     }
 
-    public List<Feedback> getByPage(int page, int feedbacksOnPage) {
+    public List<Feedback> getByPage(long page, int feedbacksOnPage) {
         List<Feedback> feedbacks = feedbackDAO.findByPage(page, feedbacksOnPage);
 
         LOGGER.info("Got feedbacks by page, feedbacks: " + feedbacks +

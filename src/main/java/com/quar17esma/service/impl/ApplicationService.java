@@ -71,7 +71,7 @@ public class ApplicationService extends Service implements IApplicationService {
         LOGGER.info("Added application, application: " + application);
     }
 
-    public List<Application> getByPage(int page, int applicationsOnPage) {
+    public List<Application> getByPage(long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findAllByPage(page, applicationsOnPage);
 
         LOGGER.info("Got applications by page, applications: " + applications +
@@ -84,7 +84,7 @@ public class ApplicationService extends Service implements IApplicationService {
         return applicationDAO.countAll();
     }
 
-    public List<Application> getAcceptedByPage(int page, int applicationsOnPage) {
+    public List<Application> getAcceptedByPage(long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
 
         LOGGER.info("Got accepted applications by page, applications: " + applications +
@@ -97,7 +97,7 @@ public class ApplicationService extends Service implements IApplicationService {
         return applicationDAO.countAccepted();
     }
 
-    public List<Application> getByUserIdByPage(long userId, int page, int applicationsOnPage) {
+    public List<Application> getByUserIdByPage(long userId, long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
 
         LOGGER.info("Got applications by user id, by page, applications: " + applications +

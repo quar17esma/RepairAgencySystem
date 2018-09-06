@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ShowFeedbacks implements Action {
     private static final int DEFAULT_PAGE = 1;
-    private static final int FEEDBACKS_ON_PAGE = 5;
+    private static final int ITEMS_ON_PAGE = 5;
     private IFeedbackService feedbackService;
 
     public ShowFeedbacks() {
@@ -24,38 +24,24 @@ public class ShowFeedbacks implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        int page = setPageOrGetDefault(request.getParameter("page"));
+        long page = setPageNumberOrDefault(request.getParameter("page"));
 
-        List<Feedback> feedbacks = feedbackService.getByPage(page, FEEDBACKS_ON_PAGE);
+        List<Feedback> feedbacks = feedbackService.getByPage(page, ITEMS_ON_PAGE);
         long feedbacksQuantity = feedbackService.getAllQuantity();
-        int pagesQuantity = countPagesQuantity(feedbacksQuantity);
+        long pagesQuantity = countPagesQuantity(feedbacksQuantity);
         request.setAttribute("feedbacks", feedbacks);
         request.setAttribute("pagesQuantity", pagesQuantity);
 
         return ConfigurationManager.getProperty("path.page.feedbacks");
     }
 
-    private int countPagesQuantity(long applicationQuantity) {
-        int pagesQuantity;
-
-        if (applicationQuantity % FEEDBACKS_ON_PAGE != 0) {
-            pagesQuantity = (int) (applicationQuantity / FEEDBACKS_ON_PAGE + 1);
-        } else {
-            pagesQuantity = (int) (applicationQuantity / FEEDBACKS_ON_PAGE);
-        }
-
-        return pagesQuantity;
+    private long countPagesQuantity(long itemQuantity) {
+        return (itemQuantity % ITEMS_ON_PAGE != 0)
+                ? (itemQuantity / ITEMS_ON_PAGE + 1)
+                : (itemQuantity / ITEMS_ON_PAGE);
     }
 
-    private int setPageOrGetDefault(String pageString) {
-        int page;
-
-        if (pageString != null) {
-            page = Integer.parseInt(pageString);
-        } else {
-            page = DEFAULT_PAGE;
-        }
-
-        return page;
+    private long setPageNumberOrDefault(String pageString) {
+        return (pageString != null) ? Integer.parseInt(pageString) : DEFAULT_PAGE;
     }
 }

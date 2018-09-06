@@ -155,7 +155,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
     }
 
     @Override
-    public List<Application> findAllByPage(int page, int applicationsOnPage) {
+    public List<Application> findAllByPage(long page, int applicationsOnPage) {
         List<Application> applications = new ArrayList<>();
 
         try {
@@ -198,7 +198,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
     }
 
     @Override
-    public List<Application> findAcceptedByPage(int page, int itemsOnPage) {
+    public List<Application> findAcceptedByPage(long page, int itemsOnPage) {
         List<Application> applications = new ArrayList<>();
 
         try {
@@ -214,12 +214,12 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
         return applications;
     }
 
-    private List<Application> findByPage(int page, int itemsOnPage, String sql) throws SQLException {
+    private List<Application> findByPage(long page, int itemsOnPage, String sql) throws SQLException {
         List<Application> applications = new ArrayList<>();
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(sql)) {
-            query.setInt(1, (page - 1) * itemsOnPage);
+            query.setLong(1, (page - 1) * itemsOnPage);
             query.setInt(2, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
@@ -245,13 +245,13 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
     }
 
     @Override
-    public List<Application> findByUserIdByPage(long userId, int page, int itemsOnPage) {
+    public List<Application> findByUserIdByPage(long userId, long page, int itemsOnPage) {
         List<Application> applications = new ArrayList<>();
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(FIND_BY_USER_ID_BY_PAGE)) {
             query.setLong(1, userId);
-            query.setInt(2, (page - 1) * itemsOnPage);
+            query.setLong(2, (page - 1) * itemsOnPage);
             query.setInt(3, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {

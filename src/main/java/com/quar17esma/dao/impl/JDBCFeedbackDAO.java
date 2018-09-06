@@ -86,12 +86,12 @@ public class JDBCFeedbackDAO extends JDBCGenericDAO<Feedback> implements Feedbac
     }
 
     @Override
-    public List<Feedback> findByPage(int page, int itemsOnPage) {
+    public List<Feedback> findByPage(long page, int itemsOnPage) {
         List<Feedback> feedbacks = new ArrayList<>();
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
-            query.setInt(1, (page - 1) * itemsOnPage);
+            query.setLong(1, (page - 1) * itemsOnPage);
             query.setInt(2, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
