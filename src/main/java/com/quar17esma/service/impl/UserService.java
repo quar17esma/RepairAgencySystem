@@ -4,6 +4,7 @@ import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
 import com.quar17esma.exceptions.BusyEmailException;
+import com.quar17esma.exceptions.NoSuchUserException;
 import com.quar17esma.service.IUserService;
 import org.apache.log4j.Logger;
 
@@ -69,5 +70,19 @@ public class UserService extends Service implements IUserService {
         user.setId(userId);
 
         LOGGER.info("Added user, user: " + user);
+    }
+
+    public User login(String email, String password) throws NoSuchUserException {
+        if (email == null &&
+                password == null &&
+                email.isEmpty() &&
+                password.isEmpty()) {
+            throw new NoSuchUserException("Fail to login, email or password is null or empty", email);
+        }
+
+        User user = userDAO.login(email, password);
+
+        LOGGER.info("Logged in user by email, user: " + user + ", email: " + email);
+        return user;
     }
 }

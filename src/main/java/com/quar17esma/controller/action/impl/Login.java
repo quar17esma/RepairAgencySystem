@@ -6,20 +6,20 @@ import com.quar17esma.controller.manager.LabelManager;
 import com.quar17esma.entity.User;
 import com.quar17esma.exceptions.NoSuchUserException;
 import com.quar17esma.exceptions.WrongPasswordException;
-import com.quar17esma.service.ILoginService;
-import com.quar17esma.service.impl.LoginService;
+import com.quar17esma.service.IUserService;
+import com.quar17esma.service.impl.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class Login implements Action {
-    private ILoginService loginService;
+    private IUserService userService;
 
     public Login() {
-        this.loginService = LoginService.getInstance();
+        this.userService = UserService.getInstance();
     }
 
-    public Login(ILoginService loginService) {
-        this.loginService = loginService;
+    public Login(IUserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class Login implements Action {
         String password = request.getParameter("password");
 
         try {
-            User user = loginService.login(email, password);
+            User user = userService.login(email, password);
             request.getSession().setAttribute("user", user);
             request.getSession().setAttribute("locale", locale);
             page = ConfigurationManager.getProperty("path.page.welcome");
