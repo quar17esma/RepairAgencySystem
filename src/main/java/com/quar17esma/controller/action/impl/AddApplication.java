@@ -9,11 +9,14 @@ import com.quar17esma.entity.User;
 import com.quar17esma.enums.Status;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class AddApplication implements Action {
+    private static final Logger LOGGER = Logger.getLogger(AddApplication.class);
+
     private IApplicationService applicationService;
     private InputApplicationChecker checker;
 
@@ -53,10 +56,12 @@ public class AddApplication implements Action {
             request.setAttribute("successAddApplicationMessage",
                     LabelManager.getProperty("message.success.add.application", locale));
             page = ConfigurationManager.getProperty("path.page.welcome");
+            LOGGER.info("Executed AddApplication action, application: " + application);
         } else {
             request.setAttribute("errorAddApplicationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.edit.application");
+            LOGGER.info("Fail to execute AddApplication action, request: " + request);
         }
 
         return page;

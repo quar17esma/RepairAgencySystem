@@ -9,11 +9,14 @@ import com.quar17esma.enums.Role;
 import com.quar17esma.exceptions.BusyEmailException;
 import com.quar17esma.service.IUserService;
 import com.quar17esma.service.impl.UserService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class AddUser implements Action {
+    private static final Logger LOGGER = Logger.getLogger(AddUser.class);
+
     private IUserService userService;
     private InputUserChecker checker;
 
@@ -44,11 +47,13 @@ public class AddUser implements Action {
         if (isDataCorrect) {
             User user = makeUser(name, surname, email, phone, password, birthDate);
             page = registerUser(user, request, locale);
+            LOGGER.info("Executed AddUser action, user: " + user);
         } else {
             setDataAttributes(request, name, surname, email, phone, birthDate);
             request.setAttribute("errorRegistrationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.edit.user");
+            LOGGER.info("Fail to execute AddUser action, wrong data");
         }
 
         return page;
@@ -75,17 +80,18 @@ public class AddUser implements Action {
             request.setAttribute("successRegistrationMessage",
                     LabelManager.getProperty("message.success.registration", locale));
             page = ConfigurationManager.getProperty("path.page.login");
-
         } catch (BusyEmailException e) {
             setDataAttributes(request, user.getName(), user.getSurname(), user.getEmail(), user.getPhone(), user.getBirthDate());
             request.setAttribute("errorBusyEmailMessage",
                     LabelManager.getProperty("message.error.busy.email", locale));
             page = ConfigurationManager.getProperty("path.page.edit.user");
+            LOGGER.error("Fail to register user, user: " + user, e);
         } catch (Exception e) {
             setDataAttributes(request, user.getName(), user.getSurname(), user.getEmail(), user.getPhone(), user.getBirthDate());
             request.setAttribute("errorRegisterUserMessage",
                     LabelManager.getProperty("message.error.register.user", locale));
             page = ConfigurationManager.getProperty("path.page.edit.user");
+            LOGGER.error("Fail to register user, user: " + user, e);
         }
 
         return page;

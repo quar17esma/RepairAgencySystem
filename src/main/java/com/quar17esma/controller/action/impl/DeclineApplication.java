@@ -7,11 +7,13 @@ import com.quar17esma.entity.Application;
 import com.quar17esma.enums.Status;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class DeclineApplication implements Action {
+    private static final Logger LOGGER = Logger.getLogger(DeclineApplication.class);
     private IApplicationService applicationService;
 
     public DeclineApplication() {
@@ -37,13 +39,16 @@ public class DeclineApplication implements Action {
             application.setStatus(Status.DECLINED);
             application.setDeclineReason(declineReason);
             applicationService.update(application);
+
             request.setAttribute("successDeclineApplicationMessage",
                     LabelManager.getProperty("message.success.decline.application", locale));
             page = ConfigurationManager.getProperty("path.page.welcome");
+            LOGGER.info("Executed DeclineApplication action, application: " + application);
         } else {
             request.setAttribute("errorCompleteApplicationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.applications");
+            LOGGER.info("Fail to execute DeclineApplication action, wrong data");
         }
 
         return page;

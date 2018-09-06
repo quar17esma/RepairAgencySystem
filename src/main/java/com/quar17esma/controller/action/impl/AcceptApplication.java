@@ -7,11 +7,14 @@ import com.quar17esma.entity.Application;
 import com.quar17esma.enums.Status;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class AcceptApplication implements Action {
+    private static final Logger LOGGER = Logger.getLogger(AcceptApplication.class);
+
     private IApplicationService applicationService;
 
     public AcceptApplication() {
@@ -37,13 +40,16 @@ public class AcceptApplication implements Action {
             application.setStatus(Status.ACCEPTED);
             application.setPrice(price);
             applicationService.update(application);
+
             request.setAttribute("successAcceptApplicationMessage",
                     LabelManager.getProperty("message.success.accept.application", locale));
             page = ConfigurationManager.getProperty("path.page.welcome");
+            LOGGER.info("Executed AcceptApplication action, application: " + application);
         } else {
             request.setAttribute("errorCompleteApplicationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.applications");
+            LOGGER.info("Fail to execute AcceptApplication action");
         }
 
         return page;
