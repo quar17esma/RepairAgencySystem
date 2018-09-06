@@ -24,9 +24,9 @@ public class ShowFeedbacks implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        long page = setPageNumberOrDefault(request.getParameter("page"));
+        long pageNumber = setPageNumberOrDefault(request.getParameter("page"));
 
-        List<Feedback> feedbacks = feedbackService.getByPage(page, ITEMS_ON_PAGE);
+        List<Feedback> feedbacks = feedbackService.getByPage(pageNumber, ITEMS_ON_PAGE);
         long feedbacksQuantity = feedbackService.getAllQuantity();
         long pagesQuantity = countPagesQuantity(feedbacksQuantity);
         request.setAttribute("feedbacks", feedbacks);
