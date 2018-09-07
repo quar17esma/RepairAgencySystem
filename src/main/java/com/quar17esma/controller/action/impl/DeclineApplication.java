@@ -33,12 +33,7 @@ public class DeclineApplication implements Action {
         String declineReason = request.getParameter("declineReason");
 
         if (applicationIdString != null) {
-            int applicationId = Integer.parseInt(applicationIdString);
-            Application application = applicationService.getById(applicationId);
-            application.setProcessDate(LocalDate.now());
-            application.setStatus(Status.DECLINED);
-            application.setDeclineReason(declineReason);
-            applicationService.update(application);
+            Application application = declineApplication(applicationIdString, declineReason);
 
             request.setAttribute("successDeclineApplicationMessage",
                     LabelManager.getProperty("message.success.decline.application", locale));
@@ -52,5 +47,15 @@ public class DeclineApplication implements Action {
         }
 
         return page;
+    }
+
+    private Application declineApplication(String applicationIdString, String declineReason) {
+        int applicationId = Integer.parseInt(applicationIdString);
+        Application application = applicationService.getById(applicationId);
+        application.setProcessDate(LocalDate.now());
+        application.setStatus(Status.DECLINED);
+        application.setDeclineReason(declineReason);
+        applicationService.update(application);
+        return application;
     }
 }
