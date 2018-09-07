@@ -44,14 +44,7 @@ public class AddApplication implements Action {
 
         if (isDataCorrect) {
             Application application = makeNewApplication(product, repairType, user);
-
-            if (applicationIdString != null && !applicationIdString.isEmpty()) {
-                int applicationId = Integer.parseInt(applicationIdString);
-                application.setId(applicationId);
-                applicationService.update(application);
-            } else {
-                applicationService.add(application);
-            }
+            addOrUpdateApplication(applicationIdString, application);
 
             request.setAttribute("successAddApplicationMessage",
                     LabelManager.getProperty("message.success.add.application", locale));
@@ -65,6 +58,16 @@ public class AddApplication implements Action {
         }
 
         return page;
+    }
+
+    private void addOrUpdateApplication(String applicationIdString, Application application) {
+        if (applicationIdString == null || applicationIdString.isEmpty()) {
+            applicationService.add(application);
+        } else {
+            int applicationId = Integer.parseInt(applicationIdString);
+            application.setId(applicationId);
+            applicationService.update(application);
+        }
     }
 
     private Application makeNewApplication(String product, String repairType, User user) {
