@@ -33,11 +33,8 @@ public class CompleteApplication implements Action {
         String applicationIdString = request.getParameter("applicationId");
 
         if (applicationIdString != null) {
-            int applicationId = Integer.parseInt(applicationIdString);
-            Application application = applicationService.getById(applicationId);
-            application.setCompleteDate(LocalDate.now());
-            application.setStatus(Status.COMPLETED);
-            applicationService.update(application);
+            Application application = completeApplication(applicationIdString);
+
             request.setAttribute("successCompleteApplicationMessage",
                     LabelManager.getProperty("message.success.complete.application", locale));
             page = ConfigurationManager.getProperty("path.page.welcome");
@@ -49,5 +46,14 @@ public class CompleteApplication implements Action {
             LOGGER.info("Fail to execute CompleteApplication action, wrong data");
         }
         return page;
+    }
+
+    private Application completeApplication(String applicationIdString) {
+        int applicationId = Integer.parseInt(applicationIdString);
+        Application application = applicationService.getById(applicationId);
+        application.setCompleteDate(LocalDate.now());
+        application.setStatus(Status.COMPLETED);
+        applicationService.update(application);
+        return application;
     }
 }
