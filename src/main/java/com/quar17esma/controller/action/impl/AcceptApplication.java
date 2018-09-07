@@ -34,12 +34,7 @@ public class AcceptApplication implements Action {
         int price = Integer.parseInt(request.getParameter("price"));
 
         if (applicationIdString != null) {
-            int applicationId = Integer.parseInt(applicationIdString);
-            Application application = applicationService.getById(applicationId);
-            application.setProcessDate(LocalDate.now());
-            application.setStatus(Status.ACCEPTED);
-            application.setPrice(price);
-            applicationService.update(application);
+            Application application = acceptApplication(applicationIdString, price);
 
             request.setAttribute("successAcceptApplicationMessage",
                     LabelManager.getProperty("message.success.accept.application", locale));
@@ -53,5 +48,15 @@ public class AcceptApplication implements Action {
         }
 
         return page;
+    }
+
+    private Application acceptApplication(String applicationIdString, int price) {
+        int applicationId = Integer.parseInt(applicationIdString);
+        Application application = applicationService.getById(applicationId);
+        application.setProcessDate(LocalDate.now());
+        application.setStatus(Status.ACCEPTED);
+        application.setPrice(price);
+        applicationService.update(application);
+        return application;
     }
 }
