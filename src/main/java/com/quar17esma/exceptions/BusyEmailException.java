@@ -5,19 +5,12 @@ public class BusyEmailException extends RuntimeException {
     private String email;
 
     public BusyEmailException() {
-        super();
     }
 
     public BusyEmailException(String message, String userName, String email) {
         super(message);
         this.userName = userName;
         this.email = email;
-    }
-
-    public BusyEmailException(BusyEmailException e) {
-         super(e.getMessage());
-         this.userName = e.userName;
-         this.email = e.email;
     }
 
     public String getUserName() {
