@@ -137,7 +137,7 @@ public class JDBCUserDAO extends JDBCGenericDAO<User> implements UserDAO {
                 User user = createItem(rs);
                 result = Optional.of(user);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find user with email = " + email, e);
         }
 
@@ -157,7 +157,7 @@ public class JDBCUserDAO extends JDBCGenericDAO<User> implements UserDAO {
                 User user = createItem(rs);
                 result = Optional.of(user);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find user with phone = " + phone, e);
         }
 
@@ -188,7 +188,7 @@ public class JDBCUserDAO extends JDBCGenericDAO<User> implements UserDAO {
         } catch (WrongPasswordException e) {
             logger.error(e.getMessage(), e);
             throw new WrongPasswordException(e.getMessage(), e.getEmail());
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find user with email = " + email, e);
         }
 

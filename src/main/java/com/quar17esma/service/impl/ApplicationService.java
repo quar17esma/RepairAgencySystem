@@ -8,14 +8,14 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public class ApplicationService extends Service implements IApplicationService {
-    private static final Logger LOGGER = Logger.getLogger(ApplicationService.class);
-
+public class ApplicationService extends Service<Application> implements IApplicationService {
     private ApplicationDAO applicationDAO;
 
     private ApplicationService(DaoFactory factory) {
         super(factory);
         this.applicationDAO = factory.createApplicationDAO();
+        dao = this.applicationDAO;
+        logger = Logger.getLogger(ApplicationService.class);
     }
 
     private static class Holder {
@@ -26,55 +26,23 @@ public class ApplicationService extends Service implements IApplicationService {
         return Holder.INSTANCE;
     }
 
+    @Override
+    protected void setId(Application item, long id) {
+        item.setId(id);
+    }
+
     public List<Application> getByUserId(long userId) {
         List<Application> applications = applicationDAO.findAllByUserId(userId);
 
-        LOGGER.info("Got applications by user id, applications: " + applications +
+        logger.info("Got applications by user id, applications: " + applications +
                 "user id: " + userId);
         return applications;
-    }
-
-    @Override
-    public List<Application> getAll() {
-        List<Application> applications = applicationDAO.findAll();
-
-        LOGGER.info("Got all applications");
-        return applications;
-    }
-
-    @Override
-    public Application getById(long id) {
-        Application application = applicationDAO.findById(id).get();
-
-        LOGGER.info("Got application by id, id: " + id);
-        return application;
-    }
-
-    @Override
-    public void update(Application application) {
-        applicationDAO.update(application);
-
-        LOGGER.info("Updated application, application: " + application);
-    }
-
-    @Override
-    public void delete(long id) {
-        applicationDAO.delete(id);
-
-        LOGGER.info("Deleted application by id, id: " + id);
-    }
-
-    @Override
-    public void add(Application application) {
-        applicationDAO.insert(application);
-
-        LOGGER.info("Added application, application: " + application);
     }
 
     public List<Application> getByPage(long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findAllByPage(page, applicationsOnPage);
 
-        LOGGER.info("Got applications by page, applications: " + applications +
+        logger.info("Got applications by page, applications: " + applications +
                 ", page: " + page +
                 ", applicationsOnPage: " + applicationsOnPage);
         return applications;
@@ -87,7 +55,7 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getAcceptedByPage(long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findAcceptedByPage(page, applicationsOnPage);
 
-        LOGGER.info("Got accepted applications by page, applications: " + applications +
+        logger.info("Got accepted applications by page, applications: " + applications +
                 ", page: " + page +
                 ", applicationsOnPage: " + applicationsOnPage);
         return applications;
@@ -100,7 +68,7 @@ public class ApplicationService extends Service implements IApplicationService {
     public List<Application> getByUserIdByPage(long userId, long page, int applicationsOnPage) {
         List<Application> applications = applicationDAO.findByUserIdByPage(userId, page, applicationsOnPage);
 
-        LOGGER.info("Got applications by user id, by page, applications: " + applications +
+        logger.info("Got applications by user id, by page, applications: " + applications +
                 ", user id: " + userId +
                 ", page: " + page +
                 ", applicationsOnPage: " + applicationsOnPage);

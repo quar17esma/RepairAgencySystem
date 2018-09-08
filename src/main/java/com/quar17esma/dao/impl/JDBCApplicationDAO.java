@@ -160,7 +160,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
 
         try {
             applications = findByPage(page, applicationsOnPage, FIND_BY_PAGE);
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find applications by Page, page = " + page +
                     ", applicationsOnPage = " + applicationsOnPage, e);
         }
@@ -258,7 +258,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
                 Application application = createApplicationWithFeedback(rs);
                 applications.add(application);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find applications by user id by Page, page = " + page +
                     ", itemsOnPage = " + itemsOnPage, e);
         }
@@ -280,7 +280,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
             if (rs.next()) {
                 applicationCounter = rs.getLong("COUNT(id)");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to count by user id applications", e);
         }
         return applicationCounter;
