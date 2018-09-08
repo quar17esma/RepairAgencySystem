@@ -7,6 +7,7 @@ import com.quar17esma.controller.manager.LabelManager;
 import com.quar17esma.entity.Application;
 import com.quar17esma.entity.Feedback;
 import com.quar17esma.entity.User;
+import com.quar17esma.exceptions.WrongDataException;
 import com.quar17esma.service.IFeedbackService;
 import com.quar17esma.service.impl.FeedbackService;
 import org.apache.log4j.Logger;
@@ -39,22 +40,21 @@ public class AddFeedback implements Action {
         int applicationId = Integer.parseInt(request.getParameter("applicationId"));
         int mark = Integer.parseInt(request.getParameter("mark"));
         String comment = request.getParameter("comment").trim();
-        boolean isDataCorrect = checker.isInputDataCorrect(mark, comment);
 
-        if (isDataCorrect) {
-            Feedback feedback = makeFeedback(mark, comment, applicationId);
-            page = addFeedback(feedback, request, locale);
-            LOGGER.info("Executed AddFeedback action, feedback: " + feedback);
-        } else {
-            setDataAttributes(request, mark, comment);
-            request.setAttribute("errorAddFeedbackMessage",
-                    LabelManager.getProperty("message.error.wrong.data", locale));
-            page = ConfigurationManager.getProperty("path.page.feedbacks");
+        try {
+            checker.checkData(mark, comment);
+        } catch (WrongDataException e) {
+            page = handleWrongDataException(e, request, locale, mark,comment);
             LOGGER.info("Fail to execute AddFeedback action, wrong data");
+            return page;
         }
 
+        Feedback feedback = makeFeedback(mark, comment, applicationId);
+        page = addFeedback(feedback, request, locale);
+        LOGGER.info("Executed AddFeedback action, feedback: " + feedback);
+
         return page;
-    }
+}
 
     private Feedback makeFeedback(int mark, String comment, int applicationId) {
         return new Feedback.Builder()
@@ -65,6 +65,22 @@ public class AddFeedback implements Action {
                         .setId(applicationId)
                         .build())
                 .build();
+    }
+
+    private String handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale,
+                                            int mark, String comment) {
+        setDataAttributes(request, mark, comment);
+        switch (e.getMessage()) {
+            case "Wrong mark":
+                request.setAttribute("wrongMarkMessage",
+                        LabelManager.getProperty("message.wrong.mark", locale));
+                break;
+            case "Wrong comment":
+                request.setAttribute("wrongCommentMessage",
+                        LabelManager.getProperty("message.wrong.comment", locale));
+                break;
+        }
+        return ConfigurationManager.getProperty("path.page.feedbacks");
     }
 
     private String addFeedback(Feedback feedback, HttpServletRequest request, String locale) {

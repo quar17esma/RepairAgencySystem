@@ -29,6 +29,16 @@
                 <c:out value="${successAddFeedbackMessage}"/>
             </div>
         </c:if>
+        <c:if test="${wrongMarkMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${wrongMarkMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${wrongCommentMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${wrongCommentMessage}"/>
+            </div>
+        </c:if>
     </div>
 
     <div class="row">
