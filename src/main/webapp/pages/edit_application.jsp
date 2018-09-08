@@ -21,13 +21,13 @@
     <div class="row">
         <jsp:include page="/pages/header.jsp"/>
     </div>
-    <div class="row">
-        <c:if test="${errorAddApplication != null}">
-            <div class="alert alert-danger">
-                <c:out value="${errorAddApplication}"/>
-            </div>
-        </c:if>
-    </div>
+    <%--<div class="row">--%>
+        <%--<c:if test="${errorAddApplication != null}">--%>
+            <%--<div class="alert alert-danger">--%>
+                <%--<c:out value="${errorAddApplication}"/>--%>
+            <%--</div>--%>
+        <%--</c:if>--%>
+    <%--</div>--%>
     <div class="row">
         <h2><fmt:message key="title.add.application"/></h2>
         <form class="form-horizontal" name="addApplicationForm" method="POST" action="./add_application">
@@ -40,6 +40,11 @@
                     <input id="product" class="form-control" type="text" name="product" value="${application.product}"
                            required="required"/>
                 </div>
+                <div class="col-md-2">
+                    <div class="text-danger">
+                        <c:out value="${wrongProductMessage}"/>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label class="control-label col-md-2" for="repairType"><fmt:message key="label.repair.type"/></label>
@@ -47,6 +52,11 @@
                     <textarea id="repairType" class="form-control" type="textarea" rows="3"
                               name="repairType" value="${application.repairType}" required="required">
                     </textarea>
+                </div>
+                <div class="col-md-2">
+                    <div class="text-danger">
+                        <c:out value="${wrongRepairTypeMessage}"/>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
