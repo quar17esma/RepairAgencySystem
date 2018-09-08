@@ -98,7 +98,7 @@ public class JDBCFeedbackDAO extends JDBCGenericDAO<Feedback> implements Feedbac
                 Feedback feedback = createItem(rs);
                 feedbacks.add(feedback);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to find feedbacks by page, page = " + page +
                     ", itemsOnPage = " + itemsOnPage, e);
         }
@@ -118,7 +118,7 @@ public class JDBCFeedbackDAO extends JDBCGenericDAO<Feedback> implements Feedbac
             if (rs.next()) {
                 feedbackCounter = rs.getLong("COUNT(id)");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             logger.error("Fail to count feedbacks", e);
         }
         return feedbackCounter;
