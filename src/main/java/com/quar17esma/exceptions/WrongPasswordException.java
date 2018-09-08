@@ -4,6 +4,9 @@ public class WrongPasswordException extends RuntimeException {
 
     private String email;
 
+    public WrongPasswordException() {
+    }
+
     public WrongPasswordException(String message, String email) {
         super(message);
         this.email = email;

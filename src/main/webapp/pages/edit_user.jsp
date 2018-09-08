@@ -23,13 +23,6 @@
         <h2><fmt:message key="title.registration.form"/></h2>
     </div>
     <div class="row">
-        <c:if test="${errorRegistrationMessage != null}">
-            <div class="alert alert-error">
-                <c:out value="${errorRegistrationMessage}"/>
-            </div>
-        </c:if>
-    </div>
-    <div class="row">
         <div class="panel panel-default">
             <div class="panel-body">
                 <form class="form-horizontal" name="registrationForm" method="POST" action="./add_user">
@@ -42,6 +35,11 @@
                             <input class="form-control" type="text" name="phone" value="${phone}" required="required"
                                    placeholder="${placeholderPhone}"
                                    id="phone"/>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${wrongPhoneMessage}"/>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -57,6 +55,7 @@
                         <div class="col-md-2">
                             <div class="text-danger">
                                 <c:out value="${errorBusyEmailMessage}"/>
+                                <c:out value="${wrongEmailMessage}"/>
                             </div>
                         </div>
                     </div>
@@ -70,6 +69,11 @@
                                    placeholder="${placeholderPassword}"
                                    id="pwd"/>
                         </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${wrongPasswordMessage}"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-1" for="name">
@@ -80,6 +84,11 @@
                             <input class="form-control" type="text" name="name" value="${name}" required="required"
                                    placeholder="${placeholderName}"
                                    id="name"/>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${wrongNameMessage}"/>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -92,6 +101,11 @@
                                    placeholder="${placeholderSurname}"
                                    id="surname"/>
                         </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${wrongSurnameMessage}"/>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -102,6 +116,11 @@
                             <input class="form-control" type="date" name="birthDate" value="${birthDate}"
                                    required="required"
                                    id="birthDate"/>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-danger">
+                                <c:out value="${wrongBirthDateMessage}"/>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

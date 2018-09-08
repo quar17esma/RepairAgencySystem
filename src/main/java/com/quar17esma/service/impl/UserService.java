@@ -4,11 +4,11 @@ import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.dao.UserDAO;
 import com.quar17esma.entity.User;
 import com.quar17esma.exceptions.BusyEmailException;
+import com.quar17esma.exceptions.NoSuchUserException;
 import com.quar17esma.service.IUserService;
 import org.apache.log4j.Logger;
 
 import java.util.List;
-import java.util.Optional;
 
 public class UserService extends Service implements IUserService {
     private static final Logger LOGGER = Logger.getLogger(UserService.class);
@@ -30,39 +30,59 @@ public class UserService extends Service implements IUserService {
 
     @Override
     public List<User> getAll() {
-        return userDAO.findAll();
+        List<User> users = userDAO.findAll();
+
+        LOGGER.info("Got all users");
+        return users;
     }
 
     @Override
     public User getById(long id) {
-        return userDAO.findById(id).get();
+        User user = userDAO.findById(id).get();
+
+        LOGGER.info("Got user by ID, user: " + user + " ID: " + id);
+        return user;
     }
 
     public User getByEmail(String email) {
-        return userDAO.findByEmail(email).get();
+        User user = userDAO.findByEmail(email).get();
+
+        LOGGER.info("Got user by email, user: " + user + " email: " + email);
+        return user;
     }
 
     @Override
     public void update(User user) {
         userDAO.update(user);
+
+        LOGGER.info("Updated user, user: " + user);
     }
 
     @Override
     public void delete(long id) {
         userDAO.delete(id);
+
+        LOGGER.info("Deleted user by id, id: " + id);
     }
 
     public void add(User user) throws BusyEmailException {
-        try {
-            Optional<User> userOptional = userDAO.findByEmail(user.getEmail());
-            if (userOptional.isPresent()) {
-                throw new BusyEmailException("Fail to register user, email is busy",
-                        user.getName(), user.getEmail());
-            }
-            long userId = userDAO.insert(user);
-            user.setId(userId);
-        } catch (BusyEmailException e) {
-            throw new BusyEmailException(e);
+        long userId = userDAO.insert(user);
+        user.setId(userId);
+
+        LOGGER.info("Added user, user: " + user);
+    }
+
+    public User login(String email, String password) throws NoSuchUserException {
+        if (email == null &&
+                password == null &&
+                email.isEmpty() &&
+                password.isEmpty()) {
+            throw new NoSuchUserException("Fail to login, email or password is null or empty", email);
         }
+
+        User user = userDAO.login(email, password);
+
+        LOGGER.info("Logged in user by email, user: " + user + ", email: " + email);
+        return user;
     }
 }

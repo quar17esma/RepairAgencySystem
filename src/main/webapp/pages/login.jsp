@@ -39,7 +39,11 @@
     </div>
 
     <div class="row">
-        <c:out value="${successRegistrationMessage}"/>
+        <c:if test="${successRegistrationMessage != null}">
+            <div class="alert alert-success">
+                <c:out value="${successRegistrationMessage}"/>
+            </div>
+        </c:if>
     </div>
     <div class="row">
         <h2><fmt:message key="title.login"/></h2>

@@ -27,8 +27,9 @@ public class ConfigDaoFactory {
         try (InputStream in = this.getClass().getResourceAsStream("/db.properties")) {
             Properties dbProperties = new Properties();
             dbProperties.load(in);
-
             factoryClassName = dbProperties.getProperty("db.factory.class");
+
+            LOGGER.info("Loaded Config DAO factory");
         } catch (IOException e) {
             LOGGER.error("Fail to load DB config dao factory", e);
             throw new RuntimeException(e);

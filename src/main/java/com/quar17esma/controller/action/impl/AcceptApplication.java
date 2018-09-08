@@ -7,11 +7,14 @@ import com.quar17esma.entity.Application;
 import com.quar17esma.enums.Status;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 public class AcceptApplication implements Action {
+    private static final Logger LOGGER = Logger.getLogger(AcceptApplication.class);
+
     private IApplicationService applicationService;
 
     public AcceptApplication() {
@@ -31,21 +34,29 @@ public class AcceptApplication implements Action {
         int price = Integer.parseInt(request.getParameter("price"));
 
         if (applicationIdString != null) {
-            int applicationId = Integer.parseInt(applicationIdString);
-            Application application = applicationService.getById(applicationId);
-            application.setProcessDate(LocalDate.now());
-            application.setStatus(Status.ACCEPTED);
-            application.setPrice(price);
-            applicationService.update(application);
+            Application application = acceptApplication(applicationIdString, price);
+
             request.setAttribute("successAcceptApplicationMessage",
                     LabelManager.getProperty("message.success.accept.application", locale));
             page = ConfigurationManager.getProperty("path.page.welcome");
+            LOGGER.info("Executed AcceptApplication action, application: " + application);
         } else {
             request.setAttribute("errorCompleteApplicationMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.applications");
+            LOGGER.info("Fail to execute AcceptApplication action");
         }
 
         return page;
+    }
+
+    private Application acceptApplication(String applicationIdString, int price) {
+        int applicationId = Integer.parseInt(applicationIdString);
+        Application application = applicationService.getById(applicationId);
+        application.setProcessDate(LocalDate.now());
+        application.setStatus(Status.ACCEPTED);
+        application.setPrice(price);
+        applicationService.update(application);
+        return application;
     }
 }

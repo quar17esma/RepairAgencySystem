@@ -10,25 +10,21 @@ import org.apache.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-public class JDBCFeedbackDAO implements FeedbackDAO {
-    private static final Logger LOGGER = Logger.getLogger(JDBCFeedbackDAO.class);
-
-    private static final String FIND_ALL = "SELECT * FROM feedback " +
-            "JOIN application ON feedback.application_id = application.id";
-    private static final String FIND_BY_ID = "SELECT * FROM feedback " +
-            "JOIN application ON feedback.application_id = application.id WHERE feedback.id = ?";
-    private static final String UPDATE = "UPDATE feedback SET date_time = ?, comment = ?, mark = ? WHERE id = ?";
-    private static final String DELETE = "DELETE FROM feedback WHERE id = ?";
-    private static final String INSERT = "INSERT INTO feedback (date_time, comment, mark, application_id) VALUES(?, ?, ?, ?) ";
+public class JDBCFeedbackDAO extends JDBCGenericDAO<Feedback> implements FeedbackDAO {
     private static final String FIND_BY_PAGE = "SELECT * FROM feedback ORDER BY feedback.date_time DESC LIMIT ?, ? ";
     private static final String COUNT_ID = "SELECT COUNT(id) FROM feedback ";
 
-    private ConnectionPool connectionPool;
-
     private JDBCFeedbackDAO(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
+        logger = Logger.getLogger(JDBCFeedbackDAO.class);
+        findAll = "SELECT * FROM feedback " +
+                "JOIN application ON feedback.application_id = application.id";
+        findById = "SELECT * FROM feedback " +
+                "JOIN application ON feedback.application_id = application.id WHERE feedback.id = ?";
+        update = "UPDATE feedback SET date_time = ?, comment = ?, mark = ? WHERE id = ?";
+        delete = "DELETE FROM feedback WHERE id = ?";
+        insert = "INSERT INTO feedback (date_time, comment, mark, application_id) VALUES(?, ?, ?, ?) ";
     }
 
     private static class Holder {
@@ -40,43 +36,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     }
 
     @Override
-    public List<Feedback> findAll() {
-        List<Feedback> feedbackList = new ArrayList<>();
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(FIND_ALL)) {
-            ResultSet rs = query.executeQuery();
-            while (rs.next()) {
-                Feedback feedback = createFeedback(rs);
-                feedbackList.add(feedback);
-            }
-        } catch (Exception e) {
-            LOGGER.error("Fail to find feedbackList", e);
-        }
-
-        return feedbackList;
-    }
-
-    @Override
-    public Optional<Feedback> findById(long id) {
-        Optional<Feedback> feedback = Optional.empty();
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(FIND_BY_ID)) {
-            query.setLong(1, id);
-            ResultSet rs = query.executeQuery();
-            while (rs.next()) {
-                Feedback fb = createFeedback(rs);
-                feedback = Optional.of(fb);
-            }
-        } catch (Exception e) {
-            LOGGER.error("Fail to find meal with id = " + id, e);
-        }
-
-        return feedback;
-    }
-
-    private Feedback createFeedback(ResultSet rs) throws SQLException {
+    protected Feedback createItem(ResultSet rs) throws SQLException {
         return new Feedback.Builder()
                 .setId(rs.getLong("feedback.id"))
                 .setDateTime(rs.getTimestamp("feedback.date_time").toLocalDateTime())
@@ -85,8 +45,29 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
                 .build();
     }
 
+    @Override
+    protected void setUpdateQueryParams(PreparedStatement query, Feedback item) throws SQLException {
+        query.setTimestamp(1, Timestamp.valueOf(item.getDateTime()));
+        query.setString(2, item.getComment());
+        query.setInt(3, item.getMark());
+        query.setLong(4, item.getId());
+    }
+
+    @Override
+    protected void setInsertQueryParams(PreparedStatement query, Feedback item) throws SQLException {
+        query.setTimestamp(1, Timestamp.valueOf(item.getDateTime()));
+        query.setString(2, item.getComment());
+        query.setInt(3, item.getMark());
+        query.setLong(4, item.getApplication().getId());
+    }
+
+    @Override
+    protected void setId(Feedback item, long id) {
+        item.setId(id);
+    }
+
     private Feedback createFeedbackWithApplication(ResultSet rs) throws SQLException {
-        Feedback feedback = createFeedback(rs);
+        Feedback feedback = createItem(rs);
 
         feedback.setApplication(new Application.Builder()
                 .setId(rs.getLong("application.id"))
@@ -105,84 +86,27 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
     }
 
     @Override
-    public boolean update(Feedback feedback) {
-        boolean result = false;
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(UPDATE)) {
-            query.setTimestamp(1, Timestamp.valueOf(feedback.getDateTime()));
-            query.setString(2, feedback.getComment());
-            query.setInt(3, feedback.getMark());
-            query.setLong(4, feedback.getId());
-            query.executeUpdate();
-            result = true;
-        } catch (Exception e) {
-            LOGGER.error("Fail to update feedback with id = " + feedback.getId(), e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public boolean delete(long id) {
-        boolean result = false;
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(DELETE)) {
-            query.setLong(1, id);
-            query.executeUpdate();
-            result = true;
-        } catch (Exception e) {
-            LOGGER.error("Fail to delete order with id = " + id, e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public long insert(Feedback feedback) {
-        long result = -1;
-
-        try (Connection connection = connectionPool.getConnection();
-             PreparedStatement query = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            query.setTimestamp(1, Timestamp.valueOf(feedback.getDateTime()));
-            query.setString(2, feedback.getComment());
-            query.setInt(3, feedback.getMark());
-            query.setLong(4, feedback.getApplication().getId());
-            query.executeUpdate();
-            ResultSet rsId = query.getGeneratedKeys();
-            if (rsId.next()) {
-                result = rsId.getLong(1);
-                feedback.setId(result);
-            }
-        } catch (Exception e) {
-            LOGGER.error("Fail to insert feedback: " + feedback.toString(), e);
-        }
-
-        return result;
-    }
-
-    @Override
-    public List<Feedback> findByPage(int page, int feedbackOnPage) {
-        List<Feedback> feedbackList = new ArrayList<>();
-
-        int offset = (page - 1) * feedbackOnPage;
+    public List<Feedback> findByPage(long page, int itemsOnPage) {
+        List<Feedback> feedbacks = new ArrayList<>();
 
         try (Connection connection = connectionPool.getConnection();
              PreparedStatement query = connection.prepareStatement(FIND_BY_PAGE)) {
-            query.setInt(1, offset);
-            query.setInt(2, feedbackOnPage);
+            query.setLong(1, (page - 1) * itemsOnPage);
+            query.setInt(2, itemsOnPage);
             ResultSet rs = query.executeQuery();
             while (rs.next()) {
-                Feedback feedback = createFeedback(rs);
-                feedbackList.add(feedback);
+                Feedback feedback = createItem(rs);
+                feedbacks.add(feedback);
             }
         } catch (Exception e) {
-            LOGGER.error("Fail to find feedbackList by Page, page = " + page +
-                    ", foodsOnPage = " + feedbackOnPage, e);
+            logger.error("Fail to find feedbacks by page, page = " + page +
+                    ", itemsOnPage = " + itemsOnPage, e);
         }
 
-        return feedbackList;
+        logger.info("Found feedbacks by page, feedbacks: " + feedbacks +
+                ", page: " + page +
+                ", itemsOnPage: " + itemsOnPage);
+        return feedbacks;
     }
 
     @Override
@@ -195,7 +119,7 @@ public class JDBCFeedbackDAO implements FeedbackDAO {
                 feedbackCounter = rs.getLong("COUNT(id)");
             }
         } catch (Exception e) {
-            LOGGER.error("Fail to count feedbacks", e);
+            logger.error("Fail to count feedbacks", e);
         }
         return feedbackCounter;
     }

@@ -9,12 +9,15 @@ import com.quar17esma.entity.Feedback;
 import com.quar17esma.entity.User;
 import com.quar17esma.service.IFeedbackService;
 import com.quar17esma.service.impl.FeedbackService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AddFeedback implements Action {
+    private static final Logger LOGGER = Logger.getLogger(AddFeedback.class);
+
     private IFeedbackService feedbackService;
     private InputFeedbackChecker checker;
 
@@ -41,11 +44,13 @@ public class AddFeedback implements Action {
         if (isDataCorrect) {
             Feedback feedback = makeFeedback(mark, comment, applicationId);
             page = addFeedback(feedback, request, locale);
+            LOGGER.info("Executed AddFeedback action, feedback: " + feedback);
         } else {
             setDataAttributes(request, mark, comment);
             request.setAttribute("errorAddFeedbackMessage",
                     LabelManager.getProperty("message.error.wrong.data", locale));
             page = ConfigurationManager.getProperty("path.page.feedbacks");
+            LOGGER.info("Fail to execute AddFeedback action, wrong data");
         }
 
         return page;

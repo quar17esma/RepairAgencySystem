@@ -27,27 +27,44 @@ public class FeedbackService extends Service implements IFeedbackService {
     }
 
     public List<Feedback> getAll() {
-        return feedbackDAO.findAll();
+        List<Feedback> feedbacks = feedbackDAO.findAll();
+
+        LOGGER.info("Got all feedbacks");
+        return feedbacks;
     }
 
     public Feedback getById(long id) {
-        return feedbackDAO.findById(id).get();
+        Feedback feedback = feedbackDAO.findById(id).get();
+
+        LOGGER.info("Got feedback by id, feedback: " + feedback + ", id: " + id);
+        return feedback;
     }
 
     public void update(Feedback feedback) {
         feedbackDAO.update(feedback);
+
+        LOGGER.info("Updated feedback, feedback: " + feedback);
     }
 
     public void delete(long id) {
         feedbackDAO.delete(id);
+
+        LOGGER.info("Deleted feedback by id, id: " + id);
     }
 
     public void add(Feedback feedback) {
         feedbackDAO.insert(feedback);
+
+        LOGGER.info("Added feedback, feedback: " + feedback);
     }
 
-    public List<Feedback> getByPage(int page, int feedbacksOnPage) {
-        return feedbackDAO.findByPage(page, feedbacksOnPage);
+    public List<Feedback> getByPage(long page, int feedbacksOnPage) {
+        List<Feedback> feedbacks = feedbackDAO.findByPage(page, feedbacksOnPage);
+
+        LOGGER.info("Got feedbacks by page, feedbacks: " + feedbacks +
+                ", page: " + page +
+                ", feedbacksOnPage: " + feedbacksOnPage);
+        return feedbacks;
     }
 
     public long getAllQuantity() {
