@@ -26,11 +26,6 @@ public class ApplicationService extends Service<Application> implements IApplica
         return Holder.INSTANCE;
     }
 
-    @Override
-    protected void setId(Application item, long id) {
-        item.setId(id);
-    }
-
     public List<Application> getByUserId(long userId) {
         List<Application> applications = applicationDAO.findAllByUserId(userId);
 

@@ -84,7 +84,7 @@ public class JDBCUserDAO extends JDBCGenericDAO<User> implements UserDAO {
                 ResultSet rsId = queryInsert.getGeneratedKeys();
                 if (rsId.next()) {
                     result = rsId.getLong(1);
-                    setId(user, result);
+                    user.setId(result);
                 }
 
                 connection.commit();
@@ -118,11 +118,6 @@ public class JDBCUserDAO extends JDBCGenericDAO<User> implements UserDAO {
         query.setString(5, item.getName());
         query.setString(6, item.getSurname());
         query.setDate(7, Date.valueOf(item.getBirthDate()));
-    }
-
-    @Override
-    protected void setId(User item, long id) {
-        item.setId(id);
     }
 
     @Override

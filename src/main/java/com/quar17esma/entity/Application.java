@@ -4,8 +4,7 @@ import com.quar17esma.enums.Status;
 
 import java.time.LocalDate;
 
-public class Application {
-    private long id;
+public class Application extends Entity {
     private User user;
     private Status status;
     private int price;
@@ -15,15 +14,7 @@ public class Application {
     private LocalDate processDate;
     private LocalDate completeDate;
     private String declineReason;
-    private  Feedback feedback;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    private Feedback feedback;
 
     public User getUser() {
         return user;

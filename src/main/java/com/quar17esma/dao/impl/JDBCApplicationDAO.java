@@ -129,11 +129,6 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
     }
 
     @Override
-    protected void setId(Application item, long id) {
-        item.setId(id);
-    }
-
-    @Override
     public List<Application> findAllByUserId(long userId) {
         List<Application> applications = new ArrayList<>();
 

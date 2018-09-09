@@ -4,8 +4,7 @@ import com.quar17esma.enums.Role;
 
 import java.time.LocalDate;
 
-public class User {
-    private long id;
+public class User extends Entity {
     private String email;
     private String phone;
     private String password;
@@ -13,17 +12,6 @@ public class User {
     private String name;
     private String surname;
     private LocalDate birthDate;
-
-    public User() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;

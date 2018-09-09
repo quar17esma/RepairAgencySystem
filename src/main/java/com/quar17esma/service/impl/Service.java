@@ -2,13 +2,14 @@ package com.quar17esma.service.impl;
 
 import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.dao.GenericDAO;
+import com.quar17esma.entity.Entity;
 import com.quar17esma.exceptions.BusyEmailException;
 import com.quar17esma.service.GenericService;
 import org.apache.log4j.Logger;
 
 import java.util.List;
 
-public abstract class Service<T> implements GenericService<T> {
+public abstract class Service<T extends Entity> implements GenericService<T> {
     protected Logger logger;
     protected DaoFactory factory;
     protected GenericDAO<T> dao;
@@ -50,10 +51,8 @@ public abstract class Service<T> implements GenericService<T> {
     @Override
     public void add(T item) throws BusyEmailException {
         long id = dao.insert(item);
-        setId(item, id);
+        item.setId(id);
 
         logger.info("Added item, item: " + item);
     }
-
-    protected abstract void setId(T item, long id);
 }

@@ -26,11 +26,6 @@ public class FeedbackService extends Service<Feedback> implements IFeedbackServi
         return Holder.INSTANCE;
     }
 
-    @Override
-    protected void setId(Feedback item, long id) {
-        item.setId(id);
-    }
-
     public List<Feedback> getByPage(long page, int feedbacksOnPage) {
         List<Feedback> feedbacks = feedbackDAO.findByPage(page, feedbacksOnPage);
 

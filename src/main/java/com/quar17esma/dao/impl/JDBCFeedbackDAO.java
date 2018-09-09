@@ -61,11 +61,6 @@ public class JDBCFeedbackDAO extends JDBCGenericDAO<Feedback> implements Feedbac
         query.setLong(4, item.getApplication().getId());
     }
 
-    @Override
-    protected void setId(Feedback item, long id) {
-        item.setId(id);
-    }
-
     private Feedback createFeedbackWithApplication(ResultSet rs) throws SQLException {
         Feedback feedback = createItem(rs);
 
