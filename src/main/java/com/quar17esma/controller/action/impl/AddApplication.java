@@ -42,7 +42,7 @@ public class AddApplication implements Action {
         User user = (User) request.getSession().getAttribute("user");
 
         try {
-            checker.checkData(product, repairType);
+            checker.checkDataAdd(product, repairType);
         } catch (WrongDataException e) {
             page = handleWrongDataException(e, request, locale, product, repairType);
             LOGGER.info("Fail to execute AddApplication action, wrong data" +

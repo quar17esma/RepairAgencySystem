@@ -6,7 +6,7 @@ public class InputApplicationChecker extends InputDataChecker {
     private static final int PRODUCT_LENGTH_MAX = 100;
     private static final int REPAIR_TYPE_LENGTH_MAX = 100;
 
-    public void checkData(String product, String repairType) {
+    public void checkDataAdd(String product, String repairType) {
         if (!isProductCorrect(product)) {
             throw new WrongDataException("Wrong product");
         } else if (!isRepairTypeCorrect(repairType)) {

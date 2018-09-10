@@ -65,7 +65,7 @@ public class AddApplicationTest {
         String resultPage = addApplication.execute(request);
         assertEquals(resultPage, pageExpected);
 
-        verify(checker).checkData(product, repairType);
+        verify(checker).checkDataAdd(product, repairType);
         verify(applicationService).add(any(Application.class));
         verify(request).setAttribute("successAddApplicationMessage", SUCCESS_REGISTRATION_MESSAGE);
 
@@ -83,7 +83,7 @@ public class AddApplicationTest {
         String resultPage = addApplication.execute(request);
         assertEquals(resultPage, pageExpected);
 
-        verify(checker).checkData(product, repairType);
+        verify(checker).checkDataAdd(product, repairType);
         verify(applicationService).update(any(Application.class));
         verify(request).setAttribute("successAddApplicationMessage", SUCCESS_REGISTRATION_MESSAGE);
 
@@ -95,12 +95,12 @@ public class AddApplicationTest {
     @Test
     public void executeHandleWrongDataException() throws Exception {
         pageExpected = ConfigurationManager.getProperty("path.page.edit.application");
-        doThrow(new WrongDataException("Wrong product")).when(checker).checkData(product, repairType);
+        doThrow(new WrongDataException("Wrong product")).when(checker).checkDataAdd(product, repairType);
 
         String resultPage = addApplication.execute(request);
         assertEquals(resultPage, pageExpected);
 
-        verify(checker).checkData(product, repairType);
+        verify(checker).checkDataAdd(product, repairType);
         verify(request).setAttribute("wrongProductMessage", WRONG_PRODUCT_MESSAGE);
 
         verify(applicationService, never()).add(any(Application.class));
