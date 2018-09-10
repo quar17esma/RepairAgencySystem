@@ -67,7 +67,7 @@ public class AcceptApplication implements Action {
         return ConfigurationManager.getProperty("path.page.welcome");
     }
 
-    private String handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale) {
+    private void handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale) {
         switch (e.getMessage()) {
             case "Wrong application id":
                 request.setAttribute("errorAcceptApplicationMessage",
@@ -78,9 +78,6 @@ public class AcceptApplication implements Action {
                         LabelManager.getProperty("message.wrong.price", locale));
                 break;
         }
-
-        LOGGER.info("Fail to execute AcceptApplication action");
-        return ConfigurationManager.getProperty("path.page.welcome");
     }
 
     private boolean acceptApplication(String applicationIdString, String price) throws NoSuchElementException {

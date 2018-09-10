@@ -65,7 +65,7 @@ public class DeclineApplication implements Action {
         return ConfigurationManager.getProperty("path.page.welcome");
     }
 
-    private String handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale) {
+    private void handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale) {
         switch (e.getMessage()) {
             case "Wrong application id":
                 request.setAttribute("errorDeclineApplicationMessage",
@@ -76,9 +76,6 @@ public class DeclineApplication implements Action {
                         LabelManager.getProperty("message.wrong.decline.reason", locale));
                 break;
         }
-
-        LOGGER.info("Fail to execute AcceptApplication action");
-        return ConfigurationManager.getProperty("path.page.welcome");
     }
 
     private boolean declineApplication(String applicationIdString, String declineReason) throws NoSuchElementException {
