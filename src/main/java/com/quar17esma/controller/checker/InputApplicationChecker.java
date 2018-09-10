@@ -5,6 +5,7 @@ import com.quar17esma.exceptions.WrongDataException;
 public class InputApplicationChecker extends InputDataChecker {
     private static final int PRODUCT_LENGTH_MAX = 100;
     private static final int REPAIR_TYPE_LENGTH_MAX = 100;
+    private static final int DECLINE_REASON_LENGTH_MAX = 100;
 
     public void checkDataAdd(String product, String repairType) {
         if (!isProductCorrect(product)) {
@@ -76,6 +77,6 @@ public class InputApplicationChecker extends InputDataChecker {
     }
 
     private boolean isDeclineReasonCorrect(String declineReason) {
-        return checkString(declineReason, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, REPAIR_TYPE_LENGTH_MAX);
+        return checkString(declineReason, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, DECLINE_REASON_LENGTH_MAX);
     }
 }
