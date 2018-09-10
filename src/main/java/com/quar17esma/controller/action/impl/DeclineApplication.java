@@ -47,19 +47,17 @@ public class DeclineApplication implements Action {
             } else {
                 request.setAttribute("errorDeclineApplicationMessage",
                         LabelManager.getProperty("message.fail.decline.application", locale));
-                LOGGER.info("Fail to execute DeclineApplication action" +
-                        ", applicationId: " + applicationId);
+                LOGGER.error("Fail to execute DeclineApplication action, applicationId: " + applicationId);
             }
         } catch (WrongDataException e) {
             handleWrongDataException(e, request, locale);
-            LOGGER.info("Fail to execute DeclineApplication action, wrong data" +
+            LOGGER.error("Fail to execute DeclineApplication action, wrong data" +
                     ", applicationId: " + applicationId +
-                    ", decline Reason: " + declineReason);
+                    ", decline Reason: " + declineReason, e);
         } catch (NoSuchElementException e) {
             request.setAttribute("errorDeclineApplicationMessage",
                     LabelManager.getProperty("message.fail.decline.application", locale));
-            LOGGER.info("Fail to execute DeclineApplication action" +
-                    ", applicationId: " + applicationId);
+            LOGGER.error("Fail to execute DeclineApplication action, applicationId: " + applicationId, e);
         }
 
         return ConfigurationManager.getProperty("path.page.welcome");

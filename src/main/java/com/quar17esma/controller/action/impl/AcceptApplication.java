@@ -49,19 +49,19 @@ public class AcceptApplication implements Action {
             } else {
                 request.setAttribute("errorAcceptApplicationMessage",
                         LabelManager.getProperty("message.fail.accept.application", locale));
-                LOGGER.info("Fail to execute AcceptApplication action" +
+                LOGGER.error("Fail to execute AcceptApplication action" +
                         ", applicationId: " + applicationId);
             }
         } catch (WrongDataException e) {
             handleWrongDataException(e, request, locale);
-            LOGGER.info("Fail to execute AcceptApplication action, wrong data" +
+            LOGGER.error("Fail to execute AcceptApplication action, wrong data" +
                     ", applicationId: " + applicationId +
-                    ", price: " + price);
+                    ", price: " + price, e);
         } catch (NoSuchElementException e) {
             request.setAttribute("errorAcceptApplicationMessage",
                     LabelManager.getProperty("message.fail.accept.application", locale));
-            LOGGER.info("Fail to execute AcceptApplication action" +
-                    ", applicationId: " + applicationId);
+            LOGGER.error("Fail to execute AcceptApplication action" +
+                    ", applicationId: " + applicationId, e);
         }
 
         return ConfigurationManager.getProperty("path.page.welcome");

@@ -46,16 +46,17 @@ public class CompleteApplication implements Action {
             } else {
                 request.setAttribute("errorCompleteApplicationMessage",
                         LabelManager.getProperty("message.fail.complete.application", locale));
-                LOGGER.info("Fail to execute CompleteApplication action, applicationId: " + applicationId);
+                LOGGER.error("Fail to execute CompleteApplication action, applicationId: " + applicationId);
             }
         } catch (WrongDataException e) {
             request.setAttribute("errorCompleteApplicationMessage",
                     LabelManager.getProperty("message.error.complete.wrong.application.id", locale));
-            LOGGER.info("Fail to execute CompleteApplication action, wrong data, applicationId: " + applicationId);
+            LOGGER.error("Fail to execute CompleteApplication action, wrong data" +
+                    ", applicationId: " + applicationId, e);
         } catch (NoSuchElementException e) {
             request.setAttribute("errorCompleteApplicationMessage",
                     LabelManager.getProperty("message.fail.complete.application", locale));
-            LOGGER.info("Fail to execute CompleteApplication action, applicationId: " + applicationId);
+            LOGGER.error("Fail to execute CompleteApplication action, applicationId: " + applicationId, e);
         }
 
         return ConfigurationManager.getProperty("path.page.welcome");
