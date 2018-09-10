@@ -37,6 +37,11 @@
                 <c:out value="${successDeclineApplicationMessage}"/>
             </div>
         </c:if>
+        <c:if test="${errorDeclineApplicationMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorDeclineApplicationMessage}"/>
+            </div>
+        </c:if>
         <c:if test="${successAcceptApplicationMessage != null}">
             <div class="alert alert-success">
                 <c:out value="${successAcceptApplicationMessage}"/>

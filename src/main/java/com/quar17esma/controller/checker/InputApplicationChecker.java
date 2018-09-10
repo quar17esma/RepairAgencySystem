@@ -14,23 +14,8 @@ public class InputApplicationChecker extends InputDataChecker {
         }
     }
 
-    private boolean isRepairTypeCorrect(String repairType) {
-        return checkString(repairType, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, REPAIR_TYPE_LENGTH_MAX);
-    }
-
-    private boolean isProductCorrect(String product) {
-        return checkString(product, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, PRODUCT_LENGTH_MAX);
-    }
-
     public void checkDataAccept(String applicationId, String price) {
-        try {
-            boolean isIdCorrect = isApplicationIdCorrect(applicationId);
-            if (!isIdCorrect) {
-                throw new WrongDataException("Wrong application id");
-            }
-        } catch (NumberFormatException e) {
-            throw new WrongDataException("Wrong application id");
-        }
+        checkApplicationId(applicationId);
 
         try {
             boolean isPriceCorrect = isPriceCorrect(price);
@@ -40,6 +25,34 @@ public class InputApplicationChecker extends InputDataChecker {
         } catch (NumberFormatException e) {
             throw new WrongDataException("Wrong price");
         }
+    }
+
+    public void checkDataDecline(String applicationId, String declineReason) {
+        checkApplicationId(applicationId);
+
+        if (!isDeclineReasonCorrect(declineReason)) {
+            throw new WrongDataException("Wrong decline reason");
+        }
+
+    }
+
+    public void checkApplicationId(String applicationId) {
+        try {
+            boolean isIdCorrect = isApplicationIdCorrect(applicationId);
+            if (!isIdCorrect) {
+                throw new WrongDataException("Wrong application id");
+            }
+        } catch (NumberFormatException e) {
+            throw new WrongDataException("Wrong application id");
+        }
+    }
+
+    private boolean isRepairTypeCorrect(String repairType) {
+        return checkString(repairType, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, REPAIR_TYPE_LENGTH_MAX);
+    }
+
+    private boolean isProductCorrect(String product) {
+        return checkString(product, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, PRODUCT_LENGTH_MAX);
     }
 
     private boolean isApplicationIdCorrect(String applicationId) throws NumberFormatException {
@@ -60,5 +73,9 @@ public class InputApplicationChecker extends InputDataChecker {
         }
 
         return result;
+    }
+
+    private boolean isDeclineReasonCorrect(String declineReason) {
+        return checkString(declineReason, CheckPatterns.CHAR_DIGIT_PUNCT_EN_RU, REPAIR_TYPE_LENGTH_MAX);
     }
 }
