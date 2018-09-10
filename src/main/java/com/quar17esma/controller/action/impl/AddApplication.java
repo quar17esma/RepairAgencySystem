@@ -36,7 +36,7 @@ public class AddApplication implements Action {
         String page = null;
 
         String locale = (String) request.getSession().getAttribute("locale");
-        String applicationIdString = request.getParameter("applicationId");
+        String applicationId = request.getParameter("applicationId").trim();
         String product = request.getParameter("product").trim();
         String repairType = request.getParameter("repairType").trim();
         User user = (User) request.getSession().getAttribute("user");
@@ -45,19 +45,25 @@ public class AddApplication implements Action {
             checker.checkDataAdd(product, repairType);
         } catch (WrongDataException e) {
             page = handleWrongDataException(e, request, locale, product, repairType);
-            LOGGER.info("Fail to execute AddApplication action, wrong data" +
-                    ", product: " + product +
-                    ", repairType: " + repairType);
             return page;
         }
-
         Application application = makeNewApplication(product, repairType, user);
-        addOrUpdateApplication(applicationIdString, application);
+        boolean result = addOrUpdateApplication(applicationId, application);
+        if (result) {
+            request.setAttribute("successAddApplicationMessage",
+                    LabelManager.getProperty("message.success.add.application", locale));
+            page = ConfigurationManager.getProperty("path.page.welcome");
+            LOGGER.info("Executed AddApplication action, application: " + application);
+        } else {
+            setDataAttributes(request, product, repairType);
+            request.setAttribute("errorAddApplicationMessage",
+                    LabelManager.getProperty("message.fail.add.application", locale));
+            page = ConfigurationManager.getProperty("path.page.edit.application");
+            LOGGER.error("Fail to execute AddApplication action, wrong data" +
+                    ", product: " + product +
+                    ", repairType: " + repairType);
+        }
 
-        request.setAttribute("successAddApplicationMessage",
-                LabelManager.getProperty("message.success.add.application", locale));
-        page = ConfigurationManager.getProperty("path.page.welcome");
-        LOGGER.info("Executed AddApplication action, application: " + application);
         return page;
     }
 
@@ -73,17 +79,29 @@ public class AddApplication implements Action {
                         LabelManager.getProperty("message.wrong.data.max.100", locale));
                 break;
         }
+        LOGGER.error("Fail to execute AddApplication action, wrong data" +
+                ", product: " + product +
+                ", repairType: " + repairType, e);
         return ConfigurationManager.getProperty("path.page.edit.application");
     }
 
-    private void addOrUpdateApplication(String applicationIdString, Application application) {
-        if (applicationIdString == null || applicationIdString.isEmpty()) {
+    private boolean addOrUpdateApplication(String applicationId, Application application) {
+        boolean result;
+        if (applicationId == null || applicationId.isEmpty()) {
             applicationService.add(application);
+            result = true;
         } else {
-            int applicationId = Integer.parseInt(applicationIdString);
-            application.setId(applicationId);
-            applicationService.update(application);
+            try {
+                long Id = Long.parseLong(applicationId);
+                application.setId(Id);
+                applicationService.update(application);
+                result = true;
+            } catch (NumberFormatException e) {
+                applicationService.add(application);
+                result = true;
+            }
         }
+        return result;
     }
 
     private Application makeNewApplication(String product, String repairType, User user) {

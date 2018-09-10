@@ -21,13 +21,13 @@
     <div class="row">
         <jsp:include page="/pages/header.jsp"/>
     </div>
-    <%--<div class="row">--%>
-        <%--<c:if test="${errorAddApplication != null}">--%>
-            <%--<div class="alert alert-danger">--%>
-                <%--<c:out value="${errorAddApplication}"/>--%>
-            <%--</div>--%>
-        <%--</c:if>--%>
-    <%--</div>--%>
+    <div class="row">
+        <c:if test="${errorAddApplication != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorAddApplication}"/>
+            </div>
+        </c:if>
+    </div>
     <div class="row">
         <h2><fmt:message key="title.add.application"/></h2>
         <form class="form-horizontal" name="addApplicationForm" method="POST" action="./add_application">
