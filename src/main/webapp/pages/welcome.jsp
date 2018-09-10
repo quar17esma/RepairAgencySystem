@@ -42,6 +42,11 @@
                 <c:out value="${successAcceptApplicationMessage}"/>
             </div>
         </c:if>
+        <c:if test="${errorAcceptApplicationMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorAcceptApplicationMessage}"/>
+            </div>
+        </c:if>
     </div>
     <div class="row">
         <fmt:message key="message.welcome"/>

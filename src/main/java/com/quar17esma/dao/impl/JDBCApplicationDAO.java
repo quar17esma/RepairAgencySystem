@@ -67,7 +67,7 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
     private Application createApplicationWithFeedback(ResultSet rs) throws SQLException {
         Application application = createApplication(rs);
 
-        if (rs.getString("feedback.comment") != null) {
+        if (hasColumn(rs, "feedback.id") && rs.getString("feedback.id") != null) {
             application.setFeedback(new Feedback.Builder()
                     .setId(rs.getLong("feedback.id"))
                     .setMark(rs.getInt("feedback.mark"))
@@ -279,5 +279,16 @@ public class JDBCApplicationDAO extends JDBCGenericDAO<Application> implements A
             logger.error("Fail to count by user id applications", e);
         }
         return applicationCounter;
+    }
+
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equals(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
