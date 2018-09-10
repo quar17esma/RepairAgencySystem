@@ -44,8 +44,10 @@ public class AddFeedback implements Action {
         try {
             checker.checkData(mark, comment);
         } catch (WrongDataException e) {
-            page = handleWrongDataException(e, request, locale, mark,comment);
-            LOGGER.info("Fail to execute AddFeedback action, wrong data");
+            page = handleWrongDataException(e, request, locale, mark, comment);
+            LOGGER.error("Fail to execute AddFeedback action, wrong data" +
+                    ", mark: " + mark +
+                    ", comment; " + comment, e);
             return page;
         }
 
