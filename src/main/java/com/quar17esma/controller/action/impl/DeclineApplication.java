@@ -39,7 +39,7 @@ public class DeclineApplication implements Action {
 
         try {
             checker.checkDataDecline(applicationId, declineReason);
-            boolean result = declineApplication(applicationId, declineReason);
+            boolean result = applicationService.declineApplication(Long.parseLong(applicationId), declineReason);
             if (result) {
                 request.setAttribute("successDeclineApplicationMessage",
                         LabelManager.getProperty("message.success.decline.application", locale));
@@ -74,15 +74,5 @@ public class DeclineApplication implements Action {
                         LabelManager.getProperty("message.wrong.decline.reason", locale));
                 break;
         }
-    }
-
-    private boolean declineApplication(String applicationIdString, String declineReason) throws NoSuchElementException {
-        long applicationId = Long.parseLong(applicationIdString);
-        Application application = applicationService.getById(applicationId);
-        application.setProcessDate(LocalDate.now());
-        application.setStatus(Status.DECLINED);
-        application.setDeclineReason(declineReason);
-
-        return applicationService.update(application);
     }
 }

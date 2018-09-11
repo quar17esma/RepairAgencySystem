@@ -38,7 +38,7 @@ public class CompleteApplication implements Action {
 
         try {
             checker.checkApplicationId(applicationId);
-            boolean result = completeApplication(applicationId);
+            boolean result = applicationService.completeApplication(Long.parseLong(applicationId));
             if (result) {
                 request.setAttribute("successCompleteApplicationMessage",
                         LabelManager.getProperty("message.success.complete.application", locale));
@@ -60,13 +60,5 @@ public class CompleteApplication implements Action {
         }
 
         return ConfigurationManager.getProperty("path.page.welcome");
-    }
-
-    private boolean completeApplication(String applicationIdString) {
-        int applicationId = Integer.parseInt(applicationIdString);
-        Application application = applicationService.getById(applicationId);
-        application.setCompleteDate(LocalDate.now());
-        application.setStatus(Status.COMPLETED);
-        return applicationService.update(application);
     }
 }

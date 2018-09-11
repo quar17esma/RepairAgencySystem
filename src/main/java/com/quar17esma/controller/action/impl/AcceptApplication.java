@@ -4,15 +4,12 @@ import com.quar17esma.controller.action.Action;
 import com.quar17esma.controller.checker.InputApplicationChecker;
 import com.quar17esma.controller.manager.ConfigurationManager;
 import com.quar17esma.controller.manager.LabelManager;
-import com.quar17esma.entity.Application;
-import com.quar17esma.enums.Status;
 import com.quar17esma.exceptions.WrongDataException;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 public class AcceptApplication implements Action {
@@ -41,7 +38,9 @@ public class AcceptApplication implements Action {
 
         try {
             checker.checkDataAccept(applicationId, price);
-            boolean result = acceptApplication(applicationId, price);
+            boolean result = applicationService.acceptApplication(
+                    Long.parseLong(applicationId),
+                    Integer.parseInt(price) * 100);
             if (result) {
                 request.setAttribute("successAcceptApplicationMessage",
                         LabelManager.getProperty("message.success.accept.application", locale));
@@ -78,15 +77,5 @@ public class AcceptApplication implements Action {
                         LabelManager.getProperty("message.wrong.price", locale));
                 break;
         }
-    }
-
-    private boolean acceptApplication(String applicationIdString, String price) throws NoSuchElementException {
-        long applicationId = Long.parseLong(applicationIdString);
-        Application application = applicationService.getById(applicationId);
-        application.setProcessDate(LocalDate.now());
-        application.setStatus(Status.ACCEPTED);
-        application.setPrice(Integer.parseInt(price));
-
-        return applicationService.update(application);
     }
 }

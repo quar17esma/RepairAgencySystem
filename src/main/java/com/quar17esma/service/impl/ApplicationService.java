@@ -3,10 +3,13 @@ package com.quar17esma.service.impl;
 import com.quar17esma.dao.ApplicationDAO;
 import com.quar17esma.dao.DaoFactory;
 import com.quar17esma.entity.Application;
+import com.quar17esma.enums.Status;
 import com.quar17esma.service.IApplicationService;
 import org.apache.log4j.Logger;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ApplicationService extends Service<Application> implements IApplicationService {
     private ApplicationDAO applicationDAO;
@@ -72,5 +75,30 @@ public class ApplicationService extends Service<Application> implements IApplica
 
     public long getAllByUserIdQuantity(long userId) {
         return applicationDAO.countAllByUserId(userId);
+    }
+
+    public boolean acceptApplication(long id, int price) throws NoSuchElementException {
+        Application application = getById(id);
+        application.setProcessDate(LocalDate.now());
+        application.setStatus(Status.ACCEPTED);
+        application.setPrice(price);
+
+        return update(application);
+    }
+
+    public boolean declineApplication(long id, String declineReason) throws NoSuchElementException {
+        Application application = getById(id);
+        application.setProcessDate(LocalDate.now());
+        application.setStatus(Status.DECLINED);
+        application.setDeclineReason(declineReason);
+
+        return update(application);
+    }
+
+    public boolean completeApplication(long id) throws NoSuchElementException {
+        Application application = getById(id);
+        application.setCompleteDate(LocalDate.now());
+        application.setStatus(Status.COMPLETED);
+        return update(application);
     }
 }
