@@ -36,7 +36,7 @@ public class AddApplication implements Action {
         String page = null;
 
         String locale = (String) request.getSession().getAttribute("locale");
-        String applicationId = request.getParameter("applicationId").trim();
+        String applicationId = request.getParameter("applicationId");
         String product = request.getParameter("product").trim();
         String repairType = request.getParameter("repairType").trim();
         User user = (User) request.getSession().getAttribute("user");
