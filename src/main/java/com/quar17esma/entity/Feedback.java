@@ -2,23 +2,11 @@ package com.quar17esma.entity;
 
 import java.time.LocalDateTime;
 
-public class Feedback {
-    private long id;
+public class Feedback extends Entity {
     private Application application;
     private LocalDateTime dateTime;
     private String comment;
     private int mark;
-
-    public Feedback() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Application getApplication() {
         return application;

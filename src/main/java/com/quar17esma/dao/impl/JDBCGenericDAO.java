@@ -2,6 +2,7 @@ package com.quar17esma.dao.impl;
 
 import com.quar17esma.dao.ConnectionPool;
 import com.quar17esma.dao.GenericDAO;
+import com.quar17esma.entity.Entity;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class JDBCGenericDAO<T> implements GenericDAO<T> {
+public abstract class JDBCGenericDAO<T extends Entity> implements GenericDAO<T> {
     protected Logger logger;
 
     protected ConnectionPool connectionPool;
@@ -108,7 +109,7 @@ public abstract class JDBCGenericDAO<T> implements GenericDAO<T> {
             ResultSet rsId = query.getGeneratedKeys();
             if (rsId.next()) {
                 result = rsId.getLong(1);
-                setId(item, result);
+                item.setId(result);
             }
         } catch (SQLException e) {
             logger.error("Fail to insert item: " + item, e);
@@ -119,6 +120,4 @@ public abstract class JDBCGenericDAO<T> implements GenericDAO<T> {
     }
 
     protected abstract void setInsertQueryParams(PreparedStatement query, T item) throws SQLException;
-
-    protected abstract void setId(T item, long id);
 }

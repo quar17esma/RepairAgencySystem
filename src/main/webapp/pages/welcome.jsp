@@ -32,14 +32,29 @@
                 <c:out value="${successCompleteApplicationMessage}"/>
             </div>
         </c:if>
+        <c:if test="${errorCompleteApplicationMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorCompleteApplicationMessage}"/>
+            </div>
+        </c:if>
         <c:if test="${successDeclineApplicationMessage != null}">
             <div class="alert alert-success">
                 <c:out value="${successDeclineApplicationMessage}"/>
             </div>
         </c:if>
+        <c:if test="${errorDeclineApplicationMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorDeclineApplicationMessage}"/>
+            </div>
+        </c:if>
         <c:if test="${successAcceptApplicationMessage != null}">
             <div class="alert alert-success">
                 <c:out value="${successAcceptApplicationMessage}"/>
+            </div>
+        </c:if>
+        <c:if test="${errorAcceptApplicationMessage != null}">
+            <div class="alert alert-danger">
+                <c:out value="${errorAcceptApplicationMessage}"/>
             </div>
         </c:if>
     </div>

@@ -28,18 +28,6 @@
             </div>
         </c:if>
     </div>
-    <%--<div>--%>
-    <%--<form name="searchForm" method="POST" action="./search_food">--%>
-    <%--<label><fmt:message key="label.search.food"/></label>--%>
-    <%--<input type="search" name="searchString" value="${searchString}">--%>
-    <%--<fmt:message var="buttonSearch" key="button.search"/>--%>
-    <%--<input type="submit" value="${buttonSearch}">--%>
-    <%--</form>--%>
-    <%--<br>--%>
-    <%--</div>--%>
-    <%--<div>--%>
-    <%--<c:out value="${sorryFoodNotFoundMessage}"/>--%>
-    <%--</div>--%>
     <div class="row">
         <h2><fmt:message key="title.applications"/></h2>
 

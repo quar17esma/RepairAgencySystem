@@ -1,61 +1,78 @@
 package com.quar17esma.controller.action.impl;
 
 import com.quar17esma.controller.action.Action;
+import com.quar17esma.controller.checker.InputApplicationChecker;
 import com.quar17esma.controller.manager.ConfigurationManager;
 import com.quar17esma.controller.manager.LabelManager;
 import com.quar17esma.entity.Application;
 import com.quar17esma.enums.Status;
+import com.quar17esma.exceptions.WrongDataException;
 import com.quar17esma.service.IApplicationService;
 import com.quar17esma.service.impl.ApplicationService;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 public class DeclineApplication implements Action {
     private static final Logger LOGGER = Logger.getLogger(DeclineApplication.class);
+
     private IApplicationService applicationService;
+    private InputApplicationChecker checker;
 
     public DeclineApplication() {
         this.applicationService = ApplicationService.getInstance();
+        this.checker = new InputApplicationChecker();
     }
 
-    public DeclineApplication(IApplicationService applicationService) {
+    public DeclineApplication(IApplicationService applicationService, InputApplicationChecker checker) {
         this.applicationService = applicationService;
+        this.checker = checker;
     }
 
     @Override
     public String execute(HttpServletRequest request) {
-        String page = null;
-
         String locale = (String) request.getSession().getAttribute("locale");
-        String applicationIdString = request.getParameter("applicationId");
+        String applicationId = request.getParameter("applicationId");
         String declineReason = request.getParameter("declineReason");
 
-        if (applicationIdString != null) {
-            Application application = declineApplication(applicationIdString, declineReason);
-
-            request.setAttribute("successDeclineApplicationMessage",
-                    LabelManager.getProperty("message.success.decline.application", locale));
-            page = ConfigurationManager.getProperty("path.page.welcome");
-            LOGGER.info("Executed DeclineApplication action, application: " + application);
-        } else {
-            request.setAttribute("errorCompleteApplicationMessage",
-                    LabelManager.getProperty("message.error.wrong.data", locale));
-            page = ConfigurationManager.getProperty("path.page.applications");
-            LOGGER.info("Fail to execute DeclineApplication action, wrong data");
+        try {
+            checker.checkDataDecline(applicationId, declineReason);
+            boolean result = applicationService.declineApplication(Long.parseLong(applicationId), declineReason);
+            if (result) {
+                request.setAttribute("successDeclineApplicationMessage",
+                        LabelManager.getProperty("message.success.decline.application", locale));
+                LOGGER.info("Executed DeclineApplication action, application ID: " + applicationId);
+            } else {
+                request.setAttribute("errorDeclineApplicationMessage",
+                        LabelManager.getProperty("message.fail.decline.application", locale));
+                LOGGER.error("Fail to execute DeclineApplication action, applicationId: " + applicationId);
+            }
+        } catch (WrongDataException e) {
+            handleWrongDataException(e, request, locale);
+            LOGGER.error("Fail to execute DeclineApplication action, wrong data" +
+                    ", applicationId: " + applicationId +
+                    ", decline Reason: " + declineReason, e);
+        } catch (NoSuchElementException e) {
+            request.setAttribute("errorDeclineApplicationMessage",
+                    LabelManager.getProperty("message.fail.decline.application", locale));
+            LOGGER.error("Fail to execute DeclineApplication action, applicationId: " + applicationId, e);
         }
 
-        return page;
+        return ConfigurationManager.getProperty("path.page.welcome");
     }
 
-    private Application declineApplication(String applicationIdString, String declineReason) {
-        int applicationId = Integer.parseInt(applicationIdString);
-        Application application = applicationService.getById(applicationId);
-        application.setProcessDate(LocalDate.now());
-        application.setStatus(Status.DECLINED);
-        application.setDeclineReason(declineReason);
-        applicationService.update(application);
-        return application;
+    private void handleWrongDataException(WrongDataException e, HttpServletRequest request, String locale) {
+        switch (e.getMessage()) {
+            case "Wrong application id":
+                request.setAttribute("errorDeclineApplicationMessage",
+                        LabelManager.getProperty("message.error.decline.wrong.application.id", locale));
+                break;
+            case "Wrong decline reason":
+                request.setAttribute("errorDeclineApplicationMessage",
+                        LabelManager.getProperty("message.wrong.decline.reason", locale));
+                break;
+        }
     }
 }

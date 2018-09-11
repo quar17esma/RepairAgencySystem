@@ -25,11 +25,6 @@ public class UserService extends Service<User> implements IUserService {
         return Holder.INSTANCE;
     }
 
-    @Override
-    protected void setId(User item, long id) {
-        item.setId(id);
-    }
-
     public User getByEmail(String email) {
         User user = userDAO.findByEmail(email).get();
 

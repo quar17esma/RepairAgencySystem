@@ -15,17 +15,14 @@ public abstract class ShowApplications implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String page = null;
-
         long pageNumber = setPageNumberOrDefault(request.getParameter("page"));
         List<Application> applications = getApplications(pageNumber, request);
         long applicationQuantity = getApplicationsQuantity();
         long pagesQuantity = countPagesQuantity(applicationQuantity);
         request.setAttribute("applications", applications);
         request.setAttribute("pagesQuantity", pagesQuantity);
-        page = ConfigurationManager.getProperty("path.page.applications");
 
-        return page;
+        return ConfigurationManager.getProperty("path.page.applications");
     }
 
     protected abstract List<Application> getApplications(long page, HttpServletRequest request);
