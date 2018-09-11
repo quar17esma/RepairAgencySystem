@@ -48,7 +48,7 @@
             <c:forEach items="${feedbacks}" var="feedback">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <label><fmt:message key="label.author"/></label>
+                        <%--<label><fmt:message key="label.author"/></label>--%>
                             <%--<c:out value="${}"/><br>--%>
                         <label><fmt:message key="label.mark"/></label>
                         <c:out value="${feedback.mark}"/><br>
